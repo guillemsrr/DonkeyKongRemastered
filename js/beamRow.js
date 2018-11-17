@@ -1,22 +1,30 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.beamRow = function( _game, _numBeams, _x, _y, _tag){
-    this.numBeams = _numBeams;
-    this.posX = _x;
-    this.posY = _y;
-    this.row = _game.add.group();
+donkeyKong.beamRow = function( _game, _tag, _group){
+    this.game = _game;
+    this.group = _group;
     this.tag = _tag;
-    this.m_game = _game;
 }
 
 donkeyKong.beamRow.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.beamRow.prototype.constructor = donkeyKong.beamRow;
 
-donkeyKong.beamRow.prototype.createRow = function(isRight){
-    for (var i=0; i<gameOptions.gameWidth/16;i++){
-            beam = this.m_game.add.sprite(16*i + this.posX, this.posY, this.tag);
-            beam.body.immovable = true;
+donkeyKong.beamRow.prototype.createStraightRow = function(numBeams, posX, posY){
+    for (var i=0; i<numBeams;i++){
+            var beam = this.game.add.sprite(posX + 16*i, posY, this.tag);
+            beam.body.immovable = true; 
+            beam.body.allowGravity = false;
             beam.body.gravity = false;
-            this.row.add(beam);
+            this.group.add(beam);
+    }
+}
+
+donkeyKong.beamRow.prototype.createDiagRow = function(numBeams, posX, posY, right = 1, up = -1){
+    for (var i=0; i<numBeams;i++){
+            var beam = this.game.add.sprite(posX + right*16*i, posY + up*i, this.tag);
+            beam.body.immovable = true; 
+            beam.body.allowGravity = false;
+            beam.body.gravity = false;
+            this.group.add(beam);
     }
 }

@@ -5,7 +5,7 @@ donkeyKong.debugLevel= {
     init:function(){
         //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.physics.arcade.gravity.y=gameOptions.gravity;
+        this.game.physics.arcade.gravity.y = gameOptions.gravity;
         this.game.world.setBounds(0,0,gameOptions.level1Width,gameOptions.level1Height);
         this.game.world.enableBody = true;
     },
@@ -24,11 +24,10 @@ donkeyKong.debugLevel= {
     },
     
     create: function () {
-        
         // ------------------ GAMEPLAY -------------------
         
         //Jumpman
-        this.jumpman = new donkeyKong.jumpman(this.game, 100, 100, 'jumpman');
+        this.jumpman = new donkeyKong.jumpman(this.game, 20, gameOptions.gameHeight - 8*12, 'jumpman');
         this.game.add.existing(this.jumpman);
         
         //FireBall
@@ -36,19 +35,17 @@ donkeyKong.debugLevel= {
         
         //-------------------- LEVEL ---------------------
         this.beams = this.game.add.group();
-        //beamRow = new donkeyKong.beamRow(this.game, 10, 16, gameOptions.gameHeight - 8*15, 'beam');
-        //this.game.add.existing(beamRow);
-        //beamRow.createRow(true);
-        //this.beams.add(beamRow);
-        
-        for (var i=0; i<gameOptions.gameWidth/16;i++){
-            beam = this.game.add.sprite(16*i, gameOptions.gameHeight - 8*15,'beam');
-            beam.body.immovable = true; 
-            beam.body.gravity = false;
-            this.beams.add(beam);
-        }
-        
-        
+        var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
+        beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
+        beamRow.createDiagRow(14, 16*16, gameOptions.gameHeight - 8*10);
+        beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, -1 , -1);
+        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25);
+        beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, 1, 1);
+        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*41);
+        beamRow.createStraightRow(8, 16*2, 63);
+        beamRow.createDiagRow(8, 16*10, 63, 1, 1);
+        beamRow.createStraightRow(2, 16*7, 8*5);
+        beamRow.createStraightRow(4, 16*9, 8*4);
         
         // ------------------ PAUSE MENU -----------------
         
@@ -69,7 +66,7 @@ donkeyKong.debugLevel= {
         this.buttonIterator = 0;        
         this.buttonList = Array(2);
         this.buttonList[0] = this.resume_button;
-        this.buttonList[1] = this.backToMenu_button;        
+        this.buttonList[1] = this.backToMenu_button;
         
         // Selector
         this.selectorPressed = false;        
@@ -87,12 +84,10 @@ donkeyKong.debugLevel= {
     update: function () {
         
         // ---------------- GAMEPLAY -----------------
+        this.game.physics.arcade.collide(this.jumpman,this.beams);
         this.jumpman.update();
         this.jumpman.move(this.cursors);
         this.jumpman.jump(this.jumpButton);
-        this.game.physics.arcade.collide(this.jumpman,this.beams);
-        
-        
         
         // ---------------- PAUSE LOGIC --------------------
         
@@ -111,12 +106,13 @@ donkeyKong.debugLevel= {
         }
         
     },
+    
+    
     render: function () {
 
-    // Input debug info
-    //this.game.debug.inputInfo(32, 32);
-    //this.game.debug.pointer(this.game.input.activePointer );
-        this.game.debug.text(this.cursors);
+        // Input debug info
+        //this.game.debug.inputInfo(32, 32);
+        //this.game.debug.pointer(this.game.input.activePointer );
     },
     
     

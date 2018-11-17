@@ -6,6 +6,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag){
     //_game.physics.arcade.enable(this);
     this.game.physics.arcade.enable(this);
     //this.body.allowGravity = true;
+    //this.body.gravity.y = gameOptions.gravity;
 
     //Variables
     this.speed = 150;
@@ -24,15 +25,17 @@ donkeyKong.jumpman.prototype.update = function(){
 }
 
 donkeyKong.jumpman.prototype.move = function(cursors){
-    if(cursors.left.isDown){
-        this.scale.x=-1;
-        this.body.velocity.x = -100;
-        //this.body.velocity.y = 0;
-        this.animations.play('run');
-    }
-    else if(cursors.right.isDown){
+    
+    if(cursors.right.isDown){
         this.scale.x=1;
         this.body.velocity.x = this.speed;
+        this.animations.play('run');
+    }
+    else if(cursors.left.isDown){
+        this.scale.x=-1;
+        this.body.velocity.x = -this.speed;
+        
+        //this.body.velocity.y = 0;
         this.animations.play('run');
     }
     else{
@@ -43,7 +46,7 @@ donkeyKong.jumpman.prototype.move = function(cursors){
 
 donkeyKong.jumpman.prototype.jump = function(jumpButton){
     if (jumpButton.isDown && /*this.body.onFloor() &&*/ jumpButton.downDuration(150)){
-            this.body.velocity.y=-this.jumpForce;
-            
+            this.body.velocity.y = -this.jumpForce;
+            console.log("JUMP: " + this.body.velocity.y );
         }
 }
