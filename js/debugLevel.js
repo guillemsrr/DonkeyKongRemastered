@@ -2,11 +2,22 @@ var donkeyKong = donkeyKong || {};
 
 donkeyKong.debugLevel= {
     
+    init:function(){
+        //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.game.physics.arcade.gravity.y=gameOptions.gravity;
+        this.game.world.setBounds(0,0,gameOptions.level1Width,gameOptions.level1Height);
+        this.game.world.enableBody = true;
+    },
+    
     preload: function () {
         // Sprites
         this.load.image('fire', 'assets/sprites/Fire_Ball.png');
         this.load.image('pause_background', 'assets/sprites/pause_background.png');
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
+        this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
+        this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
+        this.load.image('beam', 'assets/sprites/beam.png');
         
         // Fonts
         
@@ -15,9 +26,27 @@ donkeyKong.debugLevel= {
     create: function () {
         
         // ------------------ GAMEPLAY -------------------
-        this.fireBall = this.game.add.sprite(100, 100, 'fire');
         
+        //Jumpman
+        this.jumpman = new donkeyKong.jumpman(this.game, 100, 100, 'jumpman');
+        this.game.add.existing(this.jumpman);
         
+        //FireBall
+        //this.fireBall = this.game.add.sprite(100, 100, 'fire');
+        
+        //-------------------- LEVEL ---------------------
+        this.beams = this.game.add.group();
+        //beamRow = new donkeyKong.beamRow(this.game, 10, 16, gameOptions.gameHeight - 8*15, 'beam');
+        //this.game.add.existing(beamRow);
+        //beamRow.createRow(true);
+        //this.beams.add(beamRow);
+        
+        for (var i=0; i<gameOptions.gameWidth/16;i++){
+            beam = this.game.add.sprite(16*i, gameOptions.gameHeight - 8*15,'beam');
+            beam.body.immovable = true; 
+            beam.body.gravity = false;
+            this.beams.add(beam);
+        }
         
         
         
@@ -48,7 +77,7 @@ donkeyKong.debugLevel= {
         
         // Cursor input initialization
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        
+        this.jumpButton=this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR); 
         
         // This is called once so all Pause grafics and logic are hidden.
         this.PausePressed();
@@ -58,8 +87,10 @@ donkeyKong.debugLevel= {
     update: function () {
         
         // ---------------- GAMEPLAY -----------------
-        
-        
+        this.jumpman.update();
+        this.jumpman.move(this.cursors);
+        this.jumpman.jump(this.jumpButton);
+        this.game.physics.arcade.collide(this.jumpman,this.beams);
         
         
         
@@ -79,6 +110,13 @@ donkeyKong.debugLevel= {
             this.SelectorLogic();           
         }
         
+    },
+    render: function () {
+
+    // Input debug info
+    //this.game.debug.inputInfo(32, 32);
+    //this.game.debug.pointer(this.game.input.activePointer );
+        this.game.debug.text(this.cursors);
     },
     
     
