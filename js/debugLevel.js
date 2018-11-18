@@ -113,12 +113,13 @@ donkeyKong.debugLevel= {
         // Input debug info
         //this.game.debug.inputInfo(32, 32);
         //this.game.debug.pointer(this.game.input.activePointer );
+        this.game.debug.body(this.jumpman);
     },
     
     
     // -------------- FUNCTIONS ----------------
     
-    PausePressed: function (){        
+    PausePressed: function (){       
         
         if(this.pauseButtonPressed) return;
         

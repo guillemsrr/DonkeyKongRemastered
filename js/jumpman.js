@@ -15,6 +15,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag){
     //Animations
     this.animations.add('run',[0,1,2],10,true);
     //this.health = gameOptions.heroEnergy;
+    this.body.setSize(15, 20, 12, 15);
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
