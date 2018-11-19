@@ -3,10 +3,8 @@ var donkeyKong = donkeyKong || {};
 donkeyKong.jumpman = function(_game, _x, _y, _tag){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
-    //_game.physics.arcade.enable(this);
-    this.game.physics.arcade.enable(this);
-    //this.body.allowGravity = true;
-    //this.body.gravity.y = gameOptions.gravity;
+    this.game = _game;
+    _game.physics.arcade.enable(this);
 
     //Variables
     this.speed = 150;
@@ -35,8 +33,6 @@ donkeyKong.jumpman.prototype.move = function(cursors){
     else if(cursors.left.isDown){
         this.scale.x=-1;
         this.body.velocity.x = -this.speed;
-        
-        //this.body.velocity.y = 0;
         this.animations.play('run');
     }
     else{
@@ -46,7 +42,7 @@ donkeyKong.jumpman.prototype.move = function(cursors){
 }
 
 donkeyKong.jumpman.prototype.jump = function(jumpButton){
-    if (jumpButton.isDown && /*this.body.onFloor() &&*/ jumpButton.downDuration(150)){
+    if (jumpButton.isDown /*&& this.body.onFloor()*/&& jumpButton.downDuration(150)){
             this.body.velocity.y = -this.jumpForce;
             console.log("JUMP: " + this.body.velocity.y );
         }

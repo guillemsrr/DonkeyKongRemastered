@@ -6,8 +6,7 @@ donkeyKong.debugLevel= {
         //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.physics.arcade.gravity.y = gameOptions.gravity;
-        this.game.world.setBounds(0,0,gameOptions.level1Width,gameOptions.level1Height);
-        this.game.world.enableBody = true;
+        this.game.world.setBounds(0,0,gameOptions.level1Width, gameOptions.level1Height);
     },
     
     preload: function () {
@@ -28,6 +27,7 @@ donkeyKong.debugLevel= {
         
         //Jumpman
         this.jumpman = new donkeyKong.jumpman(this.game, 20, gameOptions.gameHeight - 8*12, 'jumpman');
+        //this.jumpman.body.enable = true;
         this.game.add.existing(this.jumpman);
         
         //FireBall
@@ -37,7 +37,7 @@ donkeyKong.debugLevel= {
         this.beams = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
         beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
-        beamRow.createDiagRow(14, 16*16, gameOptions.gameHeight - 8*10);
+        beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10);
         beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, -1 , -1);
         beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25);
         beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, 1, 1);
@@ -46,6 +46,8 @@ donkeyKong.debugLevel= {
         beamRow.createDiagRow(8, 16*10, 63, 1, 1);
         beamRow.createStraightRow(2, 16*7, 8*5);
         beamRow.createStraightRow(4, 16*9, 8*4);
+        
+        var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
         
         // ------------------ PAUSE MENU -----------------
         
@@ -60,7 +62,7 @@ donkeyKong.debugLevel= {
         this.pauseBackground = this.game.add.sprite(0, 0, 'pause_background');
         var style = { font: "bold 25px Arial", fill: "#fff", boundsAlignH: "top", boundsAlignV: "middle" };
         this.resume_button = this.game.add.text(this.menuVerticalAlignement, 200, "Resume", style);
-        this.backToMenu_button = this.game.add.text(this.menuVerticalAlignement, 250, "Back to Menu", style);        
+        this.backToMenu_button = this.game.add.text(this.menuVerticalAlignement, 250, "Back to Menu", style);  
 
         // Buttons list
         this.buttonIterator = 0;        
@@ -69,7 +71,7 @@ donkeyKong.debugLevel= {
         this.buttonList[1] = this.backToMenu_button;
         
         // Selector
-        this.selectorPressed = false;        
+        this.selectorPressed = false;   
         this.selector = this.game.add.sprite(this.menuVerticalAlignement - this.selectorOffset, this.buttonList[0].y, 'menu_selector');
         
         // Cursor input initialization
@@ -83,15 +85,7 @@ donkeyKong.debugLevel= {
     
     update: function () {
         
-        // ---------------- GAMEPLAY -----------------
-        this.game.physics.arcade.collide(this.jumpman,this.beams);
-        this.jumpman.update();
-        this.jumpman.move(this.cursors);
-        this.jumpman.jump(this.jumpButton);
-        
         // ---------------- PAUSE LOGIC --------------------
-        
-        
         // Pause input
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
             this.PausePressed();
@@ -105,6 +99,11 @@ donkeyKong.debugLevel= {
             this.SelectorLogic();           
         }
         
+        // ---------------- GAMEPLAY -----------------
+        this.game.physics.arcade.collide(this.jumpman,this.beams);
+        //this.jumpman.update();
+        this.jumpman.move(this.cursors);
+        this.jumpman.jump(this.jumpButton);
     },
     
     
