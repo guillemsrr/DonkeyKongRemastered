@@ -11,12 +11,14 @@ donkeyKong.debugLevel= {
     
     preload: function () {
         // Sprites
-        this.load.image('fire', 'assets/sprites/Fire_Ball.png');
         this.load.image('pause_background', 'assets/sprites/pause_background.png');
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
         this.load.image('beam', 'assets/sprites/beam.png');
+        this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
+        this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
+        this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png');
         
         // Fonts
         
@@ -29,6 +31,12 @@ donkeyKong.debugLevel= {
         this.jumpman = new donkeyKong.jumpman(this.game, 20, gameOptions.gameHeight - 8*12, 'jumpman');
         //this.jumpman.body.enable = true;
         this.game.add.existing(this.jumpman);
+        
+        this.pauline = new donkeyKong.pauline(this.game, 123, 27, 'pauline');
+        this.game.add.existing(this.pauline);
+        
+        this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong');
+        this.game.add.existing(this.kong);
         
         //FireBall
         //this.fireBall = this.game.add.sprite(100, 100, 'fire');
@@ -104,6 +112,9 @@ donkeyKong.debugLevel= {
         //this.jumpman.update();
         this.jumpman.move(this.cursors);
         this.jumpman.jump(this.jumpButton);
+        
+        //NPC
+        this.pauline.update();
     },
     
     
