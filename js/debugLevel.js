@@ -4,7 +4,7 @@ donkeyKong.debugLevel= {
     
     init:function(){
         //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);//NINJA
         this.game.physics.arcade.gravity.y = gameOptions.gravity;
         this.game.world.setBounds(0,0,gameOptions.level1Width, gameOptions.level1Height);
     },
@@ -18,7 +18,8 @@ donkeyKong.debugLevel= {
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
         this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
-        this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png');
+        this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png', 16, 16);
+        this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         
         // Fonts
         
@@ -28,9 +29,10 @@ donkeyKong.debugLevel= {
         // ------------------ GAMEPLAY -------------------
         
         //Jumpman
-        this.jumpman = new donkeyKong.jumpman(this.game, 20, gameOptions.gameHeight - 8*12, 'jumpman');
-        //this.jumpman.body.enable = true;
+        this.jumpman = new donkeyKong.jumpman(this.game, 60, gameOptions.gameHeight - 8*12, 'jumpman');
         this.game.add.existing(this.jumpman);
+        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2');
+        this.game.add.existing(this.jumpman2);
         
         this.pauline = new donkeyKong.pauline(this.game, 123, 27, 'pauline');
         this.game.add.existing(this.pauline);
@@ -38,10 +40,15 @@ donkeyKong.debugLevel= {
         this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong');
         this.game.add.existing(this.kong);
         
-        //FireBall
-        //this.fireBall = this.game.add.sprite(100, 100, 'fire');
+        this.fireBall = new donkeyKong.fireBall(this.game, 200, gameOptions.gameHeight - 8*11, 'fireBall');
+        this.game.add.existing(this.fireBall);
+        
+        this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
+        this.game.add.existing(this.oil);
         
         //-------------------- LEVEL ---------------------
+        
+        //Beams
         this.beams = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
         beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
@@ -56,6 +63,11 @@ donkeyKong.debugLevel= {
         beamRow.createStraightRow(4, 16*9, 8*4);
         
         var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
+        
+        //Stairs
+        this.stairs = this.game.add.group();
+        
+        //create stairs here
         
         // ------------------ PAUSE MENU -----------------
         
@@ -83,8 +95,26 @@ donkeyKong.debugLevel= {
         this.selector = this.game.add.sprite(this.menuVerticalAlignement - this.selectorOffset, this.buttonList[0].y, 'menu_selector');
         
         // Cursor input initialization
-        this.cursors = this.game.input.keyboard.createCursorKeys();
-        this.jumpButton=this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR); 
+        this.walk1={
+            left: this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT),
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
+        }
+        this.walk2 = {
+            left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.D),
+        };
+        this.jump1=this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+        this.jump2=this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+        
+        this.stairs1= {
+            up: this.game.input.keyboard.addKey(Phaser.Keyboard.UP),
+            down: this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN),
+        }
+        
+        this.stairs2= {
+            up: this.game.input.keyboard.addKey(Phaser.Keyboard.W),
+            down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
+        }
         
         // This is called once so all Pause grafics and logic are hidden.
         this.PausePressed();
@@ -109,12 +139,24 @@ donkeyKong.debugLevel= {
         
         // ---------------- GAMEPLAY -----------------
         this.game.physics.arcade.collide(this.jumpman,this.beams);
-        //this.jumpman.update();
-        this.jumpman.move(this.cursors);
-        this.jumpman.jump(this.jumpButton);
+        this.game.physics.arcade.collide(this.jumpman2,this.beams);
         
-        //NPC
+        //JUMPMAN
+        this.jumpman.update();
+        this.jumpman2.update();
+        this.jumpman.move(this.walk1);
+        this.jumpman2.move(this.walk2);
+        this.jumpman.jump(this.jump1);
+        this.jumpman2.jump(this.jump2);
+        this.jumpman.stairs(this.stairs1, this.stairs);
+        this.jumpman2.stairs(this.stairs2, this.stairs);
+        
+        //NPCs
         this.pauline.update();
+        
+        this.fireBall.move();
+        
+        this.oil.move();
     },
     
     
@@ -123,7 +165,7 @@ donkeyKong.debugLevel= {
         // Input debug info
         //this.game.debug.inputInfo(32, 32);
         //this.game.debug.pointer(this.game.input.activePointer );
-        this.game.debug.body(this.jumpman);
+        //this.game.debug.body(this.jumpman);
     },
     
     
