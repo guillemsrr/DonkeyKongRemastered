@@ -42,8 +42,23 @@ donkeyKong.jumpman.prototype.move = function(cursors){
 }
 
 donkeyKong.jumpman.prototype.jump = function(jumpButton){
-    if (jumpButton.isDown /*&& this.body.onFloor()*/&& jumpButton.downDuration(150)){
-            this.body.velocity.y = -this.jumpForce;
-            console.log("JUMP: " + this.body.velocity.y );
-        }
+    if (jumpButton.isDown && this.body.touching.down && jumpButton.downDuration(150)){
+        this.body.velocity.y = -this.jumpForce;
+        console.log("JUMP: " + this.body.velocity.y );
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

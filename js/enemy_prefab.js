@@ -1,35 +1,34 @@
 var donkeyKong = donkeyKong || {};
 
-
-donkeyKong.enemy_prefab = function(game,x,y,points,speed,direction,level){
-    Phaser.Sprite.call(this,game,x,y,'barrel');
+//750,100,720,1000,100,1
+donkeyKong.enemy_prefab = function(_game, _x, _y, _points, _speed, _direction, _level, _tag){
+    Phaser.Sprite.call(this, _game, _x, _y, _tag);
     this.anchor.setTo(.5);
-    //this.animations.add('side',[0,1,2,3],10,true);
-    //this.animations.play('walk');
-    this.patrolA = pointA;
-    this.patrolB = pointB;
-    this.speed = speed;
-    this.direction = direction;
-    this.level = level;
+    this.animations.add('roll',[0,1,2,3],5,true);
+    this.animations.play('roll');
+    this.pointsArray = _points;
+    this.speed = _speed;
+    this.direction = _direction;
+    this.level = _level;
     this.game.physics.arcade.enable(this);
-    //this.body.allowGravity = false;
 };
-
-
 
 donkeyKong.enemy_prefab.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.enemy_prefab.prototype.constructor = donkeyKong.enemy_prefab;
 
 donkeyKong.enemy_prefab.prototype.update = function(){
-   this.game.physics.arcade.collide(this,this.level.walls);
-   this.game.physics.arcade.collide(this,this.level.hero,this.hitHero,null,this);
+   this.game.physics.arcade.collide(this,this.level.beams);
+   this.game.physics.arcade.collide(this,this.level.jumpman,this.hitHero,null,this);
     
    this.body.velocity.x = this.speed*this.direction;
-   if(this.body.blocked.right || this.body.blocked.left){
-       this.direction *=-1;
-       this.scale.x=this.direction;
-       this.body.velocity.x = this.speed*this.direction;
-   } 
+    if(!this.body.touching.down){
+        if(this.body.x<=this.pointsArray[0])
+            this.direction = 1;
+        else if(this.body.x>=this.pointsArray[1])
+            this.direction = -1;
+    }
+    this.scale.x=this.direction;
+    this.body.velocity.x = this.speed*this.direction;
     
 };
 
@@ -38,12 +37,9 @@ donkeyKong.enemy_prefab.prototype.hitHero = function(_enemy,_hero){
         this.kill();
         _hero.body.velocity.y=-gameOptions.heroJump;
     }else{
-        /*
-        this.level.camera.shake(0.05,500);
-        _hero.health--;
-        this.level.hud_energy.frame =_hero.health;
-        _hero.reset(65,100);
-        */
         this.level.hitHero();
     }
 };
+
+
+

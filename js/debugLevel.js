@@ -16,6 +16,7 @@ donkeyKong.debugLevel= {
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
+        this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
         this.load.image('beam', 'assets/sprites/beam.png');
         
         // Fonts
@@ -30,8 +31,11 @@ donkeyKong.debugLevel= {
         //this.jumpman.body.enable = true;
         this.game.add.existing(this.jumpman);
         
-        //FireBall
-        //this.fireBall = this.game.add.sprite(100, 100, 'fire');
+        //Barrel
+        //donkeyKong.enemy_prefab =     function(_game,_x,_y,_pointA, _pointB,_speed,_direction,_level, _tag)
+        var pointsArray = [15*3, 15*30];
+        this.barrel = new donkeyKong.enemy_prefab(this.game, 16*5, gameOptions.gameHeight - 8*41, pointsArray, 100, 1, this, 'barrel');
+        this.game.add.existing(this.barrel);
         
         //-------------------- LEVEL ---------------------
         this.beams = this.game.add.group();
@@ -83,6 +87,14 @@ donkeyKong.debugLevel= {
         
     },
     
+    hitHero:function(){
+        this.camera.shake(0.05,500);
+        this.camera.flash(0xFF0000,500);
+        this.jumpman.body.position.x = 20;
+        this.jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+        this.jumpman.body.velocity.x =0;
+        console.log('pupa');
+    },
     update: function () {
         
         // ---------------- PAUSE LOGIC --------------------
