@@ -21,12 +21,8 @@ donkeyKong.enemy_prefab.prototype.update = function(){
    this.game.physics.arcade.collide(this,this.level.jumpman,this.hitHero,null,this);
     
    this.body.velocity.x = this.speed*this.direction;
-    if(!this.body.touching.down){
-        if(this.body.x<=this.pointsArray[0])
-            this.direction = 1;
-        else if(this.body.x>=this.pointsArray[1])
-            this.direction = -1;
-    }
+    if(!this.body.touching.down && (this.body.x<=this.pointsArray[0] || this.body.x>=this.pointsArray[1]))
+            this.direction *= -1;
     this.scale.x=this.direction;
     this.body.velocity.x = this.speed*this.direction;
     
