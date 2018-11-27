@@ -15,6 +15,7 @@ donkeyKong.debugLevel= {
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
+        this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
         this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
@@ -121,6 +122,14 @@ donkeyKong.debugLevel= {
         
     },
     
+    hitHero:function(){
+        this.camera.shake(0.05,500);
+        this.camera.flash(0xFF0000,500);
+        this.jumpman.body.position.x = 20;
+        this.jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+        this.jumpman.body.velocity.x =0;
+        console.log('pupa');
+    },
     update: function () {
         
         // ---------------- PAUSE LOGIC --------------------
