@@ -11,18 +11,31 @@ donkeyKong.enemy_prefab = function(_game, _x, _y, _points, _speed, _direction, _
     this.direction = _direction;
     this.level = _level;
     this.game.physics.arcade.enable(this);
+    this.outOfBoundsKill = true;
 };
 
 donkeyKong.enemy_prefab.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.enemy_prefab.prototype.constructor = donkeyKong.enemy_prefab;
 
 donkeyKong.enemy_prefab.prototype.update = function(){
-   this.game.physics.arcade.collide(this,this.level.beams);
-   this.game.physics.arcade.collide(this,this.level.jumpman,this.hitHero,null,this);
+    this.game.physics.arcade.collide(this,this.level.jumpman,this.hitHero,null,this);
+            this.game.physics.arcade.collide(this,this.level.beams);
     
-   this.body.velocity.x = this.speed*this.direction;
-    if(!this.body.touching.down && (this.body.x<=this.pointsArray[0] || this.body.x>=this.pointsArray[1]))
+    for(var i=0; i < this.pointsArray.size; ++i){
+        if(this.body.x != this.pointsArray[i]){
+            this.game.physics.arcade.collide(this,this.level.beams);
+        }
+        else{
+            this.game.physics.arcade.collide(this,this.level.beams);
+        }
+    }
+    
+    if(this.body.touching.down){
+        if(this.body.y - this.lastPos > 1){
             this.direction *= -1;
+        }
+        this.lastPos = this.body.y;
+    }
     this.scale.x=this.direction;
     this.body.velocity.x = this.speed*this.direction;
     
@@ -31,7 +44,6 @@ donkeyKong.enemy_prefab.prototype.update = function(){
 donkeyKong.enemy_prefab.prototype.hitHero = function(_enemy,_hero){
     if(_enemy.body.touching.up && _hero.body.touching.down){
         this.kill();
-        _hero.body.velocity.y=-gameOptions.heroJump;
     }else{
         this.level.hitHero();
     }
