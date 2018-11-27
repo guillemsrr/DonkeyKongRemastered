@@ -38,4 +38,12 @@ donkeyKong.enemy_prefab.prototype.hitHero = function(_enemy,_hero){
 };
 
 
+/*
+
+        //Barrel
+        //donkeyKong.enemy_prefab =     function(_game,_x,_y,_pointA, _pointB,_speed,_direction,_level, _tag)
+        var pointsArray = [16*3, 16*28];
+        this.barrel = new donkeyKong.enemy_prefab(this.game, 16*5, gameOptions.gameHeight - 8*41, pointsArray, 75, 1, this, 'barrel');
+        this.game.add.existing(this.barrel);
+*/
 
