@@ -35,7 +35,7 @@ donkeyKong.pauline.prototype.update = function(){
 donkeyKong.pauline.prototype.SetNextMaxTime = function(){
     this.time = 0;
     flipped = false;
-    this.nextMaxTime = 2;//this.game.rnd.integerInRange(this.MIN_TIME, this.MAX_TIME);
+    this.nextMaxTime = this.game.rnd.integerInRange(1, 3);
     //console.log(this.nextMaxTime);
 }
 
