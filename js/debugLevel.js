@@ -49,7 +49,7 @@ donkeyKong.debugLevel= {
         
         //Barrel
         //donkeyKong.enemy_prefab =      function(_game,_x,_y,_pointA, _pointB,_speed,_direction,_level, _tag)
-        this.pointsArray = [16*15, 16*28];
+        this.pointsArray = [15*15, 15*16];
         this.barrel = new donkeyKong.enemy_prefab(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
         this.game.add.existing(this.barrel);
         

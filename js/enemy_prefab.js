@@ -5,13 +5,14 @@ donkeyKong.enemy_prefab = function(_game, _x, _y, _points, _speed, _direction, _
     Phaser.Sprite.call(this, _game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.animations.add('roll',[0,1,2,3],5,true);
-    this.animations.play('roll');
+    this.animations.add('front',[4, 5],5,true);
     this.pointsArray = _points;
     this.speed = _speed;
     this.direction = _direction;
     this.level = _level;
     this.game.physics.arcade.enable(this);
     this.outOfBoundsKill = true;
+    this.IsGoingDown = true;
 };
 
 donkeyKong.enemy_prefab.prototype = Object.create(Phaser.Sprite.prototype);
@@ -19,19 +20,26 @@ donkeyKong.enemy_prefab.prototype.constructor = donkeyKong.enemy_prefab;
 
 donkeyKong.enemy_prefab.prototype.update = function(){
     this.game.physics.arcade.collide(this,this.level.jumpman,this.hitHero,null,this);
-            this.game.physics.arcade.collide(this,this.level.beams);
     
-    for(var i=0; i < this.pointsArray.size; ++i){
-        if(this.body.x != this.pointsArray[i]){
-            this.game.physics.arcade.collide(this,this.level.beams);
-        }
-        else{
-            this.game.physics.arcade.collide(this,this.level.beams);
-        }
+    if(this.IsGoingDown){
+        this.GoDownRand = Math.floor(Math.random() * 2);
+        this.IsGoingDown = false;
+    }
+    console.log(this.GoDownRand);
+    if(this.body.x >= this.pointsArray[0] && this.body.x <= this.pointsArray[1] && this.GoDownRand == 0){
+        this.body.velocity.x = 0;
+        this.animations.stop('roll');
+        this.animations.play('front');
+    }
+    else{
+        this.animations.stop('front');
+        this.animations.play('roll');
+        this.game.physics.arcade.collide(this,this.level.beams);
     }
     
     if(this.body.touching.down){
         if(this.body.y - this.lastPos > 1){
+            this.IsGoingDown = true;
             this.direction *= -1;
         }
         this.lastPos = this.body.y;
