@@ -171,8 +171,7 @@ donkeyKong.debugLevel= {
         
         
         
-        //JUMPMAN 1
-        
+        //JUMPMAN 1        
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){            
             this.game.physics.arcade.collide(this.jumpman,this.beams);
         }
@@ -186,7 +185,19 @@ donkeyKong.debugLevel= {
         
         this.jumpman.customUpdate();
         
-        //this.jumpman.stairs(this.game.physics.arcade.overlap(this.jumpman,this.stairs));
+        //JUMPMAN 2 
+        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
+            this.game.physics.arcade.collide(this.jumpman2,this.beams);
+        }
+        
+        this.jumpman2.setInputs(this.player2Input.right.isDown,
+                                this.player2Input.left.isDown,
+                                this.player2Input.up.isDown,
+                                this.player2Input.down.isDown, 
+                                this.game.physics.arcade.overlap(this.jumpman2,this.stairs), 
+                                this.game.physics.arcade.overlap(this.jumpman2,this.finalStair));
+        
+        this.jumpman2.customUpdate();
         
         //NPCs
         this.pauline.update();
