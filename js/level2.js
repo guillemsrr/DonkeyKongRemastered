@@ -1,6 +1,6 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.debugLevel= {
+donkeyKong.level2= {
     
     init:function(){
         //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -87,10 +87,11 @@ donkeyKong.debugLevel= {
         //Beams
         this.beams = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
-        beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
+        beamRow.createStraightRow(14, 8, gameOptions.gameHeight - 8*10);
         beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10);
         beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, -1 , -1);
-        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25);
+        beamRow.createDiagRow(10, 16*5, gameOptions.gameHeight - 8*25);
+        beamRow.createDiagRow(10, 16*20, gameOptions.gameHeight - 8*24);
         beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, 1, 1);
         beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*41);
         beamRow.createStraightRow(8, 16*2, 63);
@@ -152,10 +153,15 @@ donkeyKong.debugLevel= {
         
     },
     
-    hitJumpman:function(_jumpman){        
-        _jumpman.body.position.x = 60;
-        _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
-        _jumpman.body.velocity.x = 0;
+    hitJumpman:function(){        
+        this.jumpman.body.position.x = 60;
+        this.jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+        this.jumpman.body.velocity.x = 0;
+    },
+    hitJumpman2:function(){        
+        this.jumpman2.body.position.x = 75;
+        this.jumpman2.body.position.y=gameOptions.gameHeight - 8*12;
+        this.jumpman2.body.velocity.x = 0;
     },
 
     update: function () {

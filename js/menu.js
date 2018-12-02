@@ -69,7 +69,7 @@ donkeyKong.menu = {
                 this.game.state.start('DebugLevel');            
             }
             else if(this.buttonIterator == 1){
-                this.game.state.start('DebugLevel');
+                this.game.state.start('Level2');
             }
             else if(this.buttonIterator == 2){
                 this.game.state.start('Scores');

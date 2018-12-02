@@ -12,6 +12,8 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag){
     this.stairSpeed = 70;
     this.health = 3;
     this.hasHammer = false;
+    this.hammerTime = 10;
+    this.hammerCounter = 0;
     
     this.isInStair = false;
     
@@ -155,11 +157,18 @@ donkeyKong.jumpman.prototype.finalDeath = function(){
     }
 }
 
-donkeyKong.jumpman.prototype.hammerPowerUp = function(){
-    if(!this.hasHammer){
-        this.hasHammer = true;
-        this.time = 0;
-        console.log("hammerMode");
+donkeyKong.jumpman.prototype.grabHammer = function(){
+    this.hasHammer = true;
+}
+
+donkeyKong.jumpman.prototype.hammerLogic = function(){
+    
+    if(this.hammerCounter < this.hammerTime){
+        this.hammerCounter += this.game.time.physicsElapsed;
+    }
+    else{
+        this.hammerCounter = 0;        
+        this.hasHammer = false;
     }
 }
 
@@ -175,9 +184,7 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
         this.finalDeath();    
     }
     
-    
-    
-    
-    //this.resetInputs();
-    //this.hammerPowerUp();
+    if(this.hasHammer){
+        this.hammerLogic();
+    }
 }

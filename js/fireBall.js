@@ -24,8 +24,8 @@ donkeyKong.fireBall.prototype.spawn = function(_barrel,_oil){
 donkeyKong.fireBall.prototype.update = function(){
     this.game.physics.arcade.collide(this,this.level.beams);
     this.game.physics.arcade.collide(this.level.barrel,this.level.oil,this.level.oil,null,this);
-    this.game.physics.arcade.collide(this,this.level.jumpman,this.hitJumpman,null,this);
-    this.game.physics.arcade.collide(this,this.level.jumpman2,this.hitJumpman2,null,this);
+    this.game.physics.arcade.collide(this,this.level.jumpman,this.hitJumpman);
+    this.game.physics.arcade.collide(this,this.level.jumpman2,this.hitJumpman);
 }
 
 donkeyKong.fireBall.prototype.move = function(){
@@ -34,8 +34,5 @@ donkeyKong.fireBall.prototype.move = function(){
 
 
 donkeyKong.fireBall.prototype.hitJumpman = function(_fireball, _jumpman){
-    this.level.hitJumpman();
-};
-donkeyKong.fireBall.prototype.hitJumpman2 = function(_fireball, _jumpman2){
-    this.level.hitJumpman2();
+    this.level.hitJumpman(_jumpman);
 };
