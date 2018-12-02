@@ -13,6 +13,10 @@ donkeyKong.barrel = function(_game, _x, _y, _points, _speed, _direction, _level,
     this.game.physics.arcade.enable(this);
     this.outOfBoundsKill = true;
     this.IsGoingDown = false;
+    
+    this.isFallingStairs = false;
+    this.fallingTime = 0.14;
+    this.fallingCounter = 0;
 };
 
 donkeyKong.barrel.prototype = Object.create(Phaser.Sprite.prototype);
@@ -32,12 +36,13 @@ donkeyKong.barrel.prototype.update = function(){
     
     //Con esto nos aseguramos de que calcule el random 1 vez cada vez que está en una escalera y no 1 vez por frame
     if(!this.IsGoingDown){
-        //this.GoDownRand = Math.floor(Math.random() * 2);
-        //this.IsGoingDown = true;
+        this.GoDownRand = Math.floor(Math.random() * 2);
+        this.IsGoingDown = true;
     }
     console.log(this.width);
     //Si el barril se encuentra en la posición de una escalera y el random calculado antes es true, el barril caerá. Si no, seguirá recto.
-    if(this.game.physics.arcade.overlap(this,this.level.finalStair) && this.GoDownRand == true){
+    if(this.game.physics.arcade.overlap(this,this.level.finalStair) /*&& this.GoDownRand == true*/){
+        /*
         if(this.direction==1){
             if(this.body.x >= this.level.finalStair.x){
                 this.body.velocity.x = 0;
@@ -52,11 +57,20 @@ donkeyKong.barrel.prototype.update = function(){
                 this.animations.play('front');
             }
         }
+        */
+        
+        this.isFallingStairs = true;
     }
     else{
         this.animations.stop('front');
         this.animations.play('roll');
         this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
+        
+        this.fallingCounter = 0;
+    }
+    
+    if(this.isFallingStairs){
+        this.fallingStairLogic();
     }
 
     
@@ -92,5 +106,19 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
 
 donkeyKong.barrel.prototype.spawnFireball = function(_barrel, _oil){
     this.kill();
+};
+
+donkeyKong.barrel.prototype.fallingStairLogic = function(){
+    
+    if(this.fallingCounter < this.fallingTime){
+        this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
+        this.fallingCounter += this.game.time.physicsElapsed;
+    }
+    else{
+        this.body.velocity.x = 0;
+        this.animations.stop('roll');
+        this.animations.play('front');
+        
+    }
 };
 
