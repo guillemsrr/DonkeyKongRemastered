@@ -11,5 +11,6 @@ var gameOptions={
 donkeyKong.game = new Phaser.Game(gameOptions.gameWidth,gameOptions.gameHeight,Phaser.AUTO,'gameFrame',this,false,false);
 
 donkeyKong.game.state.add('Menu', donkeyKong.menu);
+donkeyKong.game.state.add('Scores', donkeyKong.scores);
 donkeyKong.game.state.add('DebugLevel', donkeyKong.debugLevel);
 donkeyKong.game.state.start('Menu');
