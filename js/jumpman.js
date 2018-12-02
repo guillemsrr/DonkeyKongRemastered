@@ -47,6 +47,7 @@ donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.jumpman.prototype.constructor = donkeyKong.jumpman;
 
 donkeyKong.jumpman.prototype.setInputs = function(rightPressed, leftPressed, upPressed, downPressed, overlapStairs, overlapFinalStair){
+    
     this.rightPressed = rightPressed;
     this.leftPressed = leftPressed;
     this.upPressed = upPressed;
@@ -91,8 +92,7 @@ donkeyKong.jumpman.prototype.move = function(){
 
 donkeyKong.jumpman.prototype.jump = function(){
     if (this.upPressed && this.body.touching.down){
-            this.body.velocity.y = -this.jumpForce;
-        }
+        this.body.velocity.y = -this.jumpForce;
     }
 }
 
@@ -165,11 +165,18 @@ donkeyKong.jumpman.prototype.hammerPowerUp = function(){
 
 
 donkeyKong.jumpman.prototype.customUpdate = function(){
-    //provisional    
-    this.move();
-    this.jump();
-    this.stairs();
-    this.die();
+    //provisional
+    if(this.health > 0){
+        this.move();
+        this.jump();
+        this.stairs();
+    }
+    else{
+        this.finalDeath();    
+    }
+    
+    
+    
     
     //this.resetInputs();
     //this.hammerPowerUp();

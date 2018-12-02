@@ -203,6 +203,11 @@ donkeyKong.debugLevel= {
         
         this.jumpman2.customUpdate();
         
+        if(this.game.input.keyboard.addKey(Phaser.Keyboard.F).isDown){
+            this.jumpman.die();
+            this.jumpman2.die();
+        }
+        
         //NPCs
         this.pauline.update();
         
