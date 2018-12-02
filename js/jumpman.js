@@ -7,12 +7,23 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag){
     _game.physics.arcade.enable(this);
 
     //Variables
-    this.speed = 150;
-    this.jumpForce = 300;
-    this.stairSpeed = 100;
+    this.speed = 90;
+    this.jumpForce = 250;
+    this.stairSpeed = 70;
     this.health = 3;
     this.hasHammer = false;
     
+    this.isInStair = false;
+    
+    this.leftPressed;
+    this.rightPressed;
+    this.upPressed;
+    this.downPressed;
+    
+    this.overlapStairs;
+    this.overlapFinalStair;
+    
+     
     //Animations
     this.animations.add('run',[0,1,2],10,true);
     this.animations.add('stairs',[3, 4, 5], 10, true);
@@ -35,34 +46,38 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag){
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.jumpman.prototype.constructor = donkeyKong.jumpman;
 
-donkeyKong.jumpman.prototype.update = function(){
-    //provisional
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.F))
-        this.die();
-    //this.hammerPowerUp();
+donkeyKong.jumpman.prototype.setInputs = function(rightPressed, leftPressed, upPressed, downPressed, overlapStairs, overlapFinalStair){
+    this.rightPressed = rightPressed;
+    this.leftPressed = leftPressed;
+    this.upPressed = upPressed;
+    this.downPressed = downPressed;
     
-    //this function stops the death roll animation
-    this.finalDeath();
+    this.overlapStairs = overlapStairs;
+    this.overlapFinalStair = overlapFinalStair;
 }
 
-donkeyKong.jumpman.prototype.move = function(cursors){
-    if(this.health>0){
-        if(cursors.right.isDown){
+donkeyKong.jumpman.prototype.move = function(){    
+    
+    if(this.rightPressed){
         this.scale.x=1;
         this.body.velocity.x = this.speed;
         if(!this.hasHammer)
             this.animations.play('run');
         else
             this.animations.play('hammerWalk');
-        }
-        else if(cursors.left.isDown){
-            this.scale.x=-1;
-            this.body.velocity.x = -this.speed;
-            if(!this.hasHammer)
-                this.animations.play('run');
-            else
-                this.animations.play('hammerWalk');
-        }
+    }
+    else if(this.leftPressed){
+        this.scale.x=-1;
+        this.body.velocity.x = -this.speed;
+        if(!this.hasHammer)
+            this.animations.play('run');
+        else
+            this.animations.play('hammerWalk');
+    }
+    else{
+        this.body.velocity.x = 0;
+        if(!this.hasHammer)
+            this.animations.stop();
         else{
             this.body.velocity.x = 0;
             if(!this.hasHammer)
@@ -74,26 +89,54 @@ donkeyKong.jumpman.prototype.move = function(cursors){
     }
 }
 
-donkeyKong.jumpman.prototype.jump = function(jumpButton){
-    if(this.health>0){
-        if (jumpButton.isDown && this.body.touching.down && jumpButton.downDuration(150)){
+donkeyKong.jumpman.prototype.jump = function(){
+    if (this.upPressed && this.body.touching.down){
             this.body.velocity.y = -this.jumpForce;
         }
     }
 }
 
-donkeyKong.jumpman.prototype.stairs = function(stairButton, stairs){
-    if(false){//si està en una escala
-        if(stairButton.up.isDown){
-            this.body.velocity.y = -this.stairSpeed;
-            this.animations.play('stairs');
+donkeyKong.jumpman.prototype.stairs = function(){
+    
+    if(this.overlapStairs){
+        if(!this.isInStair){
+            if(this.upPressed || this.downPressed){
+                this.isInStair = true;
+                this.body.allowGravity = false;
+            }
         }
-        else if(stairButton.down.isDown){
+    }
+    else if(this.overlapFinalStair){
+        if(!this.isInStair){
+            if(this.downPressed){        
+                this.isInStair = true;
+                this.body.allowGravity = false;
+            }
+        }
+    }    
+    else{
+        if(this.isInStair){
+            this.isInStair = false;
+            this.body.allowGravity = true;
+            return;            
+        }  
+    }
+    
+    if(this.isInStair){
+        if(this.upPressed){
+        this.body.velocity.y = -this.stairSpeed;
+        this.animations.play('stairs');
+        }
+        else if(this.downPressed){
             this.body.velocity.y = this.stairSpeed;
             this.animations.play('stairs');
         }
+        else{
+            this.body.velocity.y = 0;            
+        }
     }
 }
+
 
 donkeyKong.jumpman.prototype.die = function(){
     this.animations.play('deathRoll');
@@ -118,4 +161,16 @@ donkeyKong.jumpman.prototype.hammerPowerUp = function(){
         this.time = 0;
         console.log("hammerMode");
     }
+}
+
+
+donkeyKong.jumpman.prototype.customUpdate = function(){
+    //provisional    
+    this.move();
+    this.jump();
+    this.stairs();
+    this.die();
+    
+    //this.resetInputs();
+    //this.hammerPowerUp();
 }

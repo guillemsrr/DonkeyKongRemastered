@@ -15,7 +15,10 @@ donkeyKong.debugLevel= {
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
+        this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
         this.load.image('beam', 'assets/sprites/beam.png');
+        this.load.image('stair', 'assets/sprites/stairs.png');
+        this.load.image('finalStair', 'assets/sprites/finalStair.png');
         this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
         this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
         this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png', 16, 16);
@@ -27,6 +30,21 @@ donkeyKong.debugLevel= {
     
     create: function () {
         // ------------------ GAMEPLAY -------------------
+        
+        //Stairs
+        // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite   
+        this.stairs = this.game.add.group();
+        this.finalStair = this.game.add.group();
+        var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
+        stair.createStair(11, 380, 360);        
+        stair.createStair(10, 110, 293);        
+        stair.createStair(14, 220, 300);
+        stair.createStair(11, 380, 230);
+        stair.createStair(15, 240, 237);
+        stair.createStair(10, 110, 163);
+        stair.createStair(12, 170, 167);
+        stair.createStair(10, 260, 111);
+        stair.createStair(7, 200, 64);
         
         //Jumpman
         this.jumpman = new donkeyKong.jumpman(this.game, 60, gameOptions.gameHeight - 8*12, 'jumpman');
@@ -40,11 +58,19 @@ donkeyKong.debugLevel= {
         this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong');
         this.game.add.existing(this.kong);
         
-        this.fireBall = new donkeyKong.fireBall(this.game, 200, gameOptions.gameHeight - 8*11, 'fireBall');
+        //                              function(_game,_x,_y,_speed,_direction,_level, _tag)
+        this.fireBall = new donkeyKong.fireBall(this.game, 200, gameOptions.gameHeight - 8*11, 50, 1, this, 'fireBall');
         this.game.add.existing(this.fireBall);
         
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
+        
+        //Barrel
+        //donkeyKong.enemy_prefab =      function(_game,_x,_y,_points,_speed,_direction,_level, _tag)
+        this.pointsArray = [15*15, 15*16];
+        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
+        this.game.add.existing(this.barrel);
+        
         
         //-------------------- LEVEL ---------------------
         
@@ -63,10 +89,8 @@ donkeyKong.debugLevel= {
         beamRow.createStraightRow(4, 16*9, 8*4);
         
         var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
-        
-        //Stairs
-        this.stairs = this.game.add.group();
-        
+                
+        // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite        
         //create stairs here
         
         // ------------------ PAUSE MENU -----------------
@@ -88,39 +112,47 @@ donkeyKong.debugLevel= {
         this.buttonIterator = 0;        
         this.buttonList = Array(2);
         this.buttonList[0] = this.resume_button;
-        this.buttonList[1] = this.backToMenu_button;
+        this.buttonList[1] = this.backToMenu_button;        
+        
+        this.cursors = this.game.input.keyboard.createCursorKeys();
         
         // Selector
         this.selectorPressed = false;   
         this.selector = this.game.add.sprite(this.menuVerticalAlignement - this.selectorOffset, this.buttonList[0].y, 'menu_selector');
         
         // Cursor input initialization
-        this.walk1={
+        this.player1Input={
             left: this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT),
             right: this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
-        }
-        this.walk2 = {
-            left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
-            right: this.game.input.keyboard.addKey(Phaser.Keyboard.D),
-        };
-        this.jump1=this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
-        this.jump2=this.game.input.keyboard.addKey(Phaser.Keyboard.W);
-        
-        this.stairs1= {
             up: this.game.input.keyboard.addKey(Phaser.Keyboard.UP),
             down: this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN),
         }
         
-        this.stairs2= {
+        this.player2Input={            
+            left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.D),
             up: this.game.input.keyboard.addKey(Phaser.Keyboard.W),
             down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
         }
+        
+        
         
         // This is called once so all Pause grafics and logic are hidden.
         this.PausePressed();
         
     },
     
+    hitJumpman:function(){        
+        this.jumpman.body.position.x = 60;
+        this.jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+        this.jumpman.body.velocity.x = 0;
+    },
+    hitJumpman2:function(){        
+        this.jumpman2.body.position.x = 75;
+        this.jumpman2.body.position.y=gameOptions.gameHeight - 8*12;
+        this.jumpman2.body.velocity.x = 0;
+    },
+
     update: function () {
         
         // ---------------- PAUSE LOGIC --------------------
@@ -138,18 +170,38 @@ donkeyKong.debugLevel= {
         }
         
         // ---------------- GAMEPLAY -----------------
-        this.game.physics.arcade.collide(this.jumpman,this.beams);
-        this.game.physics.arcade.collide(this.jumpman2,this.beams);
         
-        //JUMPMAN
-        this.jumpman.update();
-        this.jumpman2.update();
-        this.jumpman.move(this.walk1);
-        this.jumpman2.move(this.walk2);
-        this.jumpman.jump(this.jump1);
-        this.jumpman2.jump(this.jump2);
-        this.jumpman.stairs(this.stairs1, this.stairs);
-        this.jumpman2.stairs(this.stairs2, this.stairs);
+        //if(this.game.physics.arcade.overlap(this.jumpman,this.stairs))
+        
+        
+        
+        //JUMPMAN 1        
+        if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){            
+            this.game.physics.arcade.collide(this.jumpman,this.beams);
+        }
+        
+        this.jumpman.setInputs(this.player1Input.right.isDown,
+                               this.player1Input.left.isDown,
+                               this.player1Input.up.isDown,
+                               this.player1Input.down.isDown, 
+                               this.game.physics.arcade.overlap(this.jumpman,this.stairs), 
+                               this.game.physics.arcade.overlap(this.jumpman,this.finalStair));
+        
+        this.jumpman.customUpdate();
+        
+        //JUMPMAN 2 
+        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
+            this.game.physics.arcade.collide(this.jumpman2,this.beams);
+        }
+        
+        this.jumpman2.setInputs(this.player2Input.right.isDown,
+                                this.player2Input.left.isDown,
+                                this.player2Input.up.isDown,
+                                this.player2Input.down.isDown, 
+                                this.game.physics.arcade.overlap(this.jumpman2,this.stairs), 
+                                this.game.physics.arcade.overlap(this.jumpman2,this.finalStair));
+        
+        this.jumpman2.customUpdate();
         
         //NPCs
         this.pauline.update();
