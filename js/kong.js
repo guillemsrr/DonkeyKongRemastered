@@ -1,11 +1,12 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.kong = function(_game, _x, _y, _tag){
+donkeyKong.kong = function(_game, _x, _y, _tag, _level){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.game = _game;
     this.time = 0;
     this.nextMaxTime = 0;
+    this.level = _level;
     //this.SetNextMaxTime();
     
     //Animations
@@ -64,9 +65,11 @@ donkeyKong.kong.prototype.NextAnimation = function(){
 donkeyKong.kong.prototype.ThrowDown = function(){
     this.animations.play('throwDown');
     //throw barrel down
+    this.level.barrelDownSpawned = true;
 }
 
 donkeyKong.kong.prototype.ThrowRight = function(){
     this.animations.play('throwRight');
     //throw barrel right
+    this.level.barrelRightSpawned = true;
 }

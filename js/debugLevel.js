@@ -65,7 +65,7 @@ donkeyKong.debugLevel= {
         this.pauline = new donkeyKong.pauline(this.game, 123, 27, 'pauline');
         this.game.add.existing(this.pauline);
         
-        this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong');
+        this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong', this);
         this.game.add.existing(this.kong);
         
         //                              function(_game,_x,_y,_speed,_direction,_level, _tag)
@@ -77,10 +77,9 @@ donkeyKong.debugLevel= {
         
         //Barrel
         //donkeyKong.enemy_prefab =      function(_game,_x,_y,_points,_speed,_direction,_level, _tag)
-        this.pointsArray = [15*15, 15*16];
-        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
-        this.game.add.existing(this.barrel);
-        
+        this.barrelTimer = 0;
+        this.barrelRightSpawned = false;
+        this.barrelDownSpawned = false;
         
         //-------------------- LEVEL ---------------------
         
@@ -177,8 +176,6 @@ donkeyKong.debugLevel= {
         // ---------------- GAMEPLAY -----------------
         
         //if(this.game.physics.arcade.overlap(this.jumpman,this.stairs))
-                
-        
         
         //JUMPMAN 1        
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){            
@@ -232,6 +229,25 @@ donkeyKong.debugLevel= {
         this.fireBall.move();
         
         this.oil.move();
+        
+        
+        //Barrels
+        if(this.barrelRightSpawned){
+            this.barrelTimer+=this.game.time.physicsElapsed;
+            if(this.barrelTimer > 0.7){
+                this.SpawnBarrelRight();
+                this.barrelRightSpawned = false;
+                this.barrelTimer = 0;
+            }
+        }
+        if(this.barrelDownSpawned){
+            this.barrelTimer+=this.game.time.physicsElapsed;
+            if(this.barrelTimer > 0.4){
+                this.SpawnBarrelDown();
+                this.barrelDownSpawned = false;
+                this.barrelTimer = 0;
+            }
+        }
     },
     
     
@@ -300,6 +316,17 @@ donkeyKong.debugLevel= {
         this.selector.y = this.buttonList[this.buttonIterator].y;
         
         this.selectorPressed = true;
+    },
+    
+    SpawnBarrelRight: function(){
+        this.pointsArray = [15*15, 15*16];
+        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, 'barrel');
+        this.game.add.existing(this.barrel);
+    },
+    SpawnBarrelDown: function(){
+        this.pointsArray = [15*15, 15*16];
+        //this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
+        //this.game.add.existing(this.barrel);
     }
     
 };
