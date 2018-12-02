@@ -21,18 +21,30 @@ donkeyKong.barrel.prototype.constructor = donkeyKong.barrel;
 donkeyKong.barrel.prototype.update = function(){
     this.game.physics.arcade.collide(this,this.level.jumpman,this.hitJumpman,null,this);
     this.game.physics.arcade.collide(this,this.level.jumpman2,this.hitJumpman2,null,this);
+    this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
     
     //Con esto nos aseguramos de que calcule el random 1 vez cada vez que está en una escalera y no 1 vez por frame
     if(!this.IsGoingDown){
         this.GoDownRand = Math.floor(Math.random() * 2);
         this.IsGoingDown = true;
     }
-    
+    console.log(this.width);
     //Si el barril se encuentra en la posición de una escalera y el random calculado antes es true, el barril caerá. Si no, seguirá recto.
-    if(this.body.x >= this.pointsArray[0] && this.body.x <= this.pointsArray[1] && this.GoDownRand == true){
-        this.body.velocity.x = 0;
-        this.animations.stop('roll');
-        this.animations.play('front');
+    if(this.game.physics.arcade.overlap(this,this.level.finalStair) && this.GoDownRand == true){
+        if(this.direction==1){
+            if(this.body.x >= this.level.finalStair.x){
+                this.body.velocity.x = 0;
+                this.animations.stop('roll');
+                this.animations.play('front');
+            }
+        }
+        else{
+            if(this.body.x <= this.level.finalStair.x){
+                this.body.velocity.x = 0;
+                this.animations.stop('roll');
+                this.animations.play('front');
+            }
+        }
     }
     else{
         this.animations.stop('front');
@@ -40,11 +52,23 @@ donkeyKong.barrel.prototype.update = function(){
         this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
     }
 
-    this.scale.x=this.direction;
-    this.body.velocity.x = this.speed*this.direction;
     
 };
 
+//Movimiento lateral del barril
+donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
+    if(_barrel.body.touching.down && _beam.body.touching.up){
+        if(this.body.y - this.lastPos > 1){
+            this.IsGoingDown = false;
+            this.direction *= -1;
+        }
+        this.lastPos = this.body.y;
+    }
+    this.scale.x=this.direction;
+    this.body.velocity.x = this.speed*this.direction;
+};
+
+//Detecta si hay colisión del barril con los jugadores
 donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
     if(_barrel.body.touching.up && _jumpman.body.touching.down){
         this.kill();
@@ -60,17 +84,7 @@ donkeyKong.barrel.prototype.hitJumpman2 = function(_barrel, _jumpman2){
     }
 };
 
-
-    
-
-
-donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
-    if(_barrel.body.touching.down && _beam.body.touching.up){
-        if(this.body.y - this.lastPos > 1){
-            this.IsGoingDown = false;
-            this.direction *= -1;
-        }
-        this.lastPos = this.body.y;
-    }
+donkeyKong.barrel.prototype.spawnFireball = function(_barrel, _oil){
+    this.kill();
 };
 

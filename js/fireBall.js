@@ -14,16 +14,9 @@ donkeyKong.fireBall = function(_game, _x, _y, _speed, _direction, _level, _tag){
 donkeyKong.fireBall.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.fireBall.prototype.constructor = donkeyKong.fireBall;
 
-donkeyKong.fireBall.prototype.spawn = function(_barrel,_oil){
-    if(_barrel.body.touching.left && _oil.body.touching.right){
-        //this.level.hitHero();
-        console.log("fueguesito");
-    }
-};
 
 donkeyKong.fireBall.prototype.update = function(){
     this.game.physics.arcade.collide(this,this.level.beams);
-    this.game.physics.arcade.collide(this.level.barrel,this.level.oil,this.level.oil,null,this);
     this.game.physics.arcade.collide(this,this.level.jumpman,this.hitJumpman,null,this);
     this.game.physics.arcade.collide(this,this.level.jumpman2,this.hitJumpman2,null,this);
 }
