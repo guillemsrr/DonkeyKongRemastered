@@ -41,16 +41,17 @@ donkeyKong.debugLevel= {
         this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong');
         this.game.add.existing(this.kong);
         
-        this.fireBall = new donkeyKong.fireBall(this.game, 200, gameOptions.gameHeight - 8*11, 'fireBall');
+        //                              function(_game,_x,_y,_speed,_direction,_level, _tag)
+        this.fireBall = new donkeyKong.fireBall(this.game, 200, gameOptions.gameHeight - 8*11, 50, 1, this, 'fireBall');
         this.game.add.existing(this.fireBall);
         
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
         
         //Barrel
-        //donkeyKong.enemy_prefab =      function(_game,_x,_y,_pointA, _pointB,_speed,_direction,_level, _tag)
+        //donkeyKong.enemy_prefab =      function(_game,_x,_y,_points,_speed,_direction,_level, _tag)
         this.pointsArray = [15*15, 15*16];
-        this.barrel = new donkeyKong.enemy_prefab(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
+        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
         this.game.add.existing(this.barrel);
         
         
@@ -129,14 +130,17 @@ donkeyKong.debugLevel= {
         
     },
     
-    hitHero:function(){
-        this.camera.shake(0.05,500);
-        this.camera.flash(0xFF0000,500);
-        this.jumpman.body.position.x = 20;
+    hitJumpman:function(){        
+        this.jumpman.body.position.x = 60;
         this.jumpman.body.position.y=gameOptions.gameHeight - 8*12;
-        this.jumpman.body.velocity.x =0;
-        console.log('pupa');
+        this.jumpman.body.velocity.x = 0;
     },
+    hitJumpman2:function(){        
+        this.jumpman2.body.position.x = 75;
+        this.jumpman2.body.position.y=gameOptions.gameHeight - 8*12;
+        this.jumpman2.body.velocity.x = 0;
+    },
+
     update: function () {
         
         // ---------------- PAUSE LOGIC --------------------
