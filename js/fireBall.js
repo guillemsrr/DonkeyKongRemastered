@@ -11,13 +11,16 @@ donkeyKong.fireBall = function(_game, _x, _y, _speed, _direction, _level, _tag){
     this.outOfBoundsKill = true;
     
     this.IsGoingDown = false;
-    this.IsGoingUp = false;
     this.isGoingDownStairs = false;
     this.goingDownTime = 0.5;
     this.goingDownCounter = 0;
     
-    this.overlapStairs = false;
-    this.overlapFinalStair = false;
+    this.IsGoingUp = false;
+    this.isGoingUpStairs = false;
+    this.goingUpTime = 0.5;
+    this.goingUpCounter = 0;
+    
+    this.overlapStairs;
     
     //Collisioner:
     this.body.setCircle(6, 0, 4);
@@ -32,7 +35,7 @@ donkeyKong.fireBall.prototype.update = function(){
     this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman,null,this);
     this.animations.play('move');
     
-    
+    console.log(this.IsGoingUp);
     //Random Bajar Escaleras
     if(!this.IsGoingDown){
         this.GoDownRand = Math.floor(Math.random() * 2);
@@ -45,18 +48,32 @@ donkeyKong.fireBall.prototype.update = function(){
         this.IsGoingUp = true;
     }
     //Si la fireball se encuentra en la posición de una escalera y el random calculado antes es true, la fireball bajará las escaleras. Si no, seguirá recta.
-    if(this.game.physics.arcade.overlap(this,this.level.finalStair) && this.GoDownRand == true){
+    if(this.game.physics.arcade.overlap(this,this.level.finalStair) && this.GoDownRand && !this.IsGoingUp){
         this.isGoingDownStairs = true;
+    }
+    else if ((this.game.physics.arcade.overlap(this,this.level.stairs) || this.game.physics.arcade.overlap(this,this.level.finalStair)) && this.GoUpRand){
+        this.isGoingUpStairs = true;
     }
     else{
         this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
-        this.goingDownCounter = 0;
+        if(this.isInStair){
+            this.IsGoingUp = false;
+            this.body.velocity.y = 0;
+            this.body.allowGravity = true;
+            this.isGoingUpStairs = false;   
+            this.direction *= -1;
+            this.isInStair = false;   
+        }  
+        this.scale.x=this.direction;
+        this.body.velocity.x = this.speed*this.direction;
     }
     
     if(this.isGoingDownStairs){
         this.GoingDownStairLogic();
     }
-    this.GoingUpStairLogic();
+    if(this.isGoingUpStairs){
+        this.GoingUpStairLogic();
+    }
 }
 
 //-------------------MOVIMIENTO LATERAL DE LA FIREBALL-------------------------
@@ -65,13 +82,12 @@ donkeyKong.fireBall.prototype.movement = function(_fireball, _beam){
         if(this.body.y - this.lastPos > 1){
             this.body.allowGravity = true;
             this.IsGoingDown = false;
-            this.IsGoingUp = false;
             this.direction *= -1;
+            this.goingDownCounter = 0;
+            this.goingUpCounter = 0;
         }
         this.lastPos = this.body.y;
     }
-    this.scale.x=this.direction;
-    this.body.velocity.x = this.speed*this.direction;
 };
 
 //------------------------FUNCIÓN DE LA LÓGICA DE BAJAR ESCALERAS DE LAS BOLAS DE FUEGO-------------------
@@ -89,30 +105,21 @@ donkeyKong.fireBall.prototype.GoingDownStairLogic = function(){
 
 //------------------------FUNCIÓN DE LA LÓGICA DE SUBIR ESCALERAS DE LAS BOLAS DE FUEGO-------------------
 donkeyKong.fireBall.prototype.GoingUpStairLogic = function(){
-    
-    if(this.overlapStairs){
-        if(!this.isInStair){
-            if(this.GoUpRand == true){
-                this.isInStair = true;
-                this.body.allowGravity = false;
-            }
-        }
-    } 
-    else{
-        if(this.isInStair){
-            this.isInStair = false;
-            this.body.allowGravity = true;
-            return;            
-        }  
+    if(this.goingUpCounter < this.goingUpTime){
+        this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
+        this.goingUpCounter += this.game.time.physicsElapsed;
     }
-    
-    if(this.isInStair){
-        if(this.GoUpRand == true){
-        this.body.velocity.y = -this.speed;
+    else{
+        if(!this.isInStair){
+            this.body.velocity.x = 0;
+            this.isInStair = true;
+            this.body.allowGravity = false;
         }
-        else{
-            this.body.velocity.y = 0;            
+
+        if(this.isInStair){
+            this.body.velocity.y = -this.speed;
         }
+        
     }
 }
 

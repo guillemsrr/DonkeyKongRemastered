@@ -158,7 +158,7 @@ donkeyKong.debugLevel= {
     },
     
     SpawnFireBall:function(){
-        this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 10, 1, this, 'fireBall');
+        this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
         this.game.add.existing(this.fireBall);
     },
 
