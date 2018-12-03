@@ -12,8 +12,8 @@ donkeyKong.barrel = function(_game, _x, _y, _points, _speed, _direction, _level,
     this.level = _level;
     this.game.physics.arcade.enable(this);
     this.outOfBoundsKill = true;
-    this.IsGoingDown = false;
     
+    this.IsGoingDown = false;
     this.isFallingStairs = false;
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
@@ -39,26 +39,8 @@ donkeyKong.barrel.prototype.update = function(){
         this.GoDownRand = Math.floor(Math.random() * 2);
         this.IsGoingDown = true;
     }
-    console.log(this.width);
     //Si el barril se encuentra en la posición de una escalera y el random calculado antes es true, el barril caerá. Si no, seguirá recto.
-    if(this.game.physics.arcade.overlap(this,this.level.finalStair) /*&& this.GoDownRand == true*/){
-        /*
-        if(this.direction==1){
-            if(this.body.x >= this.level.finalStair.x){
-                this.body.velocity.x = 0;
-                this.animations.stop('roll');
-                this.animations.play('front');
-            }
-        }
-        else{
-            if(this.body.x <= this.level.finalStair.x){
-                this.body.velocity.x = 0;
-                this.animations.stop('roll');
-                this.animations.play('front');
-            }
-        }
-        */
-        
+    if(this.game.physics.arcade.overlap(this,this.level.finalStair) && this.GoDownRand == true){
         this.isFallingStairs = true;
     }
     else{
@@ -72,8 +54,6 @@ donkeyKong.barrel.prototype.update = function(){
     if(this.isFallingStairs){
         this.fallingStairLogic();
     }
-
-    
 };
 
 //Movimiento lateral del barril

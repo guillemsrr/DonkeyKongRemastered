@@ -74,6 +74,9 @@ donkeyKong.debugLevel= {
         
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
+        this.game.physics.arcade.enable(this.oil);
+        this.oil.body.immovable = true;
+        this.oil.body.moves = false;
         
         //Barrel
         //donkeyKong.enemy_prefab =      function(_game,_x,_y,_points,_speed,_direction,_level, _tag)
