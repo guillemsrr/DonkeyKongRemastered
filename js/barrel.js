@@ -73,7 +73,8 @@ donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
 donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
     if(_barrel.body.touching.up && _jumpman.body.touching.down){
         this.kill();
-    }else{
+    }
+    else{
         if(_jumpman.hasHammer){
             this.kill();
         }
@@ -85,6 +86,7 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
 };
 
 donkeyKong.barrel.prototype.spawnFireball = function(_barrel, _oil){
+    this.level.SpawnFireBall();
     this.kill();
 };
 

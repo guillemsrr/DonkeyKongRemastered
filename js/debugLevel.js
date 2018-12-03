@@ -68,9 +68,6 @@ donkeyKong.debugLevel= {
         this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong', this);
         this.game.add.existing(this.kong);
         
-        //                              function(_game,_x,_y,_speed,_direction,_level, _tag)
-        this.fireBall = new donkeyKong.fireBall(this.game, 200, gameOptions.gameHeight - 8*11, 50, 1, this, 'fireBall');
-        this.game.add.existing(this.fireBall);
         
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
@@ -159,6 +156,11 @@ donkeyKong.debugLevel= {
         _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
         _jumpman.body.velocity.x = 0;
     },
+    
+    SpawnFireBall:function(){
+        this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 10, 1, this, 'fireBall');
+        this.game.add.existing(this.fireBall);
+    },
 
     update: function () {
         
@@ -229,7 +231,6 @@ donkeyKong.debugLevel= {
         //NPCs
         this.pauline.update();
         
-        this.fireBall.move();
         
         this.oil.move();
         
