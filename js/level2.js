@@ -32,28 +32,37 @@ donkeyKong.level2= {
     create: function () {
         // ------------------ GAMEPLAY -------------------
         
-        // Hammer
+        // Hammer 1
         this.hammerPowerUp = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(150, 350, 'hammer');
+        this.hammerPowerUp = this.game.add.sprite(420, 220, 'hammer');
+        this.game.physics.enable(this.hammerPowerUp);
+        this.hammerPowerUp.body.immovable = true; 
+        this.hammerPowerUp.body.allowGravity = false;
+        this.hammerPowerUp.body.gravity = false;
+        
+        // Hammer 1
+        this.hammerPowerUp = this.game.add.group();            
+        this.hammerPowerUp = this.game.add.sprite(70, 130, 'hammer');
         this.game.physics.enable(this.hammerPowerUp);
         this.hammerPowerUp.body.immovable = true; 
         this.hammerPowerUp.body.allowGravity = false;
         this.hammerPowerUp.body.gravity = false;
         
         
-        //Stairs
+        //Stairs 
         // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite   
         this.stairs = this.game.add.group();
         this.finalStair = this.game.add.group();
         var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
         stair.createStair(11, 380, 360);        
-        stair.createStair(10, 110, 293);        
-        stair.createStair(14, 220, 300);
-        stair.createStair(11, 380, 230);
-        stair.createStair(15, 240, 237);
-        stair.createStair(10, 110, 163);
-        stair.createStair(12, 170, 167);
-        stair.createStair(10, 260, 111);
+        stair.createStair(25, 450, 355);        
+        stair.createStair(14, 110, 293);        
+        //stair.createStair(14, 220, 300);
+        stair.createStair(19, 380, 250);
+        stair.createStair(13, 160, 226);
+        stair.createStair(10, 130, 165);
+        stair.createStair(11, 250, 162);
+        stair.createStair(7, 350, 106);
         stair.createStair(7, 200, 64);
         
         //Jumpman
@@ -65,37 +74,38 @@ donkeyKong.level2= {
         this.pauline = new donkeyKong.pauline(this.game, 123, 27, 'pauline');
         this.game.add.existing(this.pauline);
         
-        this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong');
+        this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong', this);
         this.game.add.existing(this.kong);
         
-        //                              function(_game,_x,_y,_speed,_direction,_level, _tag)
-        this.fireBall = new donkeyKong.fireBall(this.game, 200, gameOptions.gameHeight - 8*11, 50, 1, this, 'fireBall');
-        this.game.add.existing(this.fireBall);
         
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
+        this.game.physics.arcade.enable(this.oil);
+        this.oil.body.immovable = true;
+        this.oil.body.moves = false;
         
         //Barrel
         //donkeyKong.enemy_prefab =      function(_game,_x,_y,_points,_speed,_direction,_level, _tag)
-        this.pointsArray = [15*15, 15*16];
-        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
-        this.game.add.existing(this.barrel);
-        
+        this.barrelTimer = 0;
+        this.barrelRightSpawned = false;
+        this.barrelDownSpawned = false;
         
         //-------------------- LEVEL ---------------------
         
-        //Beams
+        //Beams        
         this.beams = this.game.add.group();
-        var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
-        beamRow.createStraightRow(14, 8, gameOptions.gameHeight - 8*10);
-        beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10);
-        beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, -1 , -1);
-        beamRow.createDiagRow(10, 16*5, gameOptions.gameHeight - 8*25);
-        beamRow.createDiagRow(10, 16*20, gameOptions.gameHeight - 8*24);
-        beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, 1, 1);
-        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*41);
+        this.beamCollider = this.game.add.group();
+        var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
+        beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
+        beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);
+        beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, true, true, -1 , -1);
+        beamRow.createDiagRow(10, 16*5, gameOptions.gameHeight - 8*27, true, false );
+        beamRow.createDiagRow(10, 16*20, gameOptions.gameHeight - 8*24, false, true );
+        beamRow.createDiagRow(10, 16*1, gameOptions.gameHeight - 8*36, true, false, 1, 1);
+        beamRow.createDiagRow(10, 16*15, gameOptions.gameHeight - 8*36, false, false, 1, 1);
+        beamRow.createDiagRow(20, 16*8, gameOptions.gameHeight - 8*41, false, true);
         beamRow.createStraightRow(8, 16*2, 63);
-        beamRow.createDiagRow(8, 16*10, 63, 1, 1);
+        beamRow.createDiagRow(14, 16*10, 63, 1, 1, true, true);
         beamRow.createStraightRow(2, 16*7, 8*5);
         beamRow.createStraightRow(4, 16*9, 8*4);
         
@@ -124,7 +134,7 @@ donkeyKong.level2= {
         this.buttonList = Array(2);
         this.buttonList[0] = this.resume_button;
         this.buttonList[1] = this.backToMenu_button;        
-        
+         
         this.cursors = this.game.input.keyboard.createCursorKeys();
         
         // Selector
@@ -153,15 +163,15 @@ donkeyKong.level2= {
         
     },
     
-    hitJumpman:function(){        
-        this.jumpman.body.position.x = 60;
-        this.jumpman.body.position.y=gameOptions.gameHeight - 8*12;
-        this.jumpman.body.velocity.x = 0;
+    hitJumpman:function(_jumpman){        
+        _jumpman.body.position.x = 60;
+        _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+        _jumpman.body.velocity.x = 0;
     },
-    hitJumpman2:function(){        
-        this.jumpman2.body.position.x = 75;
-        this.jumpman2.body.position.y=gameOptions.gameHeight - 8*12;
-        this.jumpman2.body.velocity.x = 0;
+    
+    SpawnFireBall:function(){
+        this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
+        this.game.add.existing(this.fireBall);
     },
 
     update: function () {
@@ -183,8 +193,6 @@ donkeyKong.level2= {
         // ---------------- GAMEPLAY -----------------
         
         //if(this.game.physics.arcade.overlap(this.jumpman,this.stairs))
-                
-        
         
         //JUMPMAN 1        
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){            
@@ -235,9 +243,27 @@ donkeyKong.level2= {
         //NPCs
         this.pauline.update();
         
-        this.fireBall.move();
         
         this.oil.move();
+        
+        
+        //Barrels
+        if(this.barrelRightSpawned){
+            this.barrelTimer+=this.game.time.physicsElapsed;
+            if(this.barrelTimer > 0.7){
+                this.SpawnBarrelRight();
+                this.barrelRightSpawned = false;
+                this.barrelTimer = 0;
+            }
+        }
+        if(this.barrelDownSpawned){
+            this.barrelTimer+=this.game.time.physicsElapsed;
+            if(this.barrelTimer > 0.4){
+                this.SpawnBarrelDown();
+                this.barrelDownSpawned = false;
+                this.barrelTimer = 0;
+            }
+        }
     },
     
     
@@ -306,6 +332,17 @@ donkeyKong.level2= {
         this.selector.y = this.buttonList[this.buttonIterator].y;
         
         this.selectorPressed = true;
+    },
+    
+    SpawnBarrelRight: function(){
+        this.pointsArray = [15*15, 15*16];
+        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, 'barrel');
+        this.game.add.existing(this.barrel);
+    },
+    SpawnBarrelDown: function(){
+        this.pointsArray = [15*15, 15*16];
+        //this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
+        //this.game.add.existing(this.barrel);
     }
     
 };

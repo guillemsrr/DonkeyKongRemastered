@@ -59,7 +59,7 @@ donkeyKong.barrel.prototype.update = function(){
 //Movimiento lateral del barril
 donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
     if(_barrel.body.touching.down && _beam.body.touching.up){
-        if(this.body.y - this.lastPos > 1){
+        if(this.body.y - this.lastPos > 3){
             this.IsGoingDown = false;
             this.direction *= -1;
         }

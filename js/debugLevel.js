@@ -32,9 +32,17 @@ donkeyKong.debugLevel= {
     create: function () {
         // ------------------ GAMEPLAY -------------------
         
-        // Hammer
+        // Hammer 1
         this.hammerPowerUp = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(150, 350, 'hammer');
+        this.hammerPowerUp = this.game.add.sprite(350, 150, 'hammer');
+        this.game.physics.enable(this.hammerPowerUp);
+        this.hammerPowerUp.body.immovable = true; 
+        this.hammerPowerUp.body.allowGravity = false;
+        this.hammerPowerUp.body.gravity = false;
+        
+        // Hammer 2 
+        this.hammerPowerUp = this.game.add.group();            
+        this.hammerPowerUp = this.game.add.sprite(70, 270, 'hammer');
         this.game.physics.enable(this.hammerPowerUp);
         this.hammerPowerUp.body.immovable = true; 
         this.hammerPowerUp.body.allowGravity = false;
@@ -85,15 +93,16 @@ donkeyKong.debugLevel= {
         
         //Beams
         this.beams = this.game.add.group();
-        var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
+        this.beamCollider = this.game.add.group();
+        var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
         beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
-        beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10);
-        beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, -1 , -1);
-        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25);
-        beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, 1, 1);
-        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*41);
+        beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);        
+        beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, true, true, -1 , -1);
+        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25, true, true);
+        beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, true, true, 1, 1);
+        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*41, true, true);
         beamRow.createStraightRow(8, 16*2, 63);
-        beamRow.createDiagRow(8, 16*10, 63, 1, 1);
+        beamRow.createDiagRow(8, 16*10, 63, 1, 1, true, true);
         beamRow.createStraightRow(2, 16*7, 8*5);
         beamRow.createStraightRow(4, 16*9, 8*4);
         
