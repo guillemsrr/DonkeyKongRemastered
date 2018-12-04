@@ -1,12 +1,10 @@
 var donkeyKong = donkeyKong || {};
 
-//750,100,720,1000,100,1
-donkeyKong.barrel = function(_game, _x, _y, _points, _speed, _direction, _level, _tag){
+donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _level, _tag){
     Phaser.Sprite.call(this, _game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.animations.add('roll',[0,1,2,3],5,true);
     this.animations.add('front',[4, 5],5,true);
-    this.pointsArray = _points;
     this.speed = _speed;
     this.direction = _direction;
     this.level = _level;

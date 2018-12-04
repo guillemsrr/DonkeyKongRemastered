@@ -1,12 +1,10 @@
 var donkeyKong = donkeyKong || {};
 
-//750,100,720,1000,100,1
-donkeyKong.barrel = function(_game, _x, _y, _points, _speed, _direction, _level, _tag){
+donkeyKong.spiky_barrel = function(_game, _x, _y, _speed, _direction, _level, _tag){
     Phaser.Sprite.call(this, _game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.animations.add('roll',[0,1,2,3],5,true);
-    this.animations.add('front',[4, 5],5,true);
-    this.pointsArray = _points;
+    this.animations.add('front',[4, 5],10,true);
     this.speed = _speed;
     this.direction = _direction;
     this.level = _level;
@@ -17,15 +15,17 @@ donkeyKong.barrel = function(_game, _x, _y, _points, _speed, _direction, _level,
     this.isFallingStairs = false;
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
+    
+    this.body.setCircle(6);
 };
 
-donkeyKong.barrel.prototype = Object.create(Phaser.Sprite.prototype);
-donkeyKong.barrel.prototype.constructor = donkeyKong.barrel;
+donkeyKong.spiky_barrel.prototype = Object.create(Phaser.Sprite.prototype);
+donkeyKong.spiky_barrel.prototype.constructor = donkeyKong.spiky_barrel;
 
-donkeyKong.barrel.prototype.update = function(){
-    this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
-    this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman, null, this);
-    this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman, null, this);
+donkeyKong.spiky_barrel.prototype.update = function(){
+    if(this.game.physics.arcade.collide(this,this.level.oil)) this.kill();
+    if(this.game.physics.arcade.overlap(this,this.level.jumpman)) this.level.hitJumpman(this.level.jumpman);
+    if(this.game.physics.arcade.overlap(this,this.level.jumpman2)) this.level.hitJumpman(this.level.jumpman2);
     
     //Con esto nos aseguramos de que calcule el random 1 vez cada vez que está en una escalera y no 1 vez por frame
     if(!this.IsGoingDown){
@@ -50,7 +50,7 @@ donkeyKong.barrel.prototype.update = function(){
 };
 
 //Movimiento lateral del barril
-donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
+donkeyKong.spiky_barrel.prototype.movement = function(_barrel, _beam){
     if(_barrel.body.touching.down && _beam.body.touching.up){
         if(this.body.y - this.lastPos > 3){
             this.IsGoingDown = false;
@@ -62,7 +62,7 @@ donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
     this.body.velocity.x = this.speed*this.direction;
 };
 
-donkeyKong.barrel.prototype.fallingStairLogic = function(){
+donkeyKong.spiky_barrel.prototype.fallingStairLogic = function(){
     
     if(this.fallingCounter < this.fallingTime){
         this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
@@ -74,11 +74,6 @@ donkeyKong.barrel.prototype.fallingStairLogic = function(){
         this.animations.play('front');
         
     }
-};
-
-//Detecta si hay colisión del barril con los jugadores
-donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
-    this.level.hitJumpman(_jumpman);
 };
 
 

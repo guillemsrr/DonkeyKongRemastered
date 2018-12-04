@@ -10,20 +10,27 @@ donkeyKong.debugLevel= {
     },
     
     preload: function () {
-        // Sprites
-        this.load.image('pause_background', 'assets/sprites/pause_background.png');
-        this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
+        // ---- SPRITES ---- \\
+        //Characters
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
+        //NPCs
+        this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
+        //Enemies
+        this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
+        this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png', 16, 16);
+        //Barrels
         this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
+        this.load.spritesheet('spiky_barrel', 'assets/sprites/spiky_barrel.png', 15, 15);
+        //Props
+        this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.image('stair', 'assets/sprites/stairs.png');
         this.load.image('finalStair', 'assets/sprites/finalStair.png');
-        this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
-        this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
-        this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png', 16, 16);
-        this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         this.load.image('hammer', 'assets/sprites/hammer.png');
+        //Menu
+        this.load.image('pause_background', 'assets/sprites/pause_background.png');
+        this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         
         // Fonts
         
@@ -70,13 +77,15 @@ donkeyKong.debugLevel= {
         this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2');
         this.game.add.existing(this.jumpman2);
         
+        //Pauline
         this.pauline = new donkeyKong.pauline(this.game, 123, 27, 'pauline');
         this.game.add.existing(this.pauline);
         
+        //Donkey kong
         this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong', this);
         this.game.add.existing(this.kong);
         
-        
+        //Oil Barrel
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
         this.game.physics.arcade.enable(this.oil);
@@ -84,7 +93,6 @@ donkeyKong.debugLevel= {
         this.oil.body.moves = false;
         
         //Barrel
-        //donkeyKong.enemy_prefab =      function(_game,_x,_y,_points,_speed,_direction,_level, _tag)
         this.barrelTimer = 0;
         this.barrelRightSpawned = false;
         this.barrelDownSpawned = false;
@@ -332,12 +340,17 @@ donkeyKong.debugLevel= {
     },
     
     SpawnBarrelRight: function(){
-        this.pointsArray = [15*15, 15*16];
-        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, 'barrel');
-        this.game.add.existing(this.barrel);
+        this.NormalBarrel = Math.floor(Math.random() * 2);
+        if(this.NormalBarrel){
+            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'barrel');
+            this.game.add.existing(this.barrel);
+        }
+        else{
+            this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'spiky_barrel');
+            this.game.add.existing(this.spiky_barrel);
+        }
     },
     SpawnBarrelDown: function(){
-        this.pointsArray = [15*15, 15*16];
         //this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
         //this.game.add.existing(this.barrel);
     }
