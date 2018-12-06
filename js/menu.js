@@ -23,12 +23,16 @@ donkeyKong.menu = {
         this.onePlayerButton = this.game.add.sprite(this.menuVerticalAlignement, 250, '1player_button');
         this.twoPlayerButton = this.game.add.sprite(this.menuVerticalAlignement, 280, '2player_button');
         
+        var style = { font: "bold 20px Arial", fill: "#fff", boundsAlignH: "top", boundsAlignV: "middle" };
+        this.scoreButton = this.game.add.text(this.menuVerticalAlignement, 310, "SCORES", style);
+        
 
         // Buttons list
         this.buttonIterator = 0;        
-        this.buttonList = Array(2);
+        this.buttonList = Array(3);
         this.buttonList[0] = this.onePlayerButton;
         this.buttonList[1] = this.twoPlayerButton;
+        this.buttonList[2] = this.scoreButton;
 
         
         // Selector
@@ -65,7 +69,10 @@ donkeyKong.menu = {
                 this.game.state.start('DebugLevel');            
             }
             else if(this.buttonIterator == 1){
-                this.game.state.start('DebugLevel');
+                this.game.state.start('Level2');
+            }
+            else if(this.buttonIterator == 2){
+                this.game.state.start('Scores');
             }
         }
     },

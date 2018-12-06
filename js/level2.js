@@ -1,6 +1,6 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.debugLevel= {
+donkeyKong.level2= {
     
     init:function(){
         //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -34,34 +34,35 @@ donkeyKong.debugLevel= {
         
         // Hammer 1
         this.hammerPowerUp = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(350, 150, 'hammer');
+        this.hammerPowerUp = this.game.add.sprite(420, 220, 'hammer');
         this.game.physics.enable(this.hammerPowerUp);
         this.hammerPowerUp.body.immovable = true; 
         this.hammerPowerUp.body.allowGravity = false;
         this.hammerPowerUp.body.gravity = false;
         
-        // Hammer 2 
+        // Hammer 1
         this.hammerPowerUp = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(70, 270, 'hammer');
+        this.hammerPowerUp = this.game.add.sprite(70, 130, 'hammer');
         this.game.physics.enable(this.hammerPowerUp);
         this.hammerPowerUp.body.immovable = true; 
         this.hammerPowerUp.body.allowGravity = false;
         this.hammerPowerUp.body.gravity = false;
         
         
-        //Stairs
+        //Stairs 
         // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite   
         this.stairs = this.game.add.group();
         this.finalStair = this.game.add.group();
         var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
         stair.createStair(11, 380, 360);        
-        stair.createStair(10, 110, 293);        
-        stair.createStair(14, 220, 300);
-        stair.createStair(11, 380, 230);
-        stair.createStair(15, 240, 237);
-        stair.createStair(10, 110, 163);
-        stair.createStair(12, 170, 167);
-        stair.createStair(10, 260, 111);
+        stair.createStair(25, 450, 355);        
+        stair.createStair(14, 110, 293);        
+        //stair.createStair(14, 220, 300);
+        stair.createStair(19, 380, 250);
+        stair.createStair(13, 160, 226);
+        stair.createStair(10, 130, 165);
+        stair.createStair(11, 250, 162);
+        stair.createStair(7, 350, 106);
         stair.createStair(7, 200, 64);
         
         //Jumpman
@@ -91,18 +92,20 @@ donkeyKong.debugLevel= {
         
         //-------------------- LEVEL ---------------------
         
-        //Beams
+        //Beams        
         this.beams = this.game.add.group();
         this.beamCollider = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
         beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
-        beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);        
+        beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);
         beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, true, true, -1 , -1);
-        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25, true, true);
-        beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, true, true, 1, 1);
-        beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*41, true, true);
+        beamRow.createDiagRow(10, 16*5, gameOptions.gameHeight - 8*27, true, false );
+        beamRow.createDiagRow(10, 16*20, gameOptions.gameHeight - 8*24, false, true );
+        beamRow.createDiagRow(10, 16*1, gameOptions.gameHeight - 8*36, true, false, 1, 1);
+        beamRow.createDiagRow(10, 16*15, gameOptions.gameHeight - 8*36, false, false, 1, 1);
+        beamRow.createDiagRow(20, 16*8, gameOptions.gameHeight - 8*41, false, true);
         beamRow.createStraightRow(8, 16*2, 63);
-        beamRow.createDiagRow(8, 16*10, 63, 1, 1, true, true);
+        beamRow.createDiagRow(14, 16*10, 63, 1, 1, true, true);
         beamRow.createStraightRow(2, 16*7, 8*5);
         beamRow.createStraightRow(4, 16*9, 8*4);
         
@@ -131,7 +134,7 @@ donkeyKong.debugLevel= {
         this.buttonList = Array(2);
         this.buttonList[0] = this.resume_button;
         this.buttonList[1] = this.backToMenu_button;        
-        
+         
         this.cursors = this.game.input.keyboard.createCursorKeys();
         
         // Selector
