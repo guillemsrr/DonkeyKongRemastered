@@ -24,7 +24,7 @@ donkeyKong.kong = function(_game, _x, _y, _tag, _level){
 donkeyKong.kong.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.kong.prototype.constructor = donkeyKong.kong;
 
-donkeyKong.kong.prototype.update = function(){
+donkeyKong.kong.prototype.customUpdate = function(){
     
     if(this.time >= this.nextMaxTime){
         this.SetNextMaxTime();

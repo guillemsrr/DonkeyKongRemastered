@@ -10,6 +10,9 @@ donkeyKong.menu = {
         this.load.image('2player_button', 'assets/sprites/menu_2player_button.png');
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         
+        this.load.audio('menu', 'assets/audio/menu.mp3');
+        this.load.audio('start', 'assets/audio/start.mp3');
+        
     },
     
     create: function () {
@@ -33,7 +36,7 @@ donkeyKong.menu = {
         this.buttonList[0] = this.onePlayerButton;
         this.buttonList[1] = this.twoPlayerButton;
         this.buttonList[2] = this.scoreButton;
-
+        
         
         // Selector
         this.selectorPressed = false;        
@@ -42,12 +45,33 @@ donkeyKong.menu = {
         // Input initialization
         this.cursors = this.game.input.keyboard.createCursorKeys();
         
+        //Audio
+        this.menuAudio = this.game.add.audio('menu');
+        this.menuAudio.play();
+        this.menuAudio.loopFull();
+        
+        this.startAudio = this.game.add.audio('start');
+        this.started = false;
+        
     },
     
     update: function () {
-        
-        this.SelectorLogic();
-        
+        if(!this.started){
+            this.SelectorLogic();
+        }
+        else{
+            if(!this.startAudio.isPlaying){
+                if(this.buttonIterator == 0){
+                    this.game.state.start('DebugLevel');
+                }
+                else if(this.buttonIterator == 1){
+                    this.game.state.start('Level2');
+                }
+                else if(this.buttonIterator == 2){
+                    this.game.state.start('Scores');
+                }
+            }
+        }  
     },
     
     // -------------- FUNCTIONS --------------
@@ -64,16 +88,10 @@ donkeyKong.menu = {
             this.selectorPressed = false;
         }
         
-        if(this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER)){            
-            if(this.buttonIterator == 0){
-                this.game.state.start('DebugLevel');            
-            }
-            else if(this.buttonIterator == 1){
-                this.game.state.start('Level2');
-            }
-            else if(this.buttonIterator == 2){
-                this.game.state.start('Scores');
-            }
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER)){
+            this.menuAudio.destroy();
+            this.startAudio.play();
+            this.started = true;
         }
     },
     

@@ -16,7 +16,7 @@ donkeyKong.pauline = function(_game, _x, _y, _tag){
 donkeyKong.pauline.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.pauline.prototype.constructor = donkeyKong.pauline;
 
-donkeyKong.pauline.prototype.update = function(){
+donkeyKong.pauline.prototype.customUpdate = function(){
     if(this.time >= this.nextMaxTime){
         if(!flipped){
             this.scale.x*=-1;

@@ -27,6 +27,19 @@ donkeyKong.debugLevel= {
         
         // Fonts
         
+        //Audio
+        this.load.audio('death', 'assets/audio/NES - Donkey Kong - Sound Effects/death.wav');
+        this.load.audio('donkeyKong', 'assets/audio/NES - Donkey Kong - Sound Effects/donkeyKong.wav');
+        this.load.audio('itemGet', 'assets/audio/NES - Donkey Kong - Sound Effects/itemget.wav');
+        this.load.audio('jump', 'assets/audio/NES - Donkey Kong - Sound Effects/jump.wav');
+        this.load.audio('scoreUp', 'assets/audio/NES - Donkey Kong - Sound Effects/scoreUp.wav');
+        this.load.audio('allRoundsCleared', 'assets/audio/allRoundsCleared.mp3');
+        this.load.audio('hammer', 'assets/audio/hammer.mp3');
+        this.load.audio('levelIntro', 'assets/audio/levelIntro.mp3');  
+        this.load.audio('pause', 'assets/audio/pause.mp3');
+        this.load.audio('roundClear', 'assets/audio/roundClear.mp3');
+        this.load.audio('run', 'assets/audio/run.mp3');
+        
     },
     
     create: function () {
@@ -158,6 +171,21 @@ donkeyKong.debugLevel= {
         // This is called once so all Pause grafics and logic are hidden.
         this.PausePressed();
         
+        //----------------------AUDIO----------------------
+        this.levelIntro = this.game.add.audio('levelIntro');
+        this.levelIntro.play();
+        this.start = false;
+        this.death = this.game.add.audio('death');
+        this.donkeyKong = this.game.add.audio('donkeyKong');
+        this.itemGet = this.game.add.audio('itemGet');
+        this.jump = this.game.add.audio('jump');
+        this.scoreUp = this.game.add.audio('scoreUp');
+        this.allRoundsCleared = this.game.add.audio('allRoundsCleared');
+        this.hammer = this.game.add.audio('hammer');
+        this.pause = this.game.add.audio('pause');
+        this.roundClear = this.game.add.audio('roundClear');
+        this.run = this.game.add.audio('run');
+        
     },
     
     hitJumpman:function(_jumpman){        
@@ -187,79 +215,83 @@ donkeyKong.debugLevel= {
             this.SelectorLogic();           
         }
         
+        
+        
         // ---------------- GAMEPLAY -----------------
-        
-        //if(this.game.physics.arcade.overlap(this.jumpman,this.stairs))
-        
-        //JUMPMAN 1        
+        //JumpmanCollisions
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){            
             this.game.physics.arcade.collide(this.jumpman,this.beams);
         }
-        
-        this.jumpman.setInputs(this.player1Input.right.isDown,
-                               this.player1Input.left.isDown,
-                               this.player1Input.up.isDown,
-                               this.player1Input.down.isDown, 
-                               this.game.physics.arcade.overlap(this.jumpman,this.stairs), 
-                               this.game.physics.arcade.overlap(this.jumpman,this.finalStair));
-        
-        this.jumpman.customUpdate();
-        
-        if(this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUp)){
-            this.jumpman.grabHammer();
-            this.hammerPowerUp.destroy();
-            
-        }
-        
-        //JUMPMAN 2 
         if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
             this.game.physics.arcade.collide(this.jumpman2,this.beams);
         }
-        
-        this.jumpman2.setInputs(this.player2Input.right.isDown,
-                                this.player2Input.left.isDown,
-                                this.player2Input.up.isDown,
-                                this.player2Input.down.isDown, 
-                                this.game.physics.arcade.overlap(this.jumpman2,this.stairs), 
-                                this.game.physics.arcade.overlap(this.jumpman2,this.finalStair));
-        
-        this.jumpman2.customUpdate();
-        
-        if(this.game.physics.arcade.overlap(this.jumpman2, this.hammerPowerUp)){
-            this.jumpman2.grabHammer();
-            this.hammerPowerUp.destroy();
+        //if(this.game.physics.arcade.overlap(this.jumpman,this.stairs))
+        if(!this.levelIntro.isPlaying){
             
-        }
-        
-        // Death debug
-        if(this.game.input.keyboard.addKey(Phaser.Keyboard.F).isDown){
-            this.jumpman.die();
-            this.jumpman2.die();
-        }
-        
-        //NPCs
-        this.pauline.update();
-        
-        
-        this.oil.move();
-        
-        
-        //Barrels
-        if(this.barrelRightSpawned){
-            this.barrelTimer+=this.game.time.physicsElapsed;
-            if(this.barrelTimer > 0.7){
-                this.SpawnBarrelRight();
-                this.barrelRightSpawned = false;
-                this.barrelTimer = 0;
+            if(this.start){//the game starts when the sound is finished
+                //JUMPMAN 1        
+                this.jumpman.setInputs(this.player1Input.right.isDown,
+                                       this.player1Input.left.isDown,
+                                       this.player1Input.up.isDown,
+                                       this.player1Input.down.isDown, 
+                                       this.game.physics.arcade.overlap(this.jumpman,this.stairs), 
+                                       this.game.physics.arcade.overlap(this.jumpman,this.finalStair));
+
+                this.jumpman.customUpdate();
+
+                if(this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUp)){
+                    this.jumpman.grabHammer();
+                    this.hammerPowerUp.destroy();
+
+                }
+
+                //JUMPMAN 2 
+                this.jumpman2.setInputs(this.player2Input.right.isDown,
+                                        this.player2Input.left.isDown,
+                                        this.player2Input.up.isDown,
+                                        this.player2Input.down.isDown, 
+                                        this.game.physics.arcade.overlap(this.jumpman2,this.stairs), 
+                                        this.game.physics.arcade.overlap(this.jumpman2,this.finalStair));
+
+                this.jumpman2.customUpdate();
+
+                if(this.game.physics.arcade.overlap(this.jumpman2, this.hammerPowerUp)){
+                    this.jumpman2.grabHammer();
+                    this.hammerPowerUp.destroy();
+
+                }
+
+                // Death debug
+                if(this.game.input.keyboard.addKey(Phaser.Keyboard.F).isDown){
+                    this.jumpman.die();
+                    this.jumpman2.die();
+                }
+
+                //NPCs
+                this.kong.customUpdate();
+                this.pauline.customUpdate();
+                this.oil.move();
+
+
+                //Barrels
+                if(this.barrelRightSpawned){
+                    this.barrelTimer+=this.game.time.physicsElapsed;
+                    if(this.barrelTimer > 0.7){
+                        this.SpawnBarrelRight();
+                        this.barrelRightSpawned = false;
+                        this.barrelTimer = 0;
+                    }
+                }
+                if(this.barrelDownSpawned){
+                    this.barrelTimer+=this.game.time.physicsElapsed;
+                    if(this.barrelTimer > 0.4){
+                        this.SpawnBarrelDown();
+                        this.barrelDownSpawned = false;
+                        this.barrelTimer = 0;
+                    }
+                }
             }
-        }
-        if(this.barrelDownSpawned){
-            this.barrelTimer+=this.game.time.physicsElapsed;
-            if(this.barrelTimer > 0.4){
-                this.SpawnBarrelDown();
-                this.barrelDownSpawned = false;
-                this.barrelTimer = 0;
-            }
+            this.start = true;
         }
     },
     
