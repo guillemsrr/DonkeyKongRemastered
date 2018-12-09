@@ -3,7 +3,7 @@ var donkeyKong = donkeyKong || {};
 donkeyKong.spiky_barrel = function(_game, _x, _y, _speed, _direction, _level, _tag){
     Phaser.Sprite.call(this, _game, _x, _y, _tag);
     this.anchor.setTo(.5);
-    this.animations.add('roll',[0,1,2,3],5,true);
+    this.animations.add('roll',[0,1,2,3],10,true);
     this.animations.add('front',[4, 5],10,true);
     this.speed = _speed;
     this.direction = _direction;
@@ -16,7 +16,7 @@ donkeyKong.spiky_barrel = function(_game, _x, _y, _speed, _direction, _level, _t
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
     
-    this.body.setCircle(6);
+    this.body.setCircle(7);
 };
 
 donkeyKong.spiky_barrel.prototype = Object.create(Phaser.Sprite.prototype);
@@ -52,7 +52,7 @@ donkeyKong.spiky_barrel.prototype.update = function(){
 //Movimiento lateral del barril
 donkeyKong.spiky_barrel.prototype.movement = function(_barrel, _beam){
     if(_barrel.body.touching.down && _beam.body.touching.up){
-        if(this.body.y - this.lastPos > 3){
+        if(this.body.y - this.lastPos > 5){
             this.IsGoingDown = false;
             this.direction *= -1;
         }
