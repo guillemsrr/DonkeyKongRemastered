@@ -23,7 +23,7 @@ donkeyKong.spiky_barrel.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.spiky_barrel.prototype.constructor = donkeyKong.spiky_barrel;
 
 donkeyKong.spiky_barrel.prototype.update = function(){
-    if(this.game.physics.arcade.collide(this,this.level.oil)) this.kill();
+    this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
     if(this.game.physics.arcade.overlap(this,this.level.jumpman)) this.level.hitJumpman(this.level.jumpman);
     if(this.game.physics.arcade.overlap(this,this.level.jumpman2)) this.level.hitJumpman(this.level.jumpman2);
     
@@ -74,6 +74,11 @@ donkeyKong.spiky_barrel.prototype.fallingStairLogic = function(){
         this.animations.play('front');
         
     }
+};
+
+donkeyKong.spiky_barrel.prototype.spawnFireball = function(_barrel, _oil){
+    this.level.SpawnFireBall();
+    this.kill();
 };
 
 

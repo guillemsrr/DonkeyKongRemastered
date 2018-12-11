@@ -4,7 +4,7 @@ donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _level, _tag){
     Phaser.Sprite.call(this, _game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.animations.add('roll',[0,1,2,3],5,true);
-    this.animations.add('front',[4, 5],5,true);
+    this.animations.add('front',[4, 5],10,true);
     this.speed = _speed;
     this.direction = _direction;
     this.level = _level;
@@ -15,6 +15,8 @@ donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _level, _tag){
     this.isFallingStairs = false;
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
+    
+    this.body.setCircle(5);
 };
 
 donkeyKong.barrel.prototype = Object.create(Phaser.Sprite.prototype);
@@ -57,7 +59,7 @@ donkeyKong.barrel.prototype.update = function(){
 //Movimiento lateral del barril
 donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
     if(_barrel.body.touching.down && _beam.body.touching.up){
-        if(this.body.y - this.lastPos > 3){
+        if(this.body.y - this.lastPos > 5){
             this.IsGoingDown = false;
             this.direction *= -1;
         }
@@ -95,9 +97,13 @@ donkeyKong.barrel.prototype.fallingStairLogic = function(){
         this.fallingCounter += this.game.time.physicsElapsed;
     }
     else{
-        this.body.velocity.x = 0;
-        this.animations.stop('roll');
-        this.animations.play('front');
+        //if(!this.game.physics.arcade.collide(this,this.level.beams) || this.game.physics.arcade.overlap(this,this.level.finalStair)){
+            this.body.velocity.x = 0;
+            //this.body.velocity.y = this.speed;
+            //this.body.allowGravity = false;
+            this.animations.stop('roll');
+            this.animations.play('front');
+        //}
         
     }
 };

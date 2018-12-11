@@ -91,6 +91,7 @@ donkeyKong.debugLevel= {
         this.game.physics.arcade.enable(this.oil);
         this.oil.body.immovable = true;
         this.oil.body.moves = false;
+        this.fireballCounter=0;
         
         //Barrel
         this.barrelTimer = 0;
@@ -175,8 +176,11 @@ donkeyKong.debugLevel= {
     },
     
     SpawnFireBall:function(){
-        this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
-        this.game.add.existing(this.fireBall);
+        this.fireballCounter++;
+        if(this.fireballCounter<5){
+            this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
+            this.game.add.existing(this.fireBall);
+        }
     },
 
     update: function () {
