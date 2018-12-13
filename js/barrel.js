@@ -1,17 +1,19 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _level, _tag){
+donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _fallingDown, _level, _tag){
     Phaser.Sprite.call(this, _game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.animations.add('roll',[0,1,2,3],5,true);
     this.animations.add('front',[4, 5],10,true);
     this.speed = _speed;
     this.direction = _direction;
+    this.fallingDown = _fallingDown;
     this.level = _level;
+    
     this.game.physics.arcade.enable(this);
     this.outOfBoundsKill = true;
     
-    this.IsGoingDown = false;
+    this.isGoingDown = false;
     this.isFallingStairs = false;
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
@@ -26,33 +28,45 @@ donkeyKong.barrel.prototype.update = function(){
     this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
     //this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman, null, this);
     //this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman, null, this);
-    
-    if(this.game.physics.arcade.overlap(this, this.level.jumpman)){
-        this.hitJumpman(this, this.level.jumpman);
-    }
-    if(this.game.physics.arcade.overlap(this, this.level.jumpman2)){
-        this.hitJumpman(this, this.level.jumpman2);
-    }
-    
-    //Con esto nos aseguramos de que calcule el random 1 vez cada vez que está en una escalera y no 1 vez por frame
-    if(!this.IsGoingDown){
-        this.GoDownRand = Math.floor(Math.random() * 2);
-        this.IsGoingDown = true;
-    }
-    //Si el barril se encuentra en la posición de una escalera y el random calculado antes es true, el barril caerá. Si no, seguirá recto.
-    if(this.game.physics.arcade.overlap(this,this.level.finalStair) && this.GoDownRand == true){
-        this.isFallingStairs = true;
+    if(!this.fallingDown){
+        if(this.game.physics.arcade.overlap(this, this.level.jumpman)){
+            this.hitJumpman(this, this.level.jumpman);
+        }
+        if(this.game.physics.arcade.overlap(this, this.level.jumpman2)){
+            this.hitJumpman(this, this.level.jumpman2);
+        }
+
+        //Con esto nos aseguramos de que calcule el random 1 vez cada vez que está en una escalera y no 1 vez por frame
+        if(!this.isGoingDown){
+            this.GoDownRand = Math.floor(Math.random() * 2);
+            this.isGoingDown = true;
+        }
+        //Si el barril se encuentra en la posición de una escalera y el random calculado antes es true, el barril caerá. Si no, seguirá recto.
+        if(this.game.physics.arcade.overlap(this,this.level.finalStair) && this.GoDownRand == true){
+            this.isFallingStairs = true;
+        }
+        else{
+            this.animations.stop('front');
+            this.animations.play('roll');
+            this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
+
+            this.fallingCounter = 0;
+        }
+
+        if(this.isFallingStairs){
+            this.fallingStairLogic();
+        }
     }
     else{
-        this.animations.stop('front');
-        this.animations.play('roll');
-        this.game.physics.arcade.collide(this,this.level.beams,this.movement,null,this);
-        
-        this.fallingCounter = 0;
-    }
-    
-    if(this.isFallingStairs){
-        this.fallingStairLogic();
+        this.animations.play('front');
+        this.body.velocity.x = 0;
+        this.body.allowGravity = false;
+        if(this.game.physics.arcade.overlap(this,this.level.beams)){
+            this.body.velocity.y = this.speed;
+        }
+        else{
+            this.body.velocity.y = this.speed*2;
+        }
     }
 };
 

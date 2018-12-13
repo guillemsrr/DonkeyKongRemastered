@@ -346,7 +346,7 @@ donkeyKong.debugLevel= {
     SpawnBarrelRight: function(){
         this.NormalBarrel = Math.floor(Math.random() * 2);
         if(this.NormalBarrel){
-            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'barrel');
+            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
             this.game.add.existing(this.barrel);
         }
         else{
@@ -355,8 +355,8 @@ donkeyKong.debugLevel= {
         }
     },
     SpawnBarrelDown: function(){
-        //this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
-        //this.game.add.existing(this.barrel);
+        this.barrel = new donkeyKong.barrel(this.game, this.kong.x, this.kong.y, 75, 1, true, this, 'barrel');
+        this.game.add.existing(this.barrel);
     }
     
 };
