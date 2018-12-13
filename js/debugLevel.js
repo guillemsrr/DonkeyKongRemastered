@@ -22,6 +22,7 @@ donkeyKong.debugLevel= {
         //Barrels
         this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
         this.load.spritesheet('spiky_barrel', 'assets/sprites/spiky_barrel.png', 15, 15);
+        this.load.spritesheet('nuclear_barrel', 'assets/sprites/nuclear_barrel.png', 15, 10);
         //Props
         this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         this.load.image('beam', 'assets/sprites/beam.png');
@@ -344,14 +345,18 @@ donkeyKong.debugLevel= {
     },
     
     SpawnBarrelRight: function(){
-        this.NormalBarrel = Math.floor(Math.random() * 2);
-        if(this.NormalBarrel){
+        this.NormalBarrel = Math.floor(Math.random() * 3);
+        if(this.NormalBarrel == 0){
             this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
             this.game.add.existing(this.barrel);
         }
-        else{
+        else if (this.NormalBarrel == 1){
             this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'spiky_barrel');
             this.game.add.existing(this.spiky_barrel);
+        }
+        else if(this.NormalBarrel == 2){
+            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');
+            this.game.add.existing(this.nuclear_barrel);
         }
     },
     SpawnBarrelDown: function(){
