@@ -189,11 +189,12 @@ donkeyKong.debugLevel= {
         }
     },
     
-    NuclearBarrel:function(){
+    NuclearBarrel:function(_game){
+        _game = this.game;
         this.barrels.forEach(function(item) {
-            this.DestroyBarrel(item.x, item.y);
+            _game.add.existing(new donkeyKong.destroy_barrel(_game, item.x,item.y, 'destroy_barrel'));
+            item.kill();
         });
-        this.barrels.kill();
         this.barrels = this.game.add.group();
     },
     
