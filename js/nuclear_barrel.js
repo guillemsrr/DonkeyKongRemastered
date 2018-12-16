@@ -19,14 +19,28 @@ donkeyKong.nuclear_barrel = function(_game, _x, _y, _speed, _direction, _falling
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
     
-    this.body.setCircle(5);
+    //this.body.setCircle(5);
 };
 
 donkeyKong.nuclear_barrel.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.nuclear_barrel.prototype.constructor = donkeyKong.nuclear_barrel;
 
 donkeyKong.nuclear_barrel.prototype.update = function(){
-    this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
+        
+    this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);    
+        
+    if(this.level.timeStopped){
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        
+        this.body.allowGravity = false;
+        
+        return;
+    }
+    else{
+        this.body.allowGravity = true;        
+    }
+    
     this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman, null, this);
     this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman, null, this);
     

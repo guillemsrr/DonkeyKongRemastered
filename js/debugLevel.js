@@ -107,7 +107,7 @@ donkeyKong.debugLevel= {
         this.beams = this.game.add.group();
         this.beamCollider = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
-        beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
+        beamRow.createStraightRow(15, 16, gameOptions.gameHeight - 8*10);
         beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);        
         beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, true, true, -1 , -1);
         beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25, true, true);
@@ -165,6 +165,10 @@ donkeyKong.debugLevel= {
             down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
         }
         
+        // Power up stoping time
+        this.timeStopped = false;      
+        this.timeStoppedCounter = 0;
+        this.timeStoppedTime = 3;
         
         
         // This is called once so all Pause grafics and logic are hidden.
@@ -293,6 +297,8 @@ donkeyKong.debugLevel= {
                 this.barrelTimer = 0;
             }
         }
+        
+        this.TimeStopped();
     },
     
     
@@ -306,6 +312,18 @@ donkeyKong.debugLevel= {
     
     
     // -------------- FUNCTIONS ----------------
+    
+    TimeStopped: function (){
+        if(this.timeStopped){
+            if(this.timeStoppedCounter < this.timeStoppedTime){
+                this.timeStoppedCounter += this.game.time.physicsElapsed;
+            }
+            else{
+                this.timeStopped = false;
+                this.timeStoppedCounter = 0;
+            }            
+        }
+    },
     
     PausePressed: function (){       
         

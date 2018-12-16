@@ -18,16 +18,28 @@ donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _fallingDown, _l
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
     
-    this.body.setCircle(5);
+    //this.body.setCircle(5);
 };
 
 donkeyKong.barrel.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.barrel.prototype.constructor = donkeyKong.barrel;
 
 donkeyKong.barrel.prototype.update = function(){
+        
     this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
-    //this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman, null, this);
-    //this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman, null, this);
+       
+    if(this.level.timeStopped){
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        
+        this.body.allowGravity = false;
+        this.animations.stop();
+    }
+    else{
+        this.animations.play();
+        this.body.allowGravity = true;        
+    }
+    
     if(!this.fallingDown){
         if(this.game.physics.arcade.overlap(this, this.level.jumpman)){
             this.hitJumpman(this, this.level.jumpman);
@@ -52,7 +64,7 @@ donkeyKong.barrel.prototype.update = function(){
 
             this.fallingCounter = 0;
         }
-
+            
         if(this.isFallingStairs){
             this.fallingStairLogic();
         }
@@ -68,18 +80,24 @@ donkeyKong.barrel.prototype.update = function(){
             this.body.velocity.y = this.speed*2;
         }
     }
+    
 };
 
 //Movimiento lateral del barril
 donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
-    if(_barrel.body.touching.down && _beam.body.touching.up){
-        if(this.body.y - this.lastPos > 5){
-            this.IsGoingDown = false;
-            this.direction *= -1;
-        }
-        this.lastPos = this.body.y;
+    if(_barrel.body.touching.down && _beam.body.touching.up){        
+        
     }
+    
+    if(this.body.y - this.lastPos > 5){
+        console.log("Turns");
+        this.IsGoingDown = false;
+        this.direction *= -1;
+    }
+    this.lastPos = this.body.y;
+    
     this.scale.x=this.direction;
+    
     this.body.velocity.x = this.speed*this.direction;
 };
 
@@ -87,11 +105,13 @@ donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
 donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
     if(_barrel.body.touching.up && _jumpman.body.touching.down){
         this.level.DestroyBarrel(this.x, this.y);
+        this.destroyBarrel(_jumpman);
         this.kill();
     }
     else{
         if(_jumpman.hasHammer){
             this.level.DestroyBarrel();
+            this.destroyBarrel(_jumpman);
             this.kill();
         }
         else{
@@ -100,6 +120,12 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
         }
     }
 };
+
+donkeyKong.barrel.prototype.destroyBarrel = function(_jumpman){
+    
+    //_jumpman.speedPowerUpActive = true;
+    this.level.timeStopped = true;
+}
 
 donkeyKong.barrel.prototype.spawnFireball = function(_barrel, _oil){
     this.level.SpawnFireBall();

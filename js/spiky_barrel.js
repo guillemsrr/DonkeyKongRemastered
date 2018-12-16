@@ -23,7 +23,23 @@ donkeyKong.spiky_barrel.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.spiky_barrel.prototype.constructor = donkeyKong.spiky_barrel;
 
 donkeyKong.spiky_barrel.prototype.update = function(){
+        
     this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
+        
+    if(this.level.timeStopped){
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        
+        this.body.allowGravity = false;
+        this.animations.stop();
+        
+        return;
+    }
+    else{
+        this.animations.play();
+        this.body.allowGravity = true;        
+    }
+    
     if(this.game.physics.arcade.overlap(this,this.level.jumpman)) this.level.hitJumpman(this.level.jumpman);
     if(this.game.physics.arcade.overlap(this,this.level.jumpman2)) this.level.hitJumpman(this.level.jumpman2);
     
