@@ -86,10 +86,12 @@ donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
 //Detecta si hay colisión del barril con los jugadores
 donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
     if(_barrel.body.touching.up && _jumpman.body.touching.down){
+        this.level.DestroyBarrel(this.x, this.y);
         this.kill();
     }
     else{
         if(_jumpman.hasHammer){
+            this.level.DestroyBarrel();
             this.kill();
         }
         else{

@@ -23,6 +23,8 @@ donkeyKong.debugLevel= {
         this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
         this.load.spritesheet('spiky_barrel', 'assets/sprites/spiky_barrel.png', 15, 15);
         this.load.spritesheet('nuclear_barrel', 'assets/sprites/nuclear_barrel.png', 15, 10);
+        
+        this.load.spritesheet('destroy_barrel', 'assets/sprites/destroy_barrel.png', 15, 15);
         //Props
         this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         this.load.image('beam', 'assets/sprites/beam.png');
@@ -168,6 +170,9 @@ donkeyKong.debugLevel= {
         // This is called once so all Pause grafics and logic are hidden.
         this.PausePressed();
         
+        
+        //----- BARRELS GROUP -----
+        this.barrels = this.game.add.group();
     },
     
     hitJumpman:function(_jumpman){        
@@ -182,6 +187,20 @@ donkeyKong.debugLevel= {
             this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
             this.game.add.existing(this.fireBall);
         }
+    },
+    
+    NuclearBarrel:function(){
+        this.barrels.forEach(function(item) {
+            this.DestroyBarrel(item.x, item.y);
+        });
+        this.barrels.kill();
+        this.barrels = this.game.add.group();
+    },
+    
+    
+    DestroyBarrel:function(_x, _y){
+        this.destroy_barrel = new donkeyKong.destroy_barrel(this.game, _x, _y, 'destroy_barrel');
+        this.game.add.existing(this.destroy_barrel);
     },
 
     update: function () {
@@ -348,20 +367,24 @@ donkeyKong.debugLevel= {
         this.NormalBarrel = Math.floor(Math.random() * 3);
         if(this.NormalBarrel == 0){
             this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
-            this.game.add.existing(this.barrel);
+            //this.game.add.existing(this.barrel);
+            this.barrels.add(this.barrel);
         }
         else if (this.NormalBarrel == 1){
             this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'spiky_barrel');
-            this.game.add.existing(this.spiky_barrel);
+            //this.game.add.existing(this.spiky_barrel);
+            this.barrels.add(this.spiky_barrel);
         }
         else if(this.NormalBarrel == 2){
             this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');
-            this.game.add.existing(this.nuclear_barrel);
+            //this.game.add.existing(this.nuclear_barrel);
+            this.barrels.add(this.nuclear_barrel);
         }
     },
     SpawnBarrelDown: function(){
         this.barrel = new donkeyKong.barrel(this.game, this.kong.x, this.kong.y, 75, 1, true, this, 'barrel');
-        this.game.add.existing(this.barrel);
+        //this.game.add.existing(this.barrel);
+        this.barrels.add(this.barrel);
     }
     
 };
