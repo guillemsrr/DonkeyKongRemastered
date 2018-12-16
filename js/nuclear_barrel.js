@@ -34,10 +34,12 @@ donkeyKong.nuclear_barrel.prototype.update = function(){
         this.body.velocity.y = 0;
         
         this.body.allowGravity = false;
+        this.animations.stop();
         
         return;
     }
     else{
+        this.animations.play();
         this.body.allowGravity = true;        
     }
     
