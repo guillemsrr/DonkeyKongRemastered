@@ -29,7 +29,7 @@ donkeyKong.debugLevel= {
         
         //Audio
         this.load.audio('death', 'assets/audio/NES - Donkey Kong - Sound Effects/death.wav');
-        this.load.audio('donkeyKong', 'assets/audio/NES - Donkey Kong - Sound Effects/donkeyKong.wav');
+        this.load.audio('kong', 'assets/audio/kong.mp3');
         this.load.audio('itemGet', 'assets/audio/NES - Donkey Kong - Sound Effects/itemget.wav');
         this.load.audio('jump', 'assets/audio/NES - Donkey Kong - Sound Effects/jump.wav');
         this.load.audio('scoreUp', 'assets/audio/NES - Donkey Kong - Sound Effects/scoreUp.wav');
@@ -38,7 +38,8 @@ donkeyKong.debugLevel= {
         this.load.audio('levelIntro', 'assets/audio/levelIntro.mp3');  
         this.load.audio('pause', 'assets/audio/pause.mp3');
         this.load.audio('roundClear', 'assets/audio/roundClear.mp3');
-        this.load.audio('run', 'assets/audio/run.mp3');
+        this.load.audio('run', 'assets/audio/run_short.mp3');
+        this.load.audio('stageTheme', 'assets/audio/stageTheme.mp3');
         
     },
     
@@ -77,16 +78,39 @@ donkeyKong.debugLevel= {
         stair.createStair(10, 260, 111);
         stair.createStair(7, 200, 64);
         
+        //----------------------AUDIO----------------------
+        //level
+        this.levelIntro = this.game.add.audio('levelIntro');
+        this.levelIntro.play();
+        this.start = false;
+        this.allRoundsCleared = this.game.add.audio('allRoundsCleared');
+        this.pause = this.game.add.audio('pause');
+        this.roundClear = this.game.add.audio('roundClear');
+        this.stageTheme = this.game.add.audio('stageTheme');
+        this.stageTheme.loopFull();
+        this.stageTheme.stop();
+        //jumpman
+        this.run = this.game.add.audio('run');//new Sound(this.game, 'run', 1, false);
+        this.jump = this.game.add.audio('jump');
+        this.scoreUp = this.game.add.audio('scoreUp');
+        this.death = this.game.add.audio('death');
+        this.itemGet = this.game.add.audio('itemGet');
+        this.hammer = this.game.add.audio('hammer');
+        //kong
+        this.kongSound = this.game.add.audio('kong');
+        
+        
+        
         //Jumpman
-        this.jumpman = new donkeyKong.jumpman(this.game, 60, gameOptions.gameHeight - 8*12, 'jumpman');
+        this.jumpman = new donkeyKong.jumpman(this.game, 200, 40, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman);
-        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2');
+        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman2);
         
-        this.pauline = new donkeyKong.pauline(this.game, 123, 27, 'pauline');
+        this.pauline = new donkeyKong.pauline(this.game, 123, 29, 'pauline');
         this.game.add.existing(this.pauline);
         
-        this.kong = new donkeyKong.kong(this.game, 70, 45, 'kong', this);
+        this.kong = new donkeyKong.kong(this.game, 70, 47, 'kong', this, this.kongSound);
         this.game.add.existing(this.kong);
         
         
@@ -120,6 +144,8 @@ donkeyKong.debugLevel= {
         beamRow.createStraightRow(4, 16*9, 8*4);
         
         var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
+        
+        this.levelCompleted = false;
                 
         // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite        
         //create stairs here
@@ -166,26 +192,8 @@ donkeyKong.debugLevel= {
             down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
         }
         
-        
-        
         // This is called once so all Pause grafics and logic are hidden.
         this.PausePressed();
-        
-        //----------------------AUDIO----------------------
-        this.levelIntro = this.game.add.audio('levelIntro');
-        this.levelIntro.play();
-        this.start = false;
-        this.death = this.game.add.audio('death');
-        this.donkeyKong = this.game.add.audio('donkeyKong');
-        this.itemGet = this.game.add.audio('itemGet');
-        this.jump = this.game.add.audio('jump');
-        this.scoreUp = this.game.add.audio('scoreUp');
-        this.allRoundsCleared = this.game.add.audio('allRoundsCleared');
-        this.hammer = this.game.add.audio('hammer');
-        this.pause = this.game.add.audio('pause');
-        this.roundClear = this.game.add.audio('roundClear');
-        this.run = this.game.add.audio('run');
-        
     },
     
     hitJumpman:function(_jumpman){        
@@ -197,7 +205,10 @@ donkeyKong.debugLevel= {
     SpawnFireBall:function(){
         this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
         this.game.add.existing(this.fireBall);
+        if(!this.oil.fired)
+            this.oil.fired = true;
     },
+    
 
     update: function () {
         
@@ -212,23 +223,23 @@ donkeyKong.debugLevel= {
         
         // Selector Input
         if(this.isPaused){
-            this.SelectorLogic();           
+            this.SelectorLogic();
         }
-        
         
         
         // ---------------- GAMEPLAY -----------------
         //JumpmanCollisions
-        if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){            
+        if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){
             this.game.physics.arcade.collide(this.jumpman,this.beams);
         }
-        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
+        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){
             this.game.physics.arcade.collide(this.jumpman2,this.beams);
         }
-        //if(this.game.physics.arcade.overlap(this.jumpman,this.stairs))
-        if(!this.levelIntro.isPlaying){
-            
+        //All customUpdates inside
+        if(!this.levelIntro.isPlaying && !this.levelCompleted && !this.isPaused){
             if(this.start){//the game starts when the sound is finished
+                if(!this.stageTheme.isPlaying)
+                    this.stageTheme.play();
                 //JUMPMAN 1        
                 this.jumpman.setInputs(this.player1Input.right.isDown,
                                        this.player1Input.left.isDown,
@@ -270,7 +281,7 @@ donkeyKong.debugLevel= {
                 //NPCs
                 this.kong.customUpdate();
                 this.pauline.customUpdate();
-                this.oil.move();
+                this.oil.customUpdate();
 
 
                 //Barrels
@@ -293,8 +304,18 @@ donkeyKong.debugLevel= {
             }
             this.start = true;
         }
+        
+        //levelCompletion
+        if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
+            this.levelCompleted = true;
+            this.roundClear.play();
+        }
+        else if(this.levelCompleted && !this.roundClear.isPlaying){
+            //load next level
+            this.game.state.start('Level2');
+        }
+        
     },
-    
     
     render: function () {
 
@@ -309,6 +330,7 @@ donkeyKong.debugLevel= {
     
     PausePressed: function (){       
         
+        
         if(this.pauseButtonPressed) return;
         
         this.isPaused = !this.isPaused;
@@ -320,6 +342,7 @@ donkeyKong.debugLevel= {
         }
         
         this.pauseButtonPressed = true;
+        this.pause.play();
     },
     
     SelectorLogic: function () {        
@@ -368,10 +391,11 @@ donkeyKong.debugLevel= {
         this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, 'barrel');
         this.game.add.existing(this.barrel);
     },
+    
     SpawnBarrelDown: function(){
         this.pointsArray = [15*15, 15*16];
         //this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
         //this.game.add.existing(this.barrel);
-    }
+    },
     
 };

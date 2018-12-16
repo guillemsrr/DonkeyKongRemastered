@@ -1,6 +1,6 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.kong = function(_game, _x, _y, _tag, _level){
+donkeyKong.kong = function(_game, _x, _y, _tag, _level, _kongSound){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.game = _game;
@@ -12,13 +12,17 @@ donkeyKong.kong = function(_game, _x, _y, _tag, _level){
     //Animations
     this.animations.add('throwRight',[4,5,7],3,false);
     this.animations.add('throwDown',[4,5,6],3,false);
-    this.animations.add('monkey',[1,2], 2 , true);
+    this.animations.add('monkey',[1,2], 3 , true);
     
     //this doesn't work for the randomInRange
     this.MIN_TIME = 1;
     this.MAX_TIME = 3;
     
     this.firstThrowDown = false;
+    
+    this.kongSound = _kongSound;
+    this.kongSound.loopFull();
+    this.kongSound.stop();
 }
 
 donkeyKong.kong.prototype = Object.create(Phaser.Sprite.prototype);
@@ -56,9 +60,12 @@ donkeyKong.kong.prototype.NextAnimation = function(){
              this.ThrowRight();
          else
              this.ThrowDown();
+         this.kongSound.stop();
     }
     else{
         this.animations.play('monkey');
+        this.kongSound.play();
+            
     }
 }
 

@@ -73,6 +73,7 @@ donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
 donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
     if(_barrel.body.touching.up && _jumpman.body.touching.down){
         this.kill();
+        _jumpman.JumpOnBarrel();
     }
     else{
         if(_jumpman.hasHammer){

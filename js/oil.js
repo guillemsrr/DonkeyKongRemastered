@@ -5,7 +5,7 @@ donkeyKong.oil = function(_game, _x, _y, _tag){
     this.anchor.setTo(.5);
     this.game = _game;
     this.fired = false;
-    this.animations.add('move', [1][2],4,true);
+    this.animations.add('move', [1,2],4,true);
 }
 
 donkeyKong.oil.prototype = Object.create(Phaser.Sprite.prototype);
@@ -15,7 +15,7 @@ donkeyKong.oil.prototype.update = function(){
 
 }
 
-donkeyKong.oil.prototype.move = function(){
+donkeyKong.oil.prototype.customUpdate = function(){
     if(this.fired){
         this.animations.play('move');
     }
