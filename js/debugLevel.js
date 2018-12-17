@@ -72,7 +72,7 @@ donkeyKong.debugLevel= {
         this.hammerPowerUp.body.gravity = false;
         
         // Hammer 2   
-        this.hammerPowerUp2 = this.game.add.sprite(120, 350, 'hammer');
+        this.hammerPowerUp2 = this.game.add.sprite(60, 250, 'hammer');
         this.hammerPowerUpGroup.add(this.hammerPowerUp2);
         this.game.physics.enable(this.hammerPowerUp2);
         this.hammerPowerUp2.body.immovable = true; 
