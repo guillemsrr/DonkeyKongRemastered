@@ -17,6 +17,7 @@ donkeyKong.barrel = function(_game, _x, _y, _points, _speed, _direction, _level,
     this.isFallingStairs = false;
     this.fallingTime = 0.14;
     this.fallingCounter = 0;
+    this.time = 0;
 };
 
 donkeyKong.barrel.prototype = Object.create(Phaser.Sprite.prototype);
@@ -54,6 +55,7 @@ donkeyKong.barrel.prototype.update = function(){
     if(this.isFallingStairs){
         this.fallingStairLogic();
     }
+    this.time += this.game.time.physicsElapsed;
 };
 
 //Movimiento lateral del barril

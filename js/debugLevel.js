@@ -15,7 +15,10 @@ donkeyKong.debugLevel= {
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
+        this.load.spritesheet('staticBarrel', 'assets/sprites/barrel.png', 15, 10);
         this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
+        this.load.spritesheet('mineBarrel', 'assets/sprites/mineBarrel_2.png', 15, 10);
+        this.load.spritesheet('mineExplosion', 'assets/sprites/mineExplosion.png', 128, 128);
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.image('stair', 'assets/sprites/stairs.png');
         this.load.image('finalStair', 'assets/sprites/finalStair.png');
@@ -40,6 +43,7 @@ donkeyKong.debugLevel= {
         this.load.audio('roundClear', 'assets/audio/roundClear.mp3');
         this.load.audio('run', 'assets/audio/run_short.mp3');
         this.load.audio('stageTheme', 'assets/audio/stageTheme.mp3');
+        this.load.audio('hit', 'assets/audio/hit.mp3');
         
     },
     
@@ -96,6 +100,7 @@ donkeyKong.debugLevel= {
         this.death = this.game.add.audio('death');
         this.itemGet = this.game.add.audio('itemGet');
         this.hammer = this.game.add.audio('hammer');
+        this.hit = this.game.add.audio('hit');
         //kong
         this.kongSound = this.game.add.audio('kong');
         
@@ -107,13 +112,33 @@ donkeyKong.debugLevel= {
         this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman2);
         
+        //PAULINE
         this.pauline = new donkeyKong.pauline(this.game, 123, 29, 'pauline');
         this.game.add.existing(this.pauline);
         
-        this.kong = new donkeyKong.kong(this.game, 70, 47, 'kong', this, this.kongSound);
+        //DONKEY KONG
+        this.kong = new donkeyKong.kong(this.game, 73, 47, 'kong', this, this.kongSound);
         this.game.add.existing(this.kong);
         
+        //static barrels
+        this.staticBarrel = this.add.sprite(40, 46, "staticBarrel");
+        this.staticBarrel.frame = 4;
+        this.staticBarrel.angle = 90;
         
+        this.staticBarrel2 = this.add.sprite(50, 46, "staticBarrel");
+        this.staticBarrel2.frame = 4;
+        this.staticBarrel2.angle = 90;
+        
+        this.staticBarrel3 = this.add.sprite(40, 35, "staticBarrel");
+        this.staticBarrel3.frame = 4;
+        this.staticBarrel3.angle = 90;
+        
+        this.staticBarrel4 = this.add.sprite(50, 35, "staticBarrel");
+        this.staticBarrel4.frame = 4;
+        this.staticBarrel4.angle = 90;
+
+        
+        //OIL
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
         this.game.physics.arcade.enable(this.oil);
@@ -125,6 +150,8 @@ donkeyKong.debugLevel= {
         this.barrelTimer = 0;
         this.barrelRightSpawned = false;
         this.barrelDownSpawned = false;
+        
+        this.mines = this.game.add.group();
         
         //-------------------- LEVEL ---------------------
         
@@ -156,6 +183,7 @@ donkeyKong.debugLevel= {
         this.menuVerticalAlignement = 191;
         this.selectorOffset = 25;
         
+        //this.isPaused = false; TODO:: no hauria de ser false?¿ sinó fa la musiqueta al principi
         this.isPaused = true;
         this.pauseButtonPressed = false;
         
@@ -200,6 +228,7 @@ donkeyKong.debugLevel= {
         _jumpman.body.position.x = 60;
         _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
         _jumpman.body.velocity.x = 0;
+        this.hit.play();
     },
     
     SpawnFireBall:function(){
@@ -217,13 +246,15 @@ donkeyKong.debugLevel= {
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
             this.PausePressed();
         }
-        else{
+        else if(this.pauseButtonPressed ){
             this.pauseButtonPressed = false;
+            //console.log("2");
         }
-        
+
         // Selector Input
         if(this.isPaused){
             this.SelectorLogic();
+            //console.log("3");
         }
         
         
@@ -300,6 +331,10 @@ donkeyKong.debugLevel= {
                         this.barrelDownSpawned = false;
                         this.barrelTimer = 0;
                     }
+                }
+                
+                for(i = 0; i< this.mines.count; i++){
+                    this.mines[i].checkExplosion();
                 }
             }
             this.start = true;
@@ -388,7 +423,7 @@ donkeyKong.debugLevel= {
     
     SpawnBarrelRight: function(){
         this.pointsArray = [15*15, 15*16];
-        this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, 'barrel');
+        this.barrel = this.RandomBarrel();
         this.game.add.existing(this.barrel);
     },
     
@@ -397,5 +432,16 @@ donkeyKong.debugLevel= {
         //this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
         //this.game.add.existing(this.barrel);
     },
+    
+    RandomBarrel: function(){
+        if(this.game.rnd.integerInRange(0, 100)<10){//80% per barril normal
+            return new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "barrel");
+        }
+        else{
+            mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "mineBarrel");
+            this.mines.add(mine);
+            return mine;
+        }
+    }
     
 };
