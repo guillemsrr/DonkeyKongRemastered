@@ -71,14 +71,32 @@ donkeyKong.barrel.prototype.update = function(){
         }
     }
     else{
-        this.animations.play('front');
-        this.body.velocity.x = 0;
-        this.body.allowGravity = false;
-        if(this.game.physics.arcade.overlap(this,this.level.beams)){
-            this.body.velocity.y = this.speed;
+        
+        if(this.game.physics.arcade.overlap(this, this.level.jumpman)){
+            this.hitJumpman(this, this.level.jumpman);
+        }
+        if(this.game.physics.arcade.overlap(this, this.level.jumpman2)){
+            this.hitJumpman(this, this.level.jumpman2);
+        }
+        
+        if(this.y < gameOptions.gameHeight - 8*12){
+            this.animations.play('front');
+            this.body.velocity.x = 0;
+            this.body.allowGravity = false;
+            this.scale.x=1.1;
+            if(this.game.physics.arcade.overlap(this,this.level.beams)){
+                this.body.velocity.y = this.speed;
+            }
+            else{
+                this.body.velocity.y = this.speed*2;
+            }
         }
         else{
-            this.body.velocity.y = this.speed*2;
+            this.body.velocity.y = 0;
+            this.direction *= -1;
+            this.scale.x=this.direction;
+            this.body.velocity.x = this.speed*this.direction;
+            this.fallingDown = false;
         }
     }
     
@@ -86,11 +104,7 @@ donkeyKong.barrel.prototype.update = function(){
 };
 
 //Movimiento lateral del barril
-donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
-    if(_barrel.body.touching.down && _beam.body.touching.up){        
-        
-    }
-    
+donkeyKong.barrel.prototype.movement = function(_barrel, _beam){    
     if(this.body.y - this.lastPos > 5){
         this.IsGoingDown = false;
         this.direction *= -1;
