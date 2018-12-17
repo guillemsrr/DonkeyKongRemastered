@@ -35,6 +35,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.animations.add('hammerWalk',[12, 13, 14, 15], 7, true);
     this.animations.add('deathRoll',[16, 17, 18, 19], 10, true);
     this.animations.add('finalDeath',[10], 1, true);
+    this.isMoving = false;
     
     //Collisioner:
     //this.body.setSize(15, 20, 12, 15);
@@ -75,37 +76,20 @@ donkeyKong.jumpman.prototype.move = function(){
     if(this.rightPressed){
         this.scale.x=1;
         this.body.velocity.x = this.speed;
-        if(!this.hasHammer){
-            this.animations.play('run');
-        }
-        else
-            this.animations.play('hammerWalk');
-        if(!this.runSound.isPlaying && this.body.touching.down)
+        this.isMoving = true;
                 this.runSound.play();
+        if(!this.runSound.isPlaying && this.body.touching.down)
     }
     else if(this.leftPressed){
         this.scale.x=-1;
         this.body.velocity.x = -this.speed;
-        if(!this.hasHammer){
-            this.animations.play('run');
-        }  
-        else
-            this.animations.play('hammerWalk');
-        if(!this.runSound.isPlaying && this.body.touching.down)
+        this.isMoving = true;
                 this.runSound.play();
+        if(!this.runSound.isPlaying && this.body.touching.down)
     }
     else{
         this.body.velocity.x = 0;
-        if(!this.hasHammer)
-            this.animations.stop();
-        else{
-            this.body.velocity.x = 0;
-            if(!this.hasHammer)
-                this.animations.stop();
-            else{
-                this.animations.play('hammerIdle');
-            }
-        }
+        this.isMoving = false;
     }
 }
 
@@ -144,17 +128,19 @@ donkeyKong.jumpman.prototype.stairs = function(){
         }  
     }
     
-    if(this.isInStair){
+    if(this.isInStair){       
+        
         if(this.upPressed){
-        this.body.velocity.y = -this.stairSpeed;
-        this.animations.play('stairs');
+            this.body.velocity.y = -this.stairSpeed;
+            this.isMoving = true;
         }
         else if(this.downPressed){
             this.body.velocity.y = this.stairSpeed;
-            this.animations.play('stairs');
+            this.isMoving = true;
         }
         else{
-            this.body.velocity.y = 0;            
+            this.body.velocity.y = 0;       
+            this.isMoving = false;
         }
     }
 }
@@ -200,12 +186,43 @@ donkeyKong.jumpman.prototype.hammerLogic = function(){
     }
 }
 
+donkeyKong.jumpman.prototype.marioAnimations = function(){
+    if(this.hasHammer){
+        if(this.isMoving){            
+            this.animations.play('hammerWalk');
+        }
+        else{            
+            this.animations.play('hammerIdle');
+        }
+    }
+    else{
+        if(!this.isInStair){
+            if(this.isMoving){
+                this.animations.play('run');            
+            }
+            else{
+                this.animations.stop();
+            }            
+        }
+        else{
+            if(this.isMoving){
+                this.animations.play('stairs');
+            }
+            else{
+                this.animations.stop();
+            }
+        }
+    }
+}
+
+
 donkeyKong.jumpman.prototype.customUpdate = function(){
     //provisional
     if(this.health > 0){
         this.move();
         this.jump();
         this.stairs();
+        this.marioAnimations();
     }
     else{
         this.finalDeath();    
