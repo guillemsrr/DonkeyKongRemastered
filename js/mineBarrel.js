@@ -15,8 +15,11 @@ donkeyKong.mineBarrel.prototype.constructor = donkeyKong.mineBarrel;
 //Detecta si hay colisión del barril con los jugadores
 donkeyKong.mineBarrel.prototype.hitJumpman = function(_barrel, _jumpman){
     if(_barrel.body.touching.up && _jumpman.body.touching.down){
+        
+        if(!this.mineActivated)
+            _jumpman.JumpOnBarrel();
+        
         this.mineActivation();
-        _jumpman.JumpOnBarrel();
     }
     else{
         if(_jumpman.hasHammer){

@@ -439,7 +439,7 @@ donkeyKong.debugLevel= {
     },
     
     RandomBarrel: function(){
-        if(this.game.rnd.integerInRange(0, 100)<75){//80% per barril normal
+        if(this.game.rnd.integerInRange(0, 100)<0){//80% per barril normal
             return new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "barrel");
         }
         else{
