@@ -14,4 +14,4 @@ donkeyKong.game.state.add('Menu', donkeyKong.menu);
 donkeyKong.game.state.add('Scores', donkeyKong.scores);
 donkeyKong.game.state.add('DebugLevel', donkeyKong.debugLevel);
 donkeyKong.game.state.add('Level2', donkeyKong.level2);
-donkeyKong.game.state.start('DebugLevel');
+donkeyKong.game.state.start('Menu');

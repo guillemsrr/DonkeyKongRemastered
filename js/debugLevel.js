@@ -121,7 +121,7 @@ donkeyKong.debugLevel= {
         
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
-        this.jumpman = new donkeyKong.jumpman(this.game, 200, 40, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
         this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
