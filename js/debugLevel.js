@@ -507,8 +507,7 @@ donkeyKong.debugLevel= {
     
     SpawnBarrelDown: function(){
         this.barrel = new donkeyKong.barrel(this.game, this.kong.x, this.kong.y, 75, 1, true, this, 'barrel');
-        //this.game.add.existing(this.barrel);
-        this.barrel.scale = 1.1;
+        //this.barrel.scale = 1.1;
         this.barrels.add(this.barrel);
     }    
     
