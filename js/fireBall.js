@@ -47,7 +47,6 @@ donkeyKong.fireBall.prototype.constructor = donkeyKong.fireBall;
 donkeyKong.fireBall.prototype.update = function(){
     this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman,null,this);
     this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman,null,this);
-    this.Pursue(this.target);
     
     
     this.animations.play('move');
@@ -105,6 +104,7 @@ donkeyKong.fireBall.prototype.update = function(){
         }
         else{
             // salir
+            this.Pursue(this.target);
             this.waitingCounter = 0;
             
             this.body.allowGravity = true;
