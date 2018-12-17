@@ -123,8 +123,14 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
 
 donkeyKong.barrel.prototype.destroyBarrel = function(_jumpman){
     
-    //_jumpman.speedPowerUpActive = true;
-    this.level.timeStopped = true;
+    this.randomNum = Math.floor(Math.random() * 3);
+    if(this.randomNum == 1){
+        _jumpman.speedPowerUpActive = true;
+        
+    }
+    else if(this.randomNum == 2){
+        this.level.timeStopped = true;        
+    }
 }
 
 donkeyKong.barrel.prototype.spawnFireball = function(_barrel, _oil){

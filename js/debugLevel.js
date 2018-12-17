@@ -43,20 +43,21 @@ donkeyKong.debugLevel= {
         // ------------------ GAMEPLAY -------------------
         
         // Hammer 1
-        this.hammerPowerUp = this.game.add.group();            
+        this.hammerPowerUpGroup = this.game.add.group();            
         this.hammerPowerUp = this.game.add.sprite(350, 150, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp);
         this.game.physics.enable(this.hammerPowerUp);
         this.hammerPowerUp.body.immovable = true; 
         this.hammerPowerUp.body.allowGravity = false;
         this.hammerPowerUp.body.gravity = false;
         
-        // Hammer 2 
-        this.hammerPowerUp = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(70, 270, 'hammer');
-        this.game.physics.enable(this.hammerPowerUp);
-        this.hammerPowerUp.body.immovable = true; 
-        this.hammerPowerUp.body.allowGravity = false;
-        this.hammerPowerUp.body.gravity = false;
+        // Hammer 2   
+        this.hammerPowerUp2 = this.game.add.sprite(120, 350, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp2);
+        this.game.physics.enable(this.hammerPowerUp2);
+        this.hammerPowerUp2.body.immovable = true; 
+        this.hammerPowerUp2.body.allowGravity = false;
+        this.hammerPowerUp2.body.gravity = false;
         
         
         //Stairs
@@ -241,11 +242,7 @@ donkeyKong.debugLevel= {
         
         this.jumpman.customUpdate();
         
-        if(this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUp)){
-            this.jumpman.grabHammer();
-            this.hammerPowerUp.destroy();
-            
-        }
+        
         
         //JUMPMAN 2 
         if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
@@ -261,11 +258,8 @@ donkeyKong.debugLevel= {
         
         this.jumpman2.customUpdate();
         
-        if(this.game.physics.arcade.overlap(this.jumpman2, this.hammerPowerUp)){
-            this.jumpman2.grabHammer();
-            this.hammerPowerUp.destroy();
-            
-        }
+        // Hammer powerup
+        this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
         
         // Death debug
         if(this.game.input.keyboard.addKey(Phaser.Keyboard.F).isDown){
@@ -323,6 +317,12 @@ donkeyKong.debugLevel= {
                 this.timeStoppedCounter = 0;
             }            
         }
+    },
+    
+    HammerPowerUp: function (_jumpman, _hammer){
+        
+            _jumpman.grabHammer();
+            _hammer.destroy();        
     },
     
     PausePressed: function (){       
