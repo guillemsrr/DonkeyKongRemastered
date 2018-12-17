@@ -308,21 +308,6 @@ donkeyKong.debugLevel= {
             this.game.physics.arcade.collide(this.jumpman,this.beams);
         }
         
-        this.jumpman.setInputs(this.player1Input.right.isDown,
-                               this.player1Input.left.isDown,
-                               this.player1Input.up.isDown,
-                               this.player1Input.down.isDown, 
-                               this.game.physics.arcade.overlap(this.jumpman,this.stairs), 
-                               this.game.physics.arcade.overlap(this.jumpman,this.finalStair));
-        
-        this.jumpman.customUpdate();
-        
-        if(this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUp)){
-            this.jumpman.grabHammer();
-            this.hammerPowerUp.destroy();
-            
-        }
-        
         //JUMPMAN 2 
         if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
             this.game.physics.arcade.collide(this.jumpman2,this.beams);
@@ -384,6 +369,12 @@ donkeyKong.debugLevel= {
                     }
                 }
                 
+                // Hammer power ups collisions
+                this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
+                
+                // Time stop power up logic
+                this.TimeStopped();
+
                 //mineExplosions:
                 for(var i = 0; i< this.mines.length; i++){
                     this.mines.children[i].checkExplosion();
@@ -395,8 +386,6 @@ donkeyKong.debugLevel= {
             }
             this.start = true;
         }
-        this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
-        
         //levelCompletion
         if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
             this.levelCompleted = true;
@@ -407,7 +396,6 @@ donkeyKong.debugLevel= {
             this.game.state.start('Level2');
         }
         
-        this.TimeStopped();
     },
     
     render: function () {
@@ -498,21 +486,22 @@ donkeyKong.debugLevel= {
     },
     
     SpawnBarrelRight: function(){
-        this.NormalBarrel = Math.floor(Math.random() * 3);
-        if(this.NormalBarrel == 0){
+        this.randomNumber = Math.floor(Math.random() * 100);
+        if(this.randomNumber < 40){
             this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
-            //this.game.add.existing(this.barrel);
             this.barrels.add(this.barrel);
         }
-        else if (this.NormalBarrel == 1){
+        else if (this.randomNumber <  60){
             this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'spiky_barrel');
-            //this.game.add.existing(this.spiky_barrel);
             this.barrels.add(this.spiky_barrel);
         }
-        else if(this.NormalBarrel == 2){
-            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');
-            //this.game.add.existing(this.nuclear_barrel);
+        else if(this.randomNumber < 80){
+            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');            
             this.barrels.add(this.nuclear_barrel);
+        }
+        else if(this.randomNumber < 100){            
+            var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "mineBarrel");
+            this.barrels.add(mine);
         }
     },
     
@@ -521,18 +510,6 @@ donkeyKong.debugLevel= {
         //this.game.add.existing(this.barrel);
         this.barrel.scale = 1.1;
         this.barrels.add(this.barrel);
-    },
-    
-    RandomBarrel: function(){
-        if(this.game.rnd.integerInRange(0, 100)<0){//80% per barril normal
-            return new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "barrel");
-        }
-        else{
-            mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "mineBarrel");
-            //this.mines.add(mine);
-            //console.log("added " + this.mines.length);
-            return mine;
-        }
-    }
+    }    
     
 };
