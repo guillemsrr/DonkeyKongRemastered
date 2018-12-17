@@ -15,7 +15,7 @@ donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _fallingDown, _l
     
     this.isGoingDown = false;
     this.isFallingStairs = false;
-    this.fallingTime = 0.14;
+    this.fallingTime = 0.1;
     this.fallingCounter = 0;
     
     this.body.setCircle(5);
@@ -91,7 +91,7 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
     }
     else{
         if(_jumpman.hasHammer){
-            this.level.DestroyBarrel();
+            this.level.DestroyBarrel(this.x, this.y);
             this.kill();
         }
         else{
@@ -113,13 +113,9 @@ donkeyKong.barrel.prototype.fallingStairLogic = function(){
         this.fallingCounter += this.game.time.physicsElapsed;
     }
     else{
-        //if(!this.game.physics.arcade.collide(this,this.level.beams) || this.game.physics.arcade.overlap(this,this.level.finalStair)){
             this.body.velocity.x = 0;
-            //this.body.velocity.y = this.speed;
-            //this.body.allowGravity = false;
             this.animations.stop('roll');
             this.animations.play('front');
-        //}
         
     }
 };

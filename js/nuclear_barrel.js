@@ -16,7 +16,7 @@ donkeyKong.nuclear_barrel = function(_game, _x, _y, _speed, _direction, _falling
     
     this.IsGoingDown = false;
     this.isFallingStairs = false;
-    this.fallingTime = 0.14;
+    this.fallingTime = 0.1;
     this.fallingCounter = 0;
     
     this.body.setCircle(5);
