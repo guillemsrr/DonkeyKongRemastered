@@ -43,20 +43,21 @@ donkeyKong.debugLevel= {
         // ------------------ GAMEPLAY -------------------
         
         // Hammer 1
-        this.hammerPowerUp = this.game.add.group();            
+        this.hammerPowerUpGroup = this.game.add.group();            
         this.hammerPowerUp = this.game.add.sprite(350, 150, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp);
         this.game.physics.enable(this.hammerPowerUp);
         this.hammerPowerUp.body.immovable = true; 
         this.hammerPowerUp.body.allowGravity = false;
         this.hammerPowerUp.body.gravity = false;
         
-        // Hammer 2 
-        this.hammerPowerUp = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(70, 270, 'hammer');
-        this.game.physics.enable(this.hammerPowerUp);
-        this.hammerPowerUp.body.immovable = true; 
-        this.hammerPowerUp.body.allowGravity = false;
-        this.hammerPowerUp.body.gravity = false;
+        // Hammer 2   
+        this.hammerPowerUp2 = this.game.add.sprite(120, 350, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp2);
+        this.game.physics.enable(this.hammerPowerUp2);
+        this.hammerPowerUp2.body.immovable = true; 
+        this.hammerPowerUp2.body.allowGravity = false;
+        this.hammerPowerUp2.body.gravity = false;
         
         
         //Stairs
@@ -107,7 +108,7 @@ donkeyKong.debugLevel= {
         this.beams = this.game.add.group();
         this.beamCollider = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
-        beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
+        beamRow.createStraightRow(15, 16, gameOptions.gameHeight - 8*10);
         beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);        
         beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, true, true, -1 , -1);
         beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25, true, true);
@@ -165,6 +166,10 @@ donkeyKong.debugLevel= {
             down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
         }
         
+        // Power up stoping time
+        this.timeStopped = false;      
+        this.timeStoppedCounter = 0;
+        this.timeStoppedTime = 3;
         
         
         // This is called once so all Pause grafics and logic are hidden.
@@ -244,11 +249,7 @@ donkeyKong.debugLevel= {
         
         this.jumpman.customUpdate();
         
-        if(this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUp)){
-            this.jumpman.grabHammer();
-            this.hammerPowerUp.destroy();
-            
-        }
+        
         
         //JUMPMAN 2 
         if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
@@ -264,11 +265,8 @@ donkeyKong.debugLevel= {
         
         this.jumpman2.customUpdate();
         
-        if(this.game.physics.arcade.overlap(this.jumpman2, this.hammerPowerUp)){
-            this.jumpman2.grabHammer();
-            this.hammerPowerUp.destroy();
-            
-        }
+        // Hammer powerup
+        this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
         
         // Death debug
         if(this.game.input.keyboard.addKey(Phaser.Keyboard.F).isDown){
@@ -300,6 +298,8 @@ donkeyKong.debugLevel= {
                 this.barrelTimer = 0;
             }
         }
+        
+        this.TimeStopped();
     },
     
     
@@ -313,6 +313,24 @@ donkeyKong.debugLevel= {
     
     
     // -------------- FUNCTIONS ----------------
+    
+    TimeStopped: function (){
+        if(this.timeStopped){
+            if(this.timeStoppedCounter < this.timeStoppedTime){
+                this.timeStoppedCounter += this.game.time.physicsElapsed;
+            }
+            else{
+                this.timeStopped = false;
+                this.timeStoppedCounter = 0;
+            }            
+        }
+    },
+    
+    HammerPowerUp: function (_jumpman, _hammer){
+        
+            _jumpman.grabHammer();
+            _hammer.destroy();        
+    },
     
     PausePressed: function (){       
         
