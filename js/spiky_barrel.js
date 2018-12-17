@@ -33,6 +33,9 @@ donkeyKong.spiky_barrel.prototype.update = function(){
         this.body.allowGravity = false;
         this.animations.stop();
         
+        if(this.game.physics.arcade.overlap(this,this.level.jumpman)) this.level.hitJumpman(this.level.jumpman);
+        if(this.game.physics.arcade.overlap(this,this.level.jumpman2)) this.level.hitJumpman(this.level.jumpman2);
+        
         return;
     }
     else{

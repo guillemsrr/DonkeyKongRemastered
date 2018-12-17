@@ -47,7 +47,18 @@ donkeyKong.fireBall.prototype.constructor = donkeyKong.fireBall;
 donkeyKong.fireBall.prototype.update = function(){
     this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman,null,this);
     this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman,null,this);
-    
+           
+    if(this.level.timeStopped){
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        
+        this.body.allowGravity = false;
+        this.animations.stop();
+    }
+    else{
+        this.animations.play();
+        this.body.allowGravity = true;        
+    }
     
     this.animations.play('move');
     

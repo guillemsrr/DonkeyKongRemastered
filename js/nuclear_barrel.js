@@ -36,7 +36,10 @@ donkeyKong.nuclear_barrel.prototype.update = function(){
         this.body.allowGravity = false;
         this.animations.stop();
         
-        return;
+        this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman, null, this);
+        this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman, null, this);
+        
+        return;    
     }
     else{
         this.animations.play();
