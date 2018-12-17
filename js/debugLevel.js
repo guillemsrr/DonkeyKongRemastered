@@ -184,8 +184,14 @@ donkeyKong.debugLevel= {
     SpawnFireBall:function(){
         this.fireballCounter++;
         if(this.fireballCounter<5){
-            this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
-            this.game.add.existing(this.fireBall);
+            if(this.fireballCounter%2 == 0){
+                this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this.jumpman, this, 'fireBall');
+                this.game.add.existing(this.fireBall);
+            }
+            else{
+                this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this.jumpman2, this, 'fireBall');
+                this.game.add.existing(this.fireBall);
+            }
         }
     },
     

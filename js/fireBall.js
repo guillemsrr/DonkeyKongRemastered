@@ -1,11 +1,12 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.fireBall = function(_game, _x, _y, _speed, _direction, _level, _tag){
+donkeyKong.fireBall = function(_game, _x, _y, _speed, _direction, _target, _level, _tag){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.animations.add('move',null,4,true);
     this.speed = _speed;
     this.direction = _direction;
+    this.target = _target
     this.level = _level;
     this.game.physics.arcade.enable(this);
     this.outOfBoundsKill = true;
@@ -19,7 +20,7 @@ donkeyKong.fireBall = function(_game, _x, _y, _speed, _direction, _level, _tag){
     this.isGoingUpStairs = false;
     
     //Waiting
-    this.waitingTime = 1;
+    this.waitingTime = 0.45;
     this.waitingCounter = 0;
     
     this.overlapStairs;
@@ -46,9 +47,13 @@ donkeyKong.fireBall.prototype.constructor = donkeyKong.fireBall;
 donkeyKong.fireBall.prototype.update = function(){
     this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman,null,this);
     this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman,null,this);
+    this.Pursue(this.target);
+    
+    
     this.animations.play('move');
     
     if(this.game.physics.arcade.overlap(this,this.level.stairs)){
+        
         this.overlapStairs = true;
         
         if(!this.IsInStair){
@@ -59,7 +64,6 @@ donkeyKong.fireBall.prototype.update = function(){
                 this.direction = this.scale.x *= -1;
             }
             this.IsInStair = true;
-            
         }
     }
     else{
@@ -85,7 +89,7 @@ donkeyKong.fireBall.prototype.update = function(){
         this.overlapFinalStair = false;
     }
     
-    if(!this.game.physics.arcade.overlap(this,this.level.stairs) && !this.game.physics.arcade.overlap(this,this.level.finalStair)){
+    if(!this.game.physics.arcade.overlap(this, this.level.stairs) && !this.game.physics.arcade.overlap(this,this.level.finalStair)){
         this.IsGoingUp = false;
         this.IsGoingDown = false;
     }
@@ -125,18 +129,31 @@ donkeyKong.fireBall.prototype.update = function(){
     if(this.game.physics.arcade.collide(this,this.level.beamCollider)){
         if(!this.changedDirection){
             this.changedDirection = true;
-            
             this.direction = this.scale.x *= -1;   
         }
     }
-    
-    if(this.changedDirection){        
+
+    if(this.changedDirection){
         if(this.changeDirectionCounter < this.changeDirectionTime){
             this.changeDirectionCounter +=this.game.time.physicsElapsed;
         }
         else{
             this.changedDirection = false;
             this.changeDirectionCounter = 0;
+        }
+    }
+}
+
+//-----------FUNCIÓN QUE DETECTA LA LOCALIZACIÓN DEL PLAYER-------
+donkeyKong.fireBall.prototype.Pursue = function(_jumpman){
+    if(this.direction < 0){
+        if(this.x < _jumpman.x){
+            this.direction = this.scale.x = 1;   
+        }
+    }
+    else{
+        if(this.x > _jumpman.x){
+            this.direction = this.scale.x = -1;   
         }
     }
 }
@@ -170,7 +187,8 @@ donkeyKong.fireBall.prototype.GoDown = function(){
 //------------------FUNCIÓN DE DELAY PARA ESCALERAS-----------------------
 donkeyKong.fireBall.prototype.WaitingFunction = function(_downOrUp){
     if(this.waitingCounter < this.waitingTime){
-        this.game.physics.arcade.collide(this,this.level.beams);
+        if(this.game.physics.arcade.collide(this,this.level.beams))
+            this.body.velocity.x = this.speed;
         this.waitingCounter += this.game.time.physicsElapsed;
     }
     else{
