@@ -52,7 +52,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.deathSound = _death;
     this.itemGetSound = _itemGet;
     this.hammerSound = _hammer;
-    this.hammerSound.loopFull();
+    this.hammerSound.loop = true;
     this.hammerSound.stop();
 }
 

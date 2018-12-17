@@ -333,9 +333,14 @@ donkeyKong.debugLevel= {
                     }
                 }
                 
-                for(i = 0; i< this.mines.count; i++){
-                    this.mines[i].checkExplosion();
+                //mineExplosions:
+                for(var i = 0; i< this.mines.length; i++){
+                    this.mines.children[i].checkExplosion();
                 }
+                /*this.game.mines.forEach(function(mine)){
+                    mine.checkExplosion();   
+                    console.log("mine group");
+                }*/
             }
             this.start = true;
         }
@@ -434,12 +439,13 @@ donkeyKong.debugLevel= {
     },
     
     RandomBarrel: function(){
-        if(this.game.rnd.integerInRange(0, 100)<10){//80% per barril normal
+        if(this.game.rnd.integerInRange(0, 100)<75){//80% per barril normal
             return new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "barrel");
         }
         else{
             mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "mineBarrel");
-            this.mines.add(mine);
+            //this.mines.add(mine);
+            //console.log("added " + this.mines.length);
             return mine;
         }
     }
