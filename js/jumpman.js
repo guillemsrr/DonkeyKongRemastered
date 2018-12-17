@@ -1,6 +1,6 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.jumpman = function(_game, _x, _y, _tag){
+donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death, _itemGet, _hammer){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.game = _game;
@@ -11,6 +11,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag){
     this.jumpForce = 250;
     this.stairSpeed = 70;
     this.health = 3;
+    this.points = 0;
     this.hasHammer = false;
     this.hammerTime = 10;
     this.hammerCounter = 0;
@@ -43,6 +44,16 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag){
     this.time = 0;
     this.deathRollTime = 2;
     this.deathRolling = false;
+    
+    //Audios:
+    this.runSound = _run;
+    this.jumpSound = _jump;
+    this.scoreUpSound = _scoreUp;
+    this.deathSound = _death;
+    this.itemGetSound = _itemGet;
+    this.hammerSound = _hammer;
+    this.hammerSound.loop = true;
+    this.hammerSound.stop();
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
@@ -64,18 +75,24 @@ donkeyKong.jumpman.prototype.move = function(){
     if(this.rightPressed){
         this.scale.x=1;
         this.body.velocity.x = this.speed;
-        if(!this.hasHammer)
+        if(!this.hasHammer){
             this.animations.play('run');
+        }
         else
             this.animations.play('hammerWalk');
+        if(!this.runSound.isPlaying && this.body.touching.down)
+                this.runSound.play();
     }
     else if(this.leftPressed){
         this.scale.x=-1;
         this.body.velocity.x = -this.speed;
-        if(!this.hasHammer)
+        if(!this.hasHammer){
             this.animations.play('run');
+        }  
         else
             this.animations.play('hammerWalk');
+        if(!this.runSound.isPlaying && this.body.touching.down)
+                this.runSound.play();
     }
     else{
         this.body.velocity.x = 0;
@@ -95,6 +112,9 @@ donkeyKong.jumpman.prototype.move = function(){
 donkeyKong.jumpman.prototype.jump = function(){
     if (this.upPressed && this.body.touching.down){
         this.body.velocity.y = -this.jumpForce;
+        if(this.runSound.isPlaying)
+            this.runSound.stop();
+        this.jumpSound.play()
     }
 }
 
@@ -139,12 +159,13 @@ donkeyKong.jumpman.prototype.stairs = function(){
     }
 }
 
-
 donkeyKong.jumpman.prototype.die = function(){
     this.animations.play('deathRoll');
     this.health = 0;
     this.time = 0;
     this.deathRolling = true;
+    if(!this.deathSound.isPlaying)
+        this.deathSound.play();
 }
 
 donkeyKong.jumpman.prototype.finalDeath = function(){
@@ -159,6 +180,9 @@ donkeyKong.jumpman.prototype.finalDeath = function(){
 
 donkeyKong.jumpman.prototype.grabHammer = function(){
     this.hasHammer = true;
+    this.itemGetSound.play();
+    if(!this.hammerSound.isPlaying)
+            this.hammerSound.play();
 }
 
 donkeyKong.jumpman.prototype.hammerLogic = function(){
@@ -170,8 +194,11 @@ donkeyKong.jumpman.prototype.hammerLogic = function(){
         this.hammerCounter = 0;        
         this.hasHammer = false;
     }
+    
+    if(!this.hasHammer){
+        this.hammerSound.stop();
+    }
 }
-
 
 donkeyKong.jumpman.prototype.customUpdate = function(){
     //provisional
@@ -187,4 +214,9 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
     if(this.hasHammer){
         this.hammerLogic();
     }
+}
+
+donkeyKong.jumpman.prototype.JumpOnBarrel = function(){
+    this.scoreUpSound.play();
+    this.points++;
 }
