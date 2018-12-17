@@ -10,23 +10,33 @@ donkeyKong.debugLevel= {
     },
     
     preload: function () {
-        // Sprites
-        this.load.image('pause_background', 'assets/sprites/pause_background.png');
-        this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
+        // ---- SPRITES ---- \\
+        //Characters
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
+        //NPCs
+        this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
+        //Enemies
+        this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
+        this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png', 16, 16);
+        //Barrels
         this.load.spritesheet('staticBarrel', 'assets/sprites/barrel.png', 15, 10);
         this.load.spritesheet('barrel', 'assets/sprites/barrel.png', 15, 10);
+        this.load.spritesheet('spiky_barrel', 'assets/sprites/spiky_barrel.png', 15, 15);
+        this.load.spritesheet('nuclear_barrel', 'assets/sprites/nuclear_barrel.png', 15, 10);
+        
+        this.load.spritesheet('destroy_barrel', 'assets/sprites/destroy_barrel.png', 15, 15);
+        //Props
+        this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         this.load.spritesheet('mineBarrel', 'assets/sprites/mineBarrel_2.png', 15, 10);
         this.load.spritesheet('mineExplosion', 'assets/sprites/mineExplosion.png', 128, 128);
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.image('stair', 'assets/sprites/stairs.png');
         this.load.image('finalStair', 'assets/sprites/finalStair.png');
-        this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
-        this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
-        this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png', 16, 16);
-        this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         this.load.image('hammer', 'assets/sprites/hammer.png');
+        //Menu
+        this.load.image('pause_background', 'assets/sprites/pause_background.png');
+        this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         
         // Fonts
         
@@ -51,20 +61,21 @@ donkeyKong.debugLevel= {
         // ------------------ GAMEPLAY -------------------
         
         // Hammer 1
-        this.hammerPowerUp = this.game.add.group();            
+        this.hammerPowerUpGroup = this.game.add.group();            
         this.hammerPowerUp = this.game.add.sprite(350, 150, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp);
         this.game.physics.enable(this.hammerPowerUp);
         this.hammerPowerUp.body.immovable = true; 
         this.hammerPowerUp.body.allowGravity = false;
         this.hammerPowerUp.body.gravity = false;
         
-        // Hammer 2 
-        this.hammerPowerUp = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(70, 270, 'hammer');
-        this.game.physics.enable(this.hammerPowerUp);
-        this.hammerPowerUp.body.immovable = true; 
-        this.hammerPowerUp.body.allowGravity = false;
-        this.hammerPowerUp.body.gravity = false;
+        // Hammer 2   
+        this.hammerPowerUp2 = this.game.add.sprite(120, 350, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp2);
+        this.game.physics.enable(this.hammerPowerUp2);
+        this.hammerPowerUp2.body.immovable = true; 
+        this.hammerPowerUp2.body.allowGravity = false;
+        this.hammerPowerUp2.body.gravity = false;
         
         
         //Stairs
@@ -138,15 +149,15 @@ donkeyKong.debugLevel= {
         this.staticBarrel4.angle = 90;
 
         
-        //OIL
+        //Oil Barrel
         this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 93, 'oil');
         this.game.add.existing(this.oil);
         this.game.physics.arcade.enable(this.oil);
         this.oil.body.immovable = true;
         this.oil.body.moves = false;
+        this.fireballCounter=0;
         
         //Barrel
-        //donkeyKong.enemy_prefab =      function(_game,_x,_y,_points,_speed,_direction,_level, _tag)
         this.barrelTimer = 0;
         this.barrelRightSpawned = false;
         this.barrelDownSpawned = false;
@@ -159,7 +170,7 @@ donkeyKong.debugLevel= {
         this.beams = this.game.add.group();
         this.beamCollider = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
-        beamRow.createStraightRow(16, 8, gameOptions.gameHeight - 8*10);
+        beamRow.createStraightRow(15, 16, gameOptions.gameHeight - 8*10);
         beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);        
         beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, true, true, -1 , -1);
         beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25, true, true);
@@ -220,8 +231,18 @@ donkeyKong.debugLevel= {
             down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
         }
         
+        // Power up stoping time
+        this.timeStopped = false;      
+        this.timeStoppedCounter = 0;
+        this.timeStoppedTime = 3;
+        
+        
         // This is called once so all Pause grafics and logic are hidden.
         this.PausePressed();
+        
+        
+        //----- BARRELS GROUP -----
+        this.barrels = this.game.add.group();
     },
     
     hitJumpman:function(_jumpman){        
@@ -232,12 +253,35 @@ donkeyKong.debugLevel= {
     },
     
     SpawnFireBall:function(){
-        this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this, 'fireBall');
-        this.game.add.existing(this.fireBall);
+        this.fireballCounter++;
+        if(this.fireballCounter<5){
+            if(this.fireballCounter%2 == 0){
+                this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this.jumpman, this, 'fireBall');
+                this.game.add.existing(this.fireBall);
+            }
+            else{
+                this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this.jumpman2, this, 'fireBall');
+                this.game.add.existing(this.fireBall);
+            }
+        }
         if(!this.oil.fired)
             this.oil.fired = true;
     },
     
+    NuclearBarrel:function(_game){
+        _game = this.game;
+        this.barrels.forEach(function(item) {
+            _game.add.existing(new donkeyKong.destroy_barrel(_game, item.x,item.y, 'destroy_barrel'));
+            item.kill();
+        });
+        this.barrels = this.game.add.group();
+    },
+    
+    
+    DestroyBarrel:function(_x, _y){
+        this.destroy_barrel = new donkeyKong.destroy_barrel(this.game, _x, _y, 'destroy_barrel');
+        this.game.add.existing(this.destroy_barrel);
+    },
 
     update: function () {
         
@@ -263,7 +307,24 @@ donkeyKong.debugLevel= {
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){
             this.game.physics.arcade.collide(this.jumpman,this.beams);
         }
-        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){
+        
+        this.jumpman.setInputs(this.player1Input.right.isDown,
+                               this.player1Input.left.isDown,
+                               this.player1Input.up.isDown,
+                               this.player1Input.down.isDown, 
+                               this.game.physics.arcade.overlap(this.jumpman,this.stairs), 
+                               this.game.physics.arcade.overlap(this.jumpman,this.finalStair));
+        
+        this.jumpman.customUpdate();
+        
+        if(this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUp)){
+            this.jumpman.grabHammer();
+            this.hammerPowerUp.destroy();
+            
+        }
+        
+        //JUMPMAN 2 
+        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
             this.game.physics.arcade.collide(this.jumpman2,this.beams);
         }
         //All customUpdates inside
@@ -281,11 +342,6 @@ donkeyKong.debugLevel= {
 
                 this.jumpman.customUpdate();
 
-                if(this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUp)){
-                    this.jumpman.grabHammer();
-                    this.hammerPowerUp.destroy();
-
-                }
 
                 //JUMPMAN 2 
                 this.jumpman2.setInputs(this.player2Input.right.isDown,
@@ -297,11 +353,6 @@ donkeyKong.debugLevel= {
 
                 this.jumpman2.customUpdate();
 
-                if(this.game.physics.arcade.overlap(this.jumpman2, this.hammerPowerUp)){
-                    this.jumpman2.grabHammer();
-                    this.hammerPowerUp.destroy();
-
-                }
 
                 // Death debug
                 if(this.game.input.keyboard.addKey(Phaser.Keyboard.F).isDown){
@@ -344,6 +395,7 @@ donkeyKong.debugLevel= {
             }
             this.start = true;
         }
+        this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
         
         //levelCompletion
         if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
@@ -355,6 +407,7 @@ donkeyKong.debugLevel= {
             this.game.state.start('Level2');
         }
         
+        this.TimeStopped();
     },
     
     render: function () {
@@ -367,6 +420,24 @@ donkeyKong.debugLevel= {
     
     
     // -------------- FUNCTIONS ----------------
+    
+    TimeStopped: function (){
+        if(this.timeStopped){
+            if(this.timeStoppedCounter < this.timeStoppedTime){
+                this.timeStoppedCounter += this.game.time.physicsElapsed;
+            }
+            else{
+                this.timeStopped = false;
+                this.timeStoppedCounter = 0;
+            }            
+        }
+    },
+    
+    HammerPowerUp: function (_jumpman, _hammer){
+        
+            _jumpman.grabHammer();
+            _hammer.destroy();        
+    },
     
     PausePressed: function (){       
         
@@ -427,15 +498,29 @@ donkeyKong.debugLevel= {
     },
     
     SpawnBarrelRight: function(){
-        this.pointsArray = [15*15, 15*16];
-        this.barrel = this.RandomBarrel();
-        this.game.add.existing(this.barrel);
+        this.NormalBarrel = Math.floor(Math.random() * 3);
+        if(this.NormalBarrel == 0){
+            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
+            //this.game.add.existing(this.barrel);
+            this.barrels.add(this.barrel);
+        }
+        else if (this.NormalBarrel == 1){
+            this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'spiky_barrel');
+            //this.game.add.existing(this.spiky_barrel);
+            this.barrels.add(this.spiky_barrel);
+        }
+        else if(this.NormalBarrel == 2){
+            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');
+            //this.game.add.existing(this.nuclear_barrel);
+            this.barrels.add(this.nuclear_barrel);
+        }
     },
     
     SpawnBarrelDown: function(){
-        this.pointsArray = [15*15, 15*16];
-        //this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y, this.pointsArray, 75, 1, this, 'barrel');
+        this.barrel = new donkeyKong.barrel(this.game, this.kong.x, this.kong.y, 75, 1, true, this, 'barrel');
         //this.game.add.existing(this.barrel);
+        this.barrel.scale = 1.1;
+        this.barrels.add(this.barrel);
     },
     
     RandomBarrel: function(){

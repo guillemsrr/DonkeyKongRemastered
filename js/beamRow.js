@@ -16,15 +16,15 @@ donkeyKong.beamRow.prototype.createStraightRow = function(numBeams, posX, posY){
     
     for (var i=0; i<numBeams;i++){
             var beam = this.game.add.sprite(posX + 16*i, posY, this.tag);
-            this.game.physics.arcade.enable(beam);
-            beam.body.enable = true;
-            beam.body.immovable = true; 
-            beam.body.allowGravity = false;
-            beam.body.gravity = false;
-            this.group.add(beam);
+        this.game.physics.arcade.enable(beam);
+        beam.body.enable = true;
+        beam.body.immovable = true; 
+        beam.body.allowGravity = false;
+        beam.body.gravity = false;
+        this.group.add(beam);
     }
 }
-
+ 
 donkeyKong.beamRow.prototype.createDiagRow = function(numBeams, posX, posY, colliderLeft, colliderRight, right = 1, up = -1 ){
     if(colliderLeft){
         var beamCollider = this.game.add.sprite(posX, posY - 20, this.colliderTag);

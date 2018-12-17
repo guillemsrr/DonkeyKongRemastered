@@ -8,6 +8,8 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
 
     //Variables
     this.speed = 90;
+    this.normalSpeed = 90;
+    this.powerUpSpeed = 180;
     this.jumpForce = 250;
     this.stairSpeed = 70;
     this.health = 3;
@@ -55,6 +57,11 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.hammerSound = _hammer;
     this.hammerSound.loop = true;
     this.hammerSound.stop();
+    
+    // Powerup
+    this.speedPowerUpActive = false;
+    this.speedPowerUpCounter = 0;
+    this.speedPowerUpTime = 3;
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
@@ -186,6 +193,21 @@ donkeyKong.jumpman.prototype.hammerLogic = function(){
     }
 }
 
+// power-ups
+donkeyKong.jumpman.prototype.speedPowerUp = function(){
+    if(this.speedPowerUpCounter < this.speedPowerUpTime){
+        this.speedPowerUpCounter += this.game.time.physicsElapsed;
+        
+        this.speed = this.powerUpSpeed;
+    }
+    else{
+        this.speed = this.normalSpeed;
+        
+        this.speedPowerUpActive = false;
+        
+        this.speedPowerUpCounter = 0;
+    }
+}
 donkeyKong.jumpman.prototype.marioAnimations = function(){
     if(this.hasHammer){
         if(this.isMoving){            
@@ -223,6 +245,10 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
         this.jump();
         this.stairs();
         this.marioAnimations();
+        
+        if(this.speedPowerUpActive){
+            this.speedPowerUp();
+        }
     }
     else{
         this.finalDeath();    
