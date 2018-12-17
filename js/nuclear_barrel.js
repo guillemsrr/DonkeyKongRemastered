@@ -111,7 +111,7 @@ donkeyKong.nuclear_barrel.prototype.hitJumpman = function(_barrel, _jumpman){
         this.kill();
     }
     else{
-        if(_jumpman.hasHammer){
+        if(_jumpman.hasHammer || _jumpman.starPowerUpActive){
             this.level.NuclearBarrel();
             this.level.DestroyBarrel(this.x, this.y);
             this.kill();

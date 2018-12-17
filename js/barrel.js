@@ -112,7 +112,7 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
         _jumpman.JumpOnBarrel();
     }
     else{
-        if(_jumpman.hasHammer){
+        if(_jumpman.hasHammer || _jumpman.starPowerUpActive){
             this.level.DestroyBarrel(this.x, this.y);
             this.destroyBarrel(_jumpman);
             this.kill();
@@ -126,14 +126,31 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
 
 donkeyKong.barrel.prototype.destroyBarrel = function(_jumpman){
     
-    this.randomNum = Math.floor(Math.random() * 3);
-    if(this.randomNum == 1){
-        _jumpman.speedPowerUpActive = true;
-        
+    //this.level.timeStopped = true;    
+    //this.level.SpawnClockSprite(_jumpman);
+    //this.level.timeStoppedCounter = 0;   
+    
+    //_jumpman.speedPowerUpActive = true;
+    //this.level.timeStopped = true;
+    //_jumpman.starPowerUpActive = true;
+    //this.level.SpawnStarSprite(_jumpman);
+    
+    this.randomNum = Math.floor(Math.random() * 10);
+    if(this.randomNum > 4){       
+        if(this.randomNum < 6){
+            _jumpman.speedPowerUpActive = true;
+        }
+        else if(this.randomNum < 8){
+            this.level.timeStopped = true;    
+            this.level.SpawnClockSprite(_jumpman);
+            this.level.timeStoppedCounter = 0;    
+        }
+        else if(this.randomNum < 10){            
+            _jumpman.starPowerUpActive = true;
+            this.level.SpawnStarSprite(_jumpman);
+        }
     }
-    else if(this.randomNum == 2){
-        this.level.timeStopped = true;        
-    }
+    
 }
 
 donkeyKong.barrel.prototype.spawnFireball = function(_barrel, _oil){

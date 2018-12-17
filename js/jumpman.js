@@ -58,10 +58,15 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.hammerSound.loop = true;
     this.hammerSound.stop();
     
-    // Powerup
+    // Powerup speed
     this.speedPowerUpActive = false;
     this.speedPowerUpCounter = 0;
     this.speedPowerUpTime = 3;
+    
+    // Powerup star
+    this.starPowerUpActive = false;
+    this.starPowerUpCounter = 0;
+    this.starPowerUpTime = 5;
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
@@ -81,14 +86,29 @@ donkeyKong.jumpman.prototype.setInputs = function(rightPressed, leftPressed, upP
 donkeyKong.jumpman.prototype.move = function(){    
     
     if(this.rightPressed){
-        this.scale.x=1;
+        if(!this.speedPowerUpActive){
+            this.scale.x=1;            
+            this.scale.y=1;            
+        }
+        else{
+            this.scale.x = 1.3;
+            this.scale.y = 1.3;
+        }
         this.body.velocity.x = this.speed;
         this.isMoving = true;
         if(!this.runSound.isPlaying && this.body.touching.down)
                 this.runSound.play();
     }
     else if(this.leftPressed){
-        this.scale.x=-1;
+        if(!this.speedPowerUpActive){
+            this.scale.x=-1;            
+            this.scale.y=1;            
+        }
+        else{
+            this.scale.x = -1.3;
+            this.scale.y = 1.3;
+        }
+        
         this.body.velocity.x = -this.speed;
         this.isMoving = true;
         if(!this.runSound.isPlaying && this.body.touching.down)
@@ -110,6 +130,9 @@ donkeyKong.jumpman.prototype.jump = function(){
 }
 
 donkeyKong.jumpman.prototype.stairs = function(){
+    if(this.hasHammer){
+        return;
+    }
     
     if(this.overlapStairs){
         if(!this.isInStair){
@@ -195,6 +218,12 @@ donkeyKong.jumpman.prototype.hammerLogic = function(){
 
 // power-ups
 donkeyKong.jumpman.prototype.speedPowerUp = function(){
+    if(this.speedPowerUpCounter == 0){
+        this.setCenter
+        this.scale.x = 1.5;        
+        this.scale.y = 1.5;    
+        this.anchor.setTo(.5);    
+    }
     if(this.speedPowerUpCounter < this.speedPowerUpTime){
         this.speedPowerUpCounter += this.game.time.physicsElapsed;
         
@@ -202,12 +231,27 @@ donkeyKong.jumpman.prototype.speedPowerUp = function(){
     }
     else{
         this.speed = this.normalSpeed;
+       
+        this.scale.x = 1;
+        this.scale.y = 1;
+        this.anchor.setTo(.5);
         
         this.speedPowerUpActive = false;
         
         this.speedPowerUpCounter = 0;
     }
 }
+
+donkeyKong.jumpman.prototype.starPowerUp = function(){
+    if(this.starPowerUpCounter < this.speedPowerUpTime){
+        this.starPowerUpCounter += this.game.time.physicsElapsed;
+    }
+    else{
+        this.starPowerUpActive = false;
+        this.starPowerUpCounter = 0;
+    }
+}
+
 donkeyKong.jumpman.prototype.marioAnimations = function(){
     if(this.hasHammer){
         if(this.isMoving){            
@@ -248,6 +292,9 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
         
         if(this.speedPowerUpActive){
             this.speedPowerUp();
+        }
+        if(this.starPowerUpActive){
+            this.starPowerUp();
         }
     }
     else{
