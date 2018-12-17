@@ -30,6 +30,8 @@ donkeyKong.debugLevel= {
         this.load.spritesheet('oil', 'assets/sprites/oil.png', 16, 24);
         this.load.spritesheet('mineBarrel', 'assets/sprites/mineBarrel_2.png', 15, 10);
         this.load.spritesheet('mineExplosion', 'assets/sprites/mineExplosion.png', 128, 128);
+        this.load.spritesheet('clockTime', 'assets/sprites/clock.png', 19, 19);
+        this.load.spritesheet('starPowerUp', 'assets/sprites/star.png', 25, 25);
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.image('stair', 'assets/sprites/stairs.png');
         this.load.image('finalStair', 'assets/sprites/finalStair.png');
@@ -118,10 +120,13 @@ donkeyKong.debugLevel= {
         
         
         //Jumpman
+        this.jumpmanGroup = this.game.add.group();
         this.jumpman = new donkeyKong.jumpman(this.game, 200, 40, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman);
+        this.jumpmanGroup.add(this.jumpman);
         this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman2);
+        this.jumpmanGroup.add(this.jumpman2);
         
         //PAULINE
         this.pauline = new donkeyKong.pauline(this.game, 123, 29, 'pauline');
@@ -370,7 +375,7 @@ donkeyKong.debugLevel= {
                 }
                 
                 // Hammer power ups collisions
-                this.game.physics.arcade.overlap(this.jumpman, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
+                this.game.physics.arcade.overlap(this.jumpmanGroup, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
                 
                 // Time stop power up logic
                 this.TimeStopped();
@@ -509,6 +514,16 @@ donkeyKong.debugLevel= {
         this.barrel = new donkeyKong.barrel(this.game, this.kong.x, this.kong.y, 75, 1, true, this, 'barrel');
         //this.barrel.scale = 1.1;
         this.barrels.add(this.barrel);
-    }    
+    },
+    
+    SpawnClockSprite: function(_jumpman){        
+        this.newClock = new donkeyKong.clockTimeStop(this.game, 'clockTime', _jumpman);
+        this.game.add.existing(this.newClock);
+    },
+    
+    SpawnStarSprite: function(_jumpman){        
+        this.newStar = new donkeyKong.starPowerUp(this.game, 'starPowerUp', _jumpman);
+        this.game.add.existing(this.newStar);
+    }
     
 };
