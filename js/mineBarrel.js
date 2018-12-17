@@ -23,7 +23,8 @@ donkeyKong.mineBarrel.prototype.hitJumpman = function(_barrel, _jumpman){
             this.kill();
         }
         else{
-            this.level.hitJumpman(_jumpman);
+            if(!this.mineActivated)
+                this.level.hitJumpman(_jumpman);
         }
     }
 };

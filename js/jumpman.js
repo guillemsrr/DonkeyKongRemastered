@@ -77,15 +77,15 @@ donkeyKong.jumpman.prototype.move = function(){
         this.scale.x=1;
         this.body.velocity.x = this.speed;
         this.isMoving = true;
-                this.runSound.play();
         if(!this.runSound.isPlaying && this.body.touching.down)
+                this.runSound.play();
     }
     else if(this.leftPressed){
         this.scale.x=-1;
         this.body.velocity.x = -this.speed;
         this.isMoving = true;
-                this.runSound.play();
         if(!this.runSound.isPlaying && this.body.touching.down)
+                this.runSound.play();
     }
     else{
         this.body.velocity.x = 0;
