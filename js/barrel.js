@@ -92,7 +92,6 @@ donkeyKong.barrel.prototype.movement = function(_barrel, _beam){
     }
     
     if(this.body.y - this.lastPos > 5){
-        console.log("Turns");
         this.IsGoingDown = false;
         this.direction *= -1;
     }

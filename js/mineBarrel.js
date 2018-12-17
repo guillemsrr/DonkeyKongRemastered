@@ -46,10 +46,5 @@ donkeyKong.mineBarrel.prototype.checkExplosion = function(){
         this.level.mines.remove(this);
         this.kill();
     }
-    else{
-        
-    }
-    //else if()
-    
 }
 

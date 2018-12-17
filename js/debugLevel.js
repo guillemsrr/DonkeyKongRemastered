@@ -499,8 +499,8 @@ donkeyKong.debugLevel= {
             this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');            
             this.barrels.add(this.nuclear_barrel);
         }
-        else if(this.randomNumber < 100){            
-            var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, this.pointsArray, 75, 1, this, "mineBarrel");
+        else if(this.randomNumber < 100){    
+            var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, "mineBarrel");
             this.barrels.add(mine);
         }
     },
