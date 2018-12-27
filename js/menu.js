@@ -25,15 +25,13 @@ donkeyKong.menu = {
         // Buttons sprites    
         this.newGame = this.game.add.text(this.menuVerticalAlignement, 240, "NEW GAME", style);
         this.levelSelector = this.game.add.text(this.menuVerticalAlignement, 270, "LEVELS", style);
-        
         this.score = this.game.add.text(this.menuVerticalAlignement, 300, "SCORES", style);
-        
         this.exit = this.game.add.text(this.menuVerticalAlignement, 330, "EXIT", style);
         
 
         // Buttons list
         this.buttonIterator = 0;
-        this.buttonList = Array(3);
+        this.buttonList = Array(4);
         this.buttonList[0] = this.newGame;
         this.buttonList[1] = this.levelSelector;
         this.buttonList[2] = this.score;
@@ -49,9 +47,11 @@ donkeyKong.menu = {
         
         //Audio
         this.menuAudio = this.game.add.audio('menu');
-        this.menuAudio.play();
-        this.menuAudio.loopFull();
-        
+        if(!this.menuAudio.isPlaying){
+            this.menuAudio.play();
+            this.menuAudio.loopFull();
+        }
+            
         this.startAudio = this.game.add.audio('start');
         this.started = false;
         
@@ -62,13 +62,11 @@ donkeyKong.menu = {
             this.SelectorLogic();
         }
         else{
-            if(!this.startAudio.isPlaying){
-                if(this.buttonIterator == 0){
-                    this.game.state.start('level1');
-                }
+            if(!this.startAudio.isPlaying && this.buttonIterator == 0){
+                this.game.state.start('level1');
             }
-            if(this.buttonIterator == 1){
-                    this.game.state.start('LevelSelector');
+            else if(this.buttonIterator == 1){
+                this.game.state.start('LevelSelector');
             }
             else if(this.buttonIterator == 2){
                 this.startAudio.destroy();
@@ -95,11 +93,11 @@ donkeyKong.menu = {
         }
         
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER)){
-            if(this.buttonIterator != 2){
-                this.menuAudio.destroy();
+            if(this.buttonIterator == 0){
                 this.startAudio.play();
             }
             this.started = true;
+            this.menuAudio.destroy();
         }
     },
     

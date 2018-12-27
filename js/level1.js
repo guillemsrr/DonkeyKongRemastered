@@ -118,13 +118,12 @@ donkeyKong.level1= {
         this.kongSound = this.game.add.audio('kong');
         
         
-        
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
         this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
-        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, 100, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
         
@@ -427,7 +426,6 @@ donkeyKong.level1= {
     },
     
     HammerPowerUp: function (_jumpman, _hammer){
-        
             _jumpman.grabHammer();
             _hammer.destroy();        
     },
@@ -527,16 +525,17 @@ donkeyKong.level1= {
     },
     
     LoadNextLevel: function (_key){
-        if(_key=="level1")
-            this.game.state.start('Level2');
-        else if(_key=="level2")
-            this.game.state.start('Level3');
+        this.game.sound.stopAll();
+        if(_key=="level1"){
+            this.game.state.start('level3');
+        }
         else if(_key=="level3")
-            this.game.state.start('Level4');
+            this.game.state.start('level3');
+        else if(_key=="level3")
+            this.game.state.start('level4');
         else if(_key=="level4")
-            this.game.state.start('Level5');
+            this.game.state.start('level5');
         else if(_key=="level5")
             this.game.state.start('level1');
     }
-    
 };
