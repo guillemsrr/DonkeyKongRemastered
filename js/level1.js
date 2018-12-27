@@ -1,6 +1,6 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.debugLevel= {
+donkeyKong.level1= {
     
     init:function(){
         //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -398,7 +398,7 @@ donkeyKong.debugLevel= {
         }
         else if(this.levelCompleted && !this.roundClear.isPlaying){
             //load next level
-            this.game.state.start('Level2');
+            this.LoadNextLevel(this.game.state.getCurrentState().key);
         }
         
     },
@@ -524,6 +524,19 @@ donkeyKong.debugLevel= {
     SpawnStarSprite: function(_jumpman){        
         this.newStar = new donkeyKong.starPowerUp(this.game, 'starPowerUp', _jumpman);
         this.game.add.existing(this.newStar);
+    },
+    
+    LoadNextLevel: function (_key){
+        if(_key=="level1")
+            this.game.state.start('Level2');
+        else if(_key=="level2")
+            this.game.state.start('Level3');
+        else if(_key=="level3")
+            this.game.state.start('Level4');
+        else if(_key=="level4")
+            this.game.state.start('Level5');
+        else if(_key=="level5")
+            this.game.state.start('level1');
     }
     
 };

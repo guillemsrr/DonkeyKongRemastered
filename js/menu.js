@@ -6,8 +6,6 @@ donkeyKong.menu = {
     
     preload: function () {
         this.load.image('menu_background', 'assets/sprites/menu_background.png');
-        this.load.image('1player_button', 'assets/sprites/menu_1player_button.png');
-        this.load.image('2player_button', 'assets/sprites/menu_2player_button.png');
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
         
         this.load.audio('menu', 'assets/audio/menu.mp3');
@@ -18,24 +16,28 @@ donkeyKong.menu = {
     create: function () {
         
         // Settings
-        this.menuVerticalAlignement = 191; 
-        this.selectorOffset = 25;   
+        this.menuVerticalAlignement = 191;
+        this.selectorOffset = 25;
+        var style = { font: "20px title", fill: "#f9bc00", boundsAlignH: "top", boundsAlignV: "middle" };
+        
+        this.game.add.sprite(0, 0, 'menu_background');
         
         // Buttons sprites    
-        this.background = this.game.add.sprite(0, 0, 'menu_background');
-        this.onePlayerButton = this.game.add.sprite(this.menuVerticalAlignement, 250, '1player_button');
-        this.twoPlayerButton = this.game.add.sprite(this.menuVerticalAlignement, 280, '2player_button');
+        this.newGame = this.game.add.text(this.menuVerticalAlignement, 240, "NEW GAME", style);
+        this.levelSelector = this.game.add.text(this.menuVerticalAlignement, 270, "LEVELS", style);
         
-        var style = { font: "bold 20px Arial", fill: "#fff", boundsAlignH: "top", boundsAlignV: "middle" };
-        this.scoreButton = this.game.add.text(this.menuVerticalAlignement, 310, "SCORES", style);
+        this.score = this.game.add.text(this.menuVerticalAlignement, 300, "SCORES", style);
+        
+        this.exit = this.game.add.text(this.menuVerticalAlignement, 330, "EXIT", style);
         
 
         // Buttons list
-        this.buttonIterator = 0;        
+        this.buttonIterator = 0;
         this.buttonList = Array(3);
-        this.buttonList[0] = this.onePlayerButton;
-        this.buttonList[1] = this.twoPlayerButton;
-        this.buttonList[2] = this.scoreButton;
+        this.buttonList[0] = this.newGame;
+        this.buttonList[1] = this.levelSelector;
+        this.buttonList[2] = this.score;
+        this.buttonList[3] = this.exit;
         
         
         // Selector
@@ -62,14 +64,18 @@ donkeyKong.menu = {
         else{
             if(!this.startAudio.isPlaying){
                 if(this.buttonIterator == 0){
-                    this.game.state.start('DebugLevel');
+                    this.game.state.start('level1');
                 }
-                else if(this.buttonIterator == 1){
-                    this.game.state.start('Level2');
-                }
-                else if(this.buttonIterator == 2){
+            }
+            if(this.buttonIterator == 1){
+                    this.game.state.start('LevelSelector');
+            }
+            else if(this.buttonIterator == 2){
+                this.startAudio.destroy();
                     this.game.state.start('Scores');
-                }
+            }
+            else if(this.buttonIterator == 3){
+                this.game.destroy();
             }
         }  
     },
@@ -89,8 +95,10 @@ donkeyKong.menu = {
         }
         
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.ENTER)){
-            this.menuAudio.destroy();
-            this.startAudio.play();
+            if(this.buttonIterator != 2){
+                this.menuAudio.destroy();
+                this.startAudio.play();
+            }
             this.started = true;
         }
     },
