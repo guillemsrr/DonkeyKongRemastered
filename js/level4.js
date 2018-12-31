@@ -1,12 +1,14 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.level3 = {
+donkeyKong.level4 = {
     
     init:function(){
         //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.game.physics.startSystem(Phaser.Physics.ARCADE);//NINJA
         this.game.physics.arcade.gravity.y = gameOptions.gravity;
         this.game.world.setBounds(0,0,gameOptions.level1Width, gameOptions.level1Height);
+        
+        
     },
     
     preload: function () {
@@ -34,10 +36,10 @@ donkeyKong.level3 = {
         this.load.spritesheet('starPowerUp', 'assets/sprites/star.png', 25, 25);
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.image('stair', 'assets/sprites/stairs.png');
+        this.load.image('red_stair', 'assets/sprites/stairs_red.png');
+        this.load.image('green_stair', 'assets/sprites/stairs_green.png');
         this.load.image('finalStair', 'assets/sprites/finalStair.png');
         this.load.image('hammer', 'assets/sprites/hammer.png');
-        this.load.image('direction_collider', 'assets/sprites/direction_collider.png');
-        
         //Menu
         this.load.image('pause_background', 'assets/sprites/pause_background.png');
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
@@ -59,15 +61,30 @@ donkeyKong.level3 = {
         this.load.audio('stageTheme', 'assets/audio/stageTheme.mp3');
         this.load.audio('hit', 'assets/audio/hit.mp3');
         
-        this.hackText = this.game.add.text(0, 0, "HACK", hudStyle);
-        this.hackText.destroy();
-        
     },
     
     create: function () {
         
-        //-----------------------HUD-----------------------
-        this.hud = new donkeyKong.hud(this.game, 70, 350, this);
+        // ------------------ GAMEPLAY -------------------
+        
+        // Hammer 1
+        this.hammerPowerUpGroup = this.game.add.group();            
+        this.hammerPowerUp = this.game.add.sprite(350, 150, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp);
+        this.game.physics.enable(this.hammerPowerUp);
+        this.hammerPowerUp.body.immovable = true; 
+        this.hammerPowerUp.body.allowGravity = false;
+        this.hammerPowerUp.body.gravity = false;
+        
+        // Hammer 2   
+        this.hammerPowerUp2 = this.game.add.sprite(120, 350, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp2);
+        this.game.physics.enable(this.hammerPowerUp2);
+        this.hammerPowerUp2.body.immovable = true; 
+        this.hammerPowerUp2.body.allowGravity = false;
+        this.hammerPowerUp2.body.gravity = false;
+        
+        
         
         //----------------------AUDIO----------------------
         //level
@@ -91,148 +108,132 @@ donkeyKong.level3 = {
         //kong
         this.kongSound = this.game.add.audio('kong');
         
-        // ------------------ GAMEPLAY -------------------
         
-        //static barrels
-        this.staticBarrel = this.add.sprite(gameOptions.gameWidth/2 + 33, 65, "staticBarrel");
-        this.staticBarrel.frame = 4;
-        this.staticBarrel.angle = 90;
         
-        this.staticBarrel2 = this.add.sprite(gameOptions.gameWidth/2 - 21, 65, "staticBarrel");
-        this.staticBarrel2.frame = 4;
-        this.staticBarrel2.angle = 90;
-        
-        this.staticBarrel3 = this.add.sprite(gameOptions.gameWidth/2 + 33, 52, "staticBarrel");
-        this.staticBarrel3.frame = 4;
-        this.staticBarrel3.angle = 90;
-        
-        this.staticBarrel4 = this.add.sprite(gameOptions.gameWidth/2 - 21, 52, "staticBarrel");
-        this.staticBarrel4.frame = 4;
-        this.staticBarrel4.angle = 90;
+        //-------------------- LEVEL ---------------------
         
         //Stairs
         // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite   
         this.stairs = this.game.add.group();
         this.finalStair = this.game.add.group();
         var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
-        stair.createStair(28, 16*13.5, gameOptions.gameHeight - 8*5.5);
-        stair.createStair(28, 16*19, gameOptions.gameHeight - 8*5.5);
-        stair.createStair(40, gameOptions.gameWidth/2 , gameOptions.gameHeight - 8*26);
-        stair.createStair(20, 370, 8*15.5);
         
-        //Jumpman
-        this.jumpmanGroup = this.game.add.group();
-        this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud,1);
-        this.game.add.existing(this.jumpman);
-        this.jumpmanGroup.add(this.jumpman);
-        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, 100, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud,2);
-        this.game.add.existing(this.jumpman2);
-        this.jumpmanGroup.add(this.jumpman2);
+        stair.createStair(14, 8*12, gameOptions.gameHeight - 4*21);      
+        stair.createStair(14, gameOptions.gameWidth-8*13,  gameOptions.gameHeight - 4*21);      
         
-        //PAULINE
-        this.pauline = new donkeyKong.pauline(this.game, gameOptions.gameWidth - 16*6, 29, 'pauline');
-        this.game.add.existing(this.pauline);
+        stair.createStair(14, 8*5, gameOptions.gameHeight - 4*37);  
+        stair.createStair(14, gameOptions.gameWidth/2-4, gameOptions.gameHeight - 4*37);  
+        stair.createStair(14, gameOptions.gameWidth-8*6, gameOptions.gameHeight - 4*37);  
         
-        //DONKEY KONG
-        this.kong = new donkeyKong.kong(this.game, gameOptions.gameWidth/2 + 2, 64, 'kong', this, this.kongSound);
-        this.game.add.existing(this.kong);
+        stair.createStair(14, 8*12, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, 8*21, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, gameOptions.gameWidth/2-4, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, gameOptions.gameWidth-8*22, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, gameOptions.gameWidth-8*13, gameOptions.gameHeight - 4*53);
+    
+        stair.createStair(14, 8*7, gameOptions.gameHeight - 4*69);  
+        stair.createStair(14, gameOptions.gameWidth/2-4, gameOptions.gameHeight - 4*69);  
+        stair.createStair(14, gameOptions.gameWidth-8*8, gameOptions.gameHeight - 4*69);  
         
+        var stair = new donkeyKong.stair(this.game, 'green_stair', this.stairs, true, 'finalStair', this.finalStair);
+        stair.createStair(30, 8*3, gameOptions.gameHeight - 4*85);  
         
-        //Oil Barrel
-        this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 52, 'oil');
-        this.game.add.existing(this.oil);
-        this.game.physics.arcade.enable(this.oil);
-        this.oil.body.immovable = true;
-        this.oil.body.moves = false;
-        this.fireballCounter=0;
-        
-        //Barrel
-        this.barrelTimer = 0;
-        this.barrelRightSpawned = false;
-        this.barrelLeftSpawned = false;
-        this.barrelDownSpawned = false;
-        
-        this.mines = this.game.add.group();
-        
-        //-------------------- LEVEL ---------------------
+        var stair = new donkeyKong.stair(this.game, 'red_stair', this.stairs, true, 'finalStair', this.finalStair);
+        stair.createStair(30, gameOptions.gameWidth-8*4, gameOptions.gameHeight - 4*85);  
         
         //Beams
         this.beams = this.game.add.group();
         this.beamCollider = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
-        //base
-        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*5);
         
-        //right down
-        beamRow.createDiagRow(4, 16*19, gameOptions.gameHeight - 8*20, false, true);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*21, gameOptions.gameHeight - 8*21, -1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
+        beamRow.createStraightRow(6, 16, gameOptions.gameHeight - 8*10);
+        beamRow.createStraightRow(6, gameOptions.gameWidth-16*7, gameOptions.gameHeight - 8*10);
         
-        beamRow.createDiagRow(4, 16*22, gameOptions.gameHeight - 8*22, false, true);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*23, gameOptions.gameHeight - 8*23, -1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
+        beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*18);
+        beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*18);
+        beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*18);
         
-        beamRow.createDiagRow(4, 16*24, gameOptions.gameHeight - 8*24, false, true);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*26, gameOptions.gameHeight - 8*25, -1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
+        beamRow.createStraightRow(6, 32, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*6, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*1, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 + 16*4, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(6, gameOptions.gameWidth - 16*8, gameOptions.gameHeight - 8*26);
         
-        beamRow.createDiagRow(4, 16*27, gameOptions.gameHeight - 8*26, false, true);
+        beamRow.createStraightRow(4, gameOptions.gameWidth/2 - 16*13, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*6, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*1, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 + 16*4, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(4, gameOptions.gameWidth/2 + 16*9, gameOptions.gameHeight - 8*34);
         
-        //left down
-        beamRow.createDiagRow(4, 16*13, gameOptions.gameHeight - 8*20, false, true,-1,-1);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*11, gameOptions.gameHeight - 8*21, 1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        beamRow.createDiagRow(4, 16*10, gameOptions.gameHeight - 8*22, false, true,-1,-1);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*8, gameOptions.gameHeight - 8*23, 1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        beamRow.createDiagRow(4, 16*7, gameOptions.gameHeight - 8*24, false, true,-1,-1);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*5, gameOptions.gameHeight - 8*25, 1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        beamRow.createDiagRow(4, 16*4, gameOptions.gameHeight - 8*26, false, true,-1,-1);
-        
-        //left up
-        beamRow.createDiagRow(4, 16*4, gameOptions.gameHeight - 8*30, false, true);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*6, gameOptions.gameHeight - 8*31, -1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        beamRow.createDiagRow(4, 16*7, gameOptions.gameHeight - 8*32, false, true);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*9, gameOptions.gameHeight - 8*33, -1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        beamRow.createDiagRow(4, 16*10, gameOptions.gameHeight - 8*34, false, true);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*12, gameOptions.gameHeight - 8*35, -1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        //right up
-        beamRow.createDiagRow(4, 16*27, gameOptions.gameHeight - 8*30, false, true, -1, -1);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*25, gameOptions.gameHeight - 8*31, 1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        beamRow.createDiagRow(4, 16*24, gameOptions.gameHeight - 8*32, false, true, -1, -1);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*22, gameOptions.gameHeight - 8*33, 1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        beamRow.createDiagRow(4, 16*21, gameOptions.gameHeight - 8*34, false, true, -1, -1);
-        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*19, gameOptions.gameHeight - 8*35, 1, this, 'direction_collider');
-        this.game.add.existing(this.directionSetter);
-        
-        //final row
-        beamRow.createStraightRow(4, 16*23, 8*5);
-        //kong row
-        beamRow.createStraightRow(4, 16*14, 8*10);
-        //scape row
-        beamRow.createStraightRow(4, 16*20, 8*16);
-        beamRow.createStraightRow(1, 16*17, 8*16);
+        beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*42);
+        beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*42);
+        beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*42);
         
         
         var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
         
+        
+        //Jumpman
+        this.jumpmanGroup = this.game.add.group();
+        this.jumpman = new donkeyKong.jumpman(this.game, 48, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        this.game.add.existing(this.jumpman);
+        this.jumpmanGroup.add(this.jumpman);
+        
+        this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 48, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        this.game.add.existing(this.jumpman2);
+        this.jumpmanGroup.add(this.jumpman2);
+        
+        
+        //PAULINE
+        this.pauline = new donkeyKong.pauline(this.game, 123, 29, 'pauline');
+        this.game.add.existing(this.pauline);
+        
+        //DONKEY KONG
+        this.kong = new donkeyKong.kong(this.game, 73, 47, 'kong', this, this.kongSound);
+        this.game.add.existing(this.kong);
+        
+        //static barrels
+        this.staticBarrel = this.add.sprite(40, 46, "staticBarrel");
+        this.staticBarrel.frame = 4;
+        this.staticBarrel.angle = 90;
+        
+        this.staticBarrel2 = this.add.sprite(50, 46, "staticBarrel");
+        this.staticBarrel2.frame = 4;
+        this.staticBarrel2.angle = 90;
+        
+        this.staticBarrel3 = this.add.sprite(40, 35, "staticBarrel");
+        this.staticBarrel3.frame = 4;
+        this.staticBarrel3.angle = 90;
+        
+        this.staticBarrel4 = this.add.sprite(50, 35, "staticBarrel");
+        this.staticBarrel4.frame = 4;
+        this.staticBarrel4.angle = 90;
+
+        
+        //Oil Barrel
+        this.oil = new donkeyKong.oil(this.game, 32, gameOptions.gameHeight - 92, 'oil');
+        this.game.add.existing(this.oil);
+        this.game.physics.arcade.enable(this.oil);
+        this.oil.body.immovable = true;
+        this.oil.body.moves = false;
+        
+        this.oil = new donkeyKong.oil(this.game, gameOptions.gameWidth - 32, gameOptions.gameHeight - 92, 'oil');
+        this.game.add.existing(this.oil);
+        this.game.physics.arcade.enable(this.oil);
+        this.oil.body.immovable = true;
+        this.oil.body.moves = false;
+        
+        this.fireballCounter=0;
+        
+        //Barrel
+        this.barrelTimer = 0;
+        this.barrelRightSpawned = false;
+        this.barrelDownSpawned = false;
+        
+        this.mines = this.game.add.group();
+        
         this.levelCompleted = false;
-                
-        // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite                
+        
         // ------------------ PAUSE MENU -----------------
         
         // Settings
@@ -290,11 +291,19 @@ donkeyKong.level3 = {
         this.barrels = this.game.add.group();
     },
     
-    hitJumpman:function(_jumpman){        
-        _jumpman.body.position.x = 60;
-        _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
-        _jumpman.body.velocity.x = 0;
-        this.hit.play();
+    hitJumpman:function(_jumpman){    
+        if(_jumpman == this.jumpman){
+            _jumpman.body.position.x = 48;
+            _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+            _jumpman.body.velocity.x = 0;
+            this.hit.play();
+        }
+        else if(_jumpman == this.jumpman2){
+            _jumpman.body.position.x = gameOptions.gameWidth - 48;
+            _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+            _jumpman.body.velocity.x = 0;
+            this.hit.play();
+        }
     },
     
     SpawnFireBall:function(){
@@ -321,6 +330,7 @@ donkeyKong.level3 = {
         });
         this.barrels = this.game.add.group();
     },
+    
     
     DestroyBarrel:function(_x, _y){
         this.destroy_barrel = new donkeyKong.destroy_barrel(this.game, _x, _y, 'destroy_barrel');
@@ -393,9 +403,6 @@ donkeyKong.level3 = {
                 this.kong.customUpdate();
                 this.pauline.customUpdate();
                 this.oil.customUpdate();
-                
-                //HUD
-                this.hud.customUpdate();
 
 
                 //Barrels
@@ -412,14 +419,6 @@ donkeyKong.level3 = {
                     if(this.barrelTimer > 0.4){
                         this.SpawnBarrelDown();
                         this.barrelDownSpawned = false;
-                        this.barrelTimer = 0;
-                    }
-                }
-                if(this.barrelLeftSpawned){
-                    this.barrelTimer+=this.game.time.physicsElapsed;
-                    if(this.barrelTimer > 0.7){
-                        this.SpawnBarrelLeft();
-                        this.barrelLeftSpawned = false;
                         this.barrelTimer = 0;
                     }
                 }
@@ -539,30 +538,24 @@ donkeyKong.level3 = {
         this.selectorPressed = true;
     },
     
-    SpawnBarrel: function(distX, dir){
+    SpawnBarrelRight: function(){
         this.randomNumber = Math.floor(Math.random() * 100);
         if(this.randomNumber < 40){
-            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, false, this, 'barrel');
+            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
             this.barrels.add(this.barrel);
         }
         else if (this.randomNumber <  60){
-            this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, this, 'spiky_barrel');
+            this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'spiky_barrel');
             this.barrels.add(this.spiky_barrel);
         }
         else if(this.randomNumber < 80){
-            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, false, this, 'nuclear_barrel');            
+            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');            
             this.barrels.add(this.nuclear_barrel);
         }
         else if(this.randomNumber < 100){    
-            var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, false, this, "mineBarrel");
+            var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, "mineBarrel");
             this.barrels.add(mine);
         }
-    },
-    SpawnBarrelRight: function(){
-        this.SpawnBarrel(this.kong.width/2, 1)
-    },
-    SpawnBarrelLeft: function(){
-        this.SpawnBarrel(this.kong.width/2, -1)
     },
     
     SpawnBarrelDown: function(){
@@ -583,10 +576,9 @@ donkeyKong.level3 = {
     
     LoadNextLevel: function (_key){
         this.game.sound.stopAll();
-        if(_key=="level1"){
-            this.game.state.start('level2');
-        }
-        else if(_key=="level2")
+        if(_key=="level1")
+            this.game.state.start('level3');
+        else if(_key=="level3")
             this.game.state.start('level3');
         else if(_key=="level3")
             this.game.state.start('level4');

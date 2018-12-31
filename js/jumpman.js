@@ -128,7 +128,7 @@ donkeyKong.jumpman.prototype.move = function(){
 }
 
 donkeyKong.jumpman.prototype.jump = function(){
-    if (this.upPressed && this.body.touching.down){
+    if (this.upPressed && this.body.touching.down && !this.hasHammer){
         this.body.velocity.y = -this.jumpForce;
         if(this.runSound.isPlaying)
             this.runSound.stop();
