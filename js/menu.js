@@ -11,6 +11,9 @@ donkeyKong.menu = {
         this.load.audio('menu', 'assets/audio/menu.mp3');
         this.load.audio('start', 'assets/audio/start.mp3');
         
+        this.hackText = this.game.add.text(0, 0, "HACK", hudStyle);
+        this.hackText.destroy();
+        
     },
     
     create: function () {

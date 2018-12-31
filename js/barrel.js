@@ -129,6 +129,7 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
             this.level.DestroyBarrel(this.x, this.y);
             this.destroyBarrel(_jumpman);
             this.kill();
+            _jumpman.JumpOnBarrel();
         }
         else{
             this.level.hitJumpman(_jumpman);

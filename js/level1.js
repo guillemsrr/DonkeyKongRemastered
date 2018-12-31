@@ -57,9 +57,16 @@ donkeyKong.level1= {
         this.load.audio('stageTheme', 'assets/audio/stageTheme.mp3');
         this.load.audio('hit', 'assets/audio/hit.mp3');
         
+        this.hackText = this.game.add.text(0, 0, "HACK", hudStyle);
+        this.hackText.destroy();
+        
     },
     
     create: function () {
+        
+        //-----------------------HUD-----------------------
+        this.hud = new donkeyKong.hud(this.game, 50, 390, this);
+        
         // ------------------ GAMEPLAY -------------------
         
         // Hammer 1
@@ -120,10 +127,10 @@ donkeyKong.level1= {
         
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
-        this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
-        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, 100, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, 100, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
         
@@ -353,6 +360,9 @@ donkeyKong.level1= {
                 this.kong.customUpdate();
                 this.pauline.customUpdate();
                 this.oil.customUpdate();
+                
+                //HUD
+                this.hud.customUpdate();
 
 
                 //Barrels

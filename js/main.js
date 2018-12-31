@@ -9,7 +9,7 @@ var gameOptions={
 };
 
 var style = { font: "20px title", fill: "#f9bc00", boundsAlignH: "top", boundsAlignV: "middle" };
-var hudStyle = { font: "10px title", fill: "#ffff", boundsAlignH: "top", boundsAlignV: "middle" };
+var hudStyle = { font: "9px title", fill: "#ffff", boundsAlignH: "top", boundsAlignV: "middle" };
 
 donkeyKong.game = new Phaser.Game(gameOptions.gameWidth,gameOptions.gameHeight,Phaser.AUTO,'gameFrame',this,false,false);
 
@@ -21,4 +21,4 @@ donkeyKong.game.state.add('level2', donkeyKong.level2);
 donkeyKong.game.state.add('level3', donkeyKong.level3);
 //donkeyKong.game.state.add('level4', donkeyKong.level4);
 //donkeyKong.game.state.add('level5', donkeyKong.level5);
-donkeyKong.game.state.start('level3');
+donkeyKong.game.state.start('level1');
