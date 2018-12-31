@@ -56,10 +56,21 @@ donkeyKong.kong.prototype.SetNextMaxTime = function(){
 
 donkeyKong.kong.prototype.NextAnimation = function(){
      if(this.animations.name == "monkey"){
-         if(this.game.rnd.integerInRange(0, 100)<80) //80% per fer throw right
+         if(this.game.state.getCurrentState().key == 1 ){
+             if(this.game.rnd.integerInRange(0, 100)<80) //40% per fer throw right
              this.ThrowRight();
-         else
+         else 
              this.ThrowDown();
+         }
+         else{
+             if(this.game.rnd.integerInRange(0, 100)<40) //40% per fer throw right
+             this.ThrowRight();
+         else if(this.game.rnd.integerInRange(0, 100)<80) //40% per fer throw right
+             this.ThrowLeft();
+         else 
+             this.ThrowDown();
+         }
+         
          this.kongSound.stop();
     }
     else{
@@ -76,7 +87,17 @@ donkeyKong.kong.prototype.ThrowDown = function(){
 }
 
 donkeyKong.kong.prototype.ThrowRight = function(){
+    if(this.scale.x < 0)
+        this.scale.x*=-1;
     this.animations.play('throwRight');
     //throw barrel right
     this.level.barrelRightSpawned = true;
+}
+
+donkeyKong.kong.prototype.ThrowLeft = function(){
+    if(this.scale.x > 0)
+        this.scale.x*=-1;
+    this.animations.play('throwRight');
+    //throw barrel right
+    this.level.barrelLeftSpawned = true;
 }

@@ -1,10 +1,12 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death, _itemGet, _hammer){
+donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death, _itemGet, _hammer, _hud, jumpManNum){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.game = _game;
     _game.physics.arcade.enable(this);
+    this.num = jumpManNum;
+    this.hud = _hud;
 
     //Variables
     this.speed = 90;
@@ -67,13 +69,18 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.starPowerUpActive = false;
     this.starPowerUpCounter = 0;
     this.starPowerUpTime = 5;
+    
+    //Bonus Text
+    this.bonusTime = 0;
+    this.bonusMaxTime = 1;
+    this.bonusActive = false;
+    this.bonusText;
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.jumpman.prototype.constructor = donkeyKong.jumpman;
 
 donkeyKong.jumpman.prototype.setInputs = function(rightPressed, leftPressed, upPressed, downPressed, overlapStairs, overlapFinalStair){
-    
     this.rightPressed = rightPressed;
     this.leftPressed = leftPressed;
     this.upPressed = upPressed;
@@ -296,6 +303,8 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
         if(this.starPowerUpActive){
             this.starPowerUp();
         }
+        
+        this.BonusCounter();
     }
     else{
         this.finalDeath();    
@@ -308,5 +317,21 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
 
 donkeyKong.jumpman.prototype.JumpOnBarrel = function(){
     this.scoreUpSound.play();
-    this.points++;
+    this.points+=100;
+    this.bonusText = this.game.add.text(this.body.position.x, this.body.position.y - 10, "100", hudStyle);
+    this.bonusTime = 0;
+    this.bonusActive = true;
+    
+    //send it to the hud
+    this.hud.setPoints(this.num, this.points);
+}
+
+donkeyKong.jumpman.prototype.BonusCounter = function(){
+    if(this.bonusActive){
+        if(this.bonusTime > this.bonusMaxTime){
+            this.bonusActive = false;
+            this.bonusText.destroy();
+        }
+        this.bonusTime += this.game.time.physicsElapsed
+    }
 }
