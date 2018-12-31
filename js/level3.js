@@ -36,6 +36,8 @@ donkeyKong.level3 = {
         this.load.image('stair', 'assets/sprites/stairs.png');
         this.load.image('finalStair', 'assets/sprites/finalStair.png');
         this.load.image('hammer', 'assets/sprites/hammer.png');
+        this.load.image('direction_collider', 'assets/sprites/direction_collider.png');
+        
         //Menu
         this.load.image('pause_background', 'assets/sprites/pause_background.png');
         this.load.image('menu_selector', 'assets/sprites/menu_selector.png');
@@ -153,24 +155,62 @@ donkeyKong.level3 = {
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
         //base
         beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*5);
+        
         //right down
         beamRow.createDiagRow(4, 16*19, gameOptions.gameHeight - 8*20, false, true);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*21, gameOptions.gameHeight - 8*21, -1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*22, gameOptions.gameHeight - 8*22, false, true);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*23, gameOptions.gameHeight - 8*23, -1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*24, gameOptions.gameHeight - 8*24, false, true);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*26, gameOptions.gameHeight - 8*25, -1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*27, gameOptions.gameHeight - 8*26, false, true);
+        
         //left down
         beamRow.createDiagRow(4, 16*13, gameOptions.gameHeight - 8*20, false, true,-1,-1);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*11, gameOptions.gameHeight - 8*21, 1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*10, gameOptions.gameHeight - 8*22, false, true,-1,-1);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*8, gameOptions.gameHeight - 8*23, 1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*7, gameOptions.gameHeight - 8*24, false, true,-1,-1);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*5, gameOptions.gameHeight - 8*25, 1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*4, gameOptions.gameHeight - 8*26, false, true,-1,-1);
+        
         //left up
         beamRow.createDiagRow(4, 16*4, gameOptions.gameHeight - 8*30, false, true);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*6, gameOptions.gameHeight - 8*31, -1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*7, gameOptions.gameHeight - 8*32, false, true);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*9, gameOptions.gameHeight - 8*33, -1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*10, gameOptions.gameHeight - 8*34, false, true);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*12, gameOptions.gameHeight - 8*35, -1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         //right up
         beamRow.createDiagRow(4, 16*27, gameOptions.gameHeight - 8*30, false, true, -1, -1);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*25, gameOptions.gameHeight - 8*31, 1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*24, gameOptions.gameHeight - 8*32, false, true, -1, -1);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*22, gameOptions.gameHeight - 8*33, 1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
+        
         beamRow.createDiagRow(4, 16*21, gameOptions.gameHeight - 8*34, false, true, -1, -1);
+        this.directionSetter = new donkeyKong.directionSetter(this.game, 16*19, gameOptions.gameHeight - 8*35, 1, this, 'direction_collider');
+        this.game.add.existing(this.directionSetter);
         
         //final row
         beamRow.createStraightRow(4, 16*23, 8*5);
@@ -484,7 +524,7 @@ donkeyKong.level3 = {
     SpawnBarrelRight: function(){
         this.randomNumber = Math.floor(Math.random() * 100);
         if(this.randomNumber < 40){
-            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, -1, false, this, 'barrel');
+            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
             this.barrels.add(this.barrel);
         }
         else if (this.randomNumber <  60){
