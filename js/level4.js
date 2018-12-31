@@ -7,6 +7,8 @@ donkeyKong.level4 = {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);//NINJA
         this.game.physics.arcade.gravity.y = gameOptions.gravity;
         this.game.world.setBounds(0,0,gameOptions.level1Width, gameOptions.level1Height);
+        
+        
     },
     
     preload: function () {
@@ -34,6 +36,8 @@ donkeyKong.level4 = {
         this.load.spritesheet('starPowerUp', 'assets/sprites/star.png', 25, 25);
         this.load.image('beam', 'assets/sprites/beam.png');
         this.load.image('stair', 'assets/sprites/stairs.png');
+        this.load.image('red_stair', 'assets/sprites/stairs_red.png');
+        this.load.image('green_stair', 'assets/sprites/stairs_green.png');
         this.load.image('finalStair', 'assets/sprites/finalStair.png');
         this.load.image('hammer', 'assets/sprites/hammer.png');
         //Menu
@@ -60,6 +64,7 @@ donkeyKong.level4 = {
     },
     
     create: function () {
+        
         // ------------------ GAMEPLAY -------------------
         
         // Hammer 1
@@ -80,20 +85,6 @@ donkeyKong.level4 = {
         this.hammerPowerUp2.body.gravity = false;
         
         
-        //Stairs
-        // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite   
-        this.stairs = this.game.add.group();
-        this.finalStair = this.game.add.group();
-        var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
-        stair.createStair(11, 380, 360);        
-        stair.createStair(10, 110, 293);        
-        stair.createStair(14, 220, 300);
-        stair.createStair(11, 380, 230);
-        stair.createStair(15, 240, 237);
-        stair.createStair(10, 110, 163);
-        stair.createStair(12, 170, 167);
-        stair.createStair(10, 260, 111);
-        stair.createStair(7, 200, 64);
         
         //----------------------AUDIO----------------------
         //level
@@ -118,6 +109,70 @@ donkeyKong.level4 = {
         this.kongSound = this.game.add.audio('kong');
         
         
+        
+        //-------------------- LEVEL ---------------------
+        
+        //Stairs
+        // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite   
+        this.stairs = this.game.add.group();
+        this.finalStair = this.game.add.group();
+        var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
+        
+        stair.createStair(14, 8*12, gameOptions.gameHeight - 4*21);      
+        stair.createStair(14, gameOptions.gameWidth-8*13,  gameOptions.gameHeight - 4*21);      
+        
+        stair.createStair(14, 8*5, gameOptions.gameHeight - 4*37);  
+        stair.createStair(14, gameOptions.gameWidth/2-4, gameOptions.gameHeight - 4*37);  
+        stair.createStair(14, gameOptions.gameWidth-8*6, gameOptions.gameHeight - 4*37);  
+        
+        stair.createStair(14, 8*12, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, 8*21, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, gameOptions.gameWidth/2-4, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, gameOptions.gameWidth-8*22, gameOptions.gameHeight - 4*53);
+        stair.createStair(14, gameOptions.gameWidth-8*13, gameOptions.gameHeight - 4*53);
+    
+        stair.createStair(14, 8*7, gameOptions.gameHeight - 4*69);  
+        stair.createStair(14, gameOptions.gameWidth/2-4, gameOptions.gameHeight - 4*69);  
+        stair.createStair(14, gameOptions.gameWidth-8*8, gameOptions.gameHeight - 4*69);  
+        
+        var stair = new donkeyKong.stair(this.game, 'green_stair', this.stairs, true, 'finalStair', this.finalStair);
+        stair.createStair(30, 8*3, gameOptions.gameHeight - 4*85);  
+        
+        var stair = new donkeyKong.stair(this.game, 'red_stair', this.stairs, true, 'finalStair', this.finalStair);
+        stair.createStair(30, gameOptions.gameWidth-8*4, gameOptions.gameHeight - 4*85);  
+        
+        //Beams
+        this.beams = this.game.add.group();
+        this.beamCollider = this.game.add.group();
+        var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
+        
+        beamRow.createStraightRow(6, 16, gameOptions.gameHeight - 8*10);
+        beamRow.createStraightRow(6, gameOptions.gameWidth-16*7, gameOptions.gameHeight - 8*10);
+        
+        beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*18);
+        beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*18);
+        beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*18);
+        
+        beamRow.createStraightRow(6, 32, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*6, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*1, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 + 16*4, gameOptions.gameHeight - 8*26);
+        beamRow.createStraightRow(6, gameOptions.gameWidth - 16*8, gameOptions.gameHeight - 8*26);
+        
+        beamRow.createStraightRow(4, gameOptions.gameWidth/2 - 16*13, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*6, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*1, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 + 16*4, gameOptions.gameHeight - 8*34);
+        beamRow.createStraightRow(4, gameOptions.gameWidth/2 + 16*9, gameOptions.gameHeight - 8*34);
+        
+        beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*42);
+        beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*42);
+        beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*42);
+        
+        
+        var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
+        
+        
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
         this.jumpman = new donkeyKong.jumpman(this.game, 48, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
@@ -127,6 +182,7 @@ donkeyKong.level4 = {
         this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 48, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
+        
         
         //PAULINE
         this.pauline = new donkeyKong.pauline(this.game, 123, 29, 'pauline');
@@ -176,53 +232,7 @@ donkeyKong.level4 = {
         
         this.mines = this.game.add.group();
         
-        //-------------------- LEVEL ---------------------
-        
-        //Beams
-        this.beams = this.game.add.group();
-        this.beamCollider = this.game.add.group();
-        var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
-        beamRow.createStraightRow(4, 16, gameOptions.gameHeight - 8*10);
-        beamRow.createStraightRow(4, gameOptions.gameWidth-16*5, gameOptions.gameHeight - 8*10);
-        
-        beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*18);
-        beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*18);
-        beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*18);
-        
-        beamRow.createStraightRow(6, 48, gameOptions.gameHeight - 8*26);
-        beamRow.createStraightRow(6, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*26);
-        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*1, gameOptions.gameHeight - 8*26);
-        
-        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*1, gameOptions.gameHeight - 8*34);
-        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*6, gameOptions.gameHeight - 8*34);
-        beamRow.createStraightRow(2, gameOptions.gameWidth/2 + 16*4, gameOptions.gameHeight - 8*34);
-        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*11, gameOptions.gameHeight - 8*34);
-        beamRow.createStraightRow(2, gameOptions.gameWidth/2 + 16*9, gameOptions.gameHeight - 8*34);
-        
-        beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*42);
-        beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*42);
-        beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*42);
-        
-        
-        //beamRow.createStraightRow(5, 16, gameOptions.gameHeight - 8*10);
-        //beamRow.createStraightRow(5, 8*16, gameOptions.gameHeight - 8*10);
-        //beamRow.createStraightRow(5, 16*16, gameOptions.gameHeight - 8*10);
-        //beamRow.createDiagRow(16, 16*16, gameOptions.gameHeight - 8*10, false, true);        
-        //beamRow.createDiagRow(24, 16*25, gameOptions.gameHeight - 8*17, true, true, -1 , -1);
-        //beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*25, true, true);
-        //beamRow.createDiagRow(24, 16*3, gameOptions.gameHeight - 8*36, true, true, 1, 1);
-        //beamRow.createDiagRow(24, 16*5, gameOptions.gameHeight - 8*41, true, true);
-        //beamRow.createStraightRow(8, 16*2, 63);
-        //beamRow.createDiagRow(8, 16*10, 63, 1, 1, true, true);
-        //beamRow.createStraightRow(2, 16*7, 8*5);
-        //beamRow.createStraightRow(4, 16*9, 8*4);
-        
-        var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
-        
         this.levelCompleted = false;
-                
-        // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite        
-        //create stairs here
         
         // ------------------ PAUSE MENU -----------------
         
@@ -281,11 +291,19 @@ donkeyKong.level4 = {
         this.barrels = this.game.add.group();
     },
     
-    hitJumpman:function(_jumpman){        
-        _jumpman.body.position.x = 60;
-        _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
-        _jumpman.body.velocity.x = 0;
-        this.hit.play();
+    hitJumpman:function(_jumpman){    
+        if(_jumpman == this.jumpman){
+            _jumpman.body.position.x = 48;
+            _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+            _jumpman.body.velocity.x = 0;
+            this.hit.play();
+        }
+        else if(_jumpman == this.jumpman2){
+            _jumpman.body.position.x = gameOptions.gameWidth - 48;
+            _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
+            _jumpman.body.velocity.x = 0;
+            this.hit.play();
+        }
     },
     
     SpawnFireBall:function(){
