@@ -61,6 +61,9 @@ donkeyKong.level3 = {
     
     create: function () {
         
+        //-----------------------HUD-----------------------
+        this.hud = new donkeyKong.hud(this.game, 70, 350, this);
+        
         //----------------------AUDIO----------------------
         //level
         this.levelIntro = this.game.add.audio('levelIntro');
@@ -86,19 +89,19 @@ donkeyKong.level3 = {
         // ------------------ GAMEPLAY -------------------
         
         //static barrels
-        this.staticBarrel = this.add.sprite(gameOptions.gameWidth/2 -18, 65, "staticBarrel");
+        this.staticBarrel = this.add.sprite(gameOptions.gameWidth/2 + 33, 65, "staticBarrel");
         this.staticBarrel.frame = 4;
         this.staticBarrel.angle = 90;
         
-        this.staticBarrel2 = this.add.sprite(gameOptions.gameWidth/2 - 28, 65, "staticBarrel");
+        this.staticBarrel2 = this.add.sprite(gameOptions.gameWidth/2 - 21, 65, "staticBarrel");
         this.staticBarrel2.frame = 4;
         this.staticBarrel2.angle = 90;
         
-        this.staticBarrel3 = this.add.sprite(gameOptions.gameWidth/2 - 18, 52, "staticBarrel");
+        this.staticBarrel3 = this.add.sprite(gameOptions.gameWidth/2 + 33, 52, "staticBarrel");
         this.staticBarrel3.frame = 4;
         this.staticBarrel3.angle = 90;
         
-        this.staticBarrel4 = this.add.sprite(gameOptions.gameWidth/2 - 28, 52, "staticBarrel");
+        this.staticBarrel4 = this.add.sprite(gameOptions.gameWidth/2 - 21, 52, "staticBarrel");
         this.staticBarrel4.frame = 4;
         this.staticBarrel4.angle = 90;
         
@@ -141,6 +144,7 @@ donkeyKong.level3 = {
         //Barrel
         this.barrelTimer = 0;
         this.barrelRightSpawned = false;
+        this.barrelLeftSpawned = false;
         this.barrelDownSpawned = false;
         
         this.mines = this.game.add.group();
@@ -175,7 +179,7 @@ donkeyKong.level3 = {
         //final row
         beamRow.createStraightRow(4, 16*23, 8*5);
         //kong row
-        beamRow.createStraightRow(4, 16*13.5, 8*10);
+        beamRow.createStraightRow(4, 16*14, 8*10);
         //scape row
         beamRow.createStraightRow(4, 16*20, 8*16);
         beamRow.createStraightRow(1, 16*17, 8*16);
@@ -365,6 +369,14 @@ donkeyKong.level3 = {
                         this.barrelTimer = 0;
                     }
                 }
+                if(this.barrelLeftSpawned){
+                    this.barrelTimer+=this.game.time.physicsElapsed;
+                    if(this.barrelTimer > 0.7){
+                        this.SpawnBarrelLeft();
+                        this.barrelLeftSpawned = false;
+                        this.barrelTimer = 0;
+                    }
+                }
                 
                 // Hammer power ups collisions
                 this.game.physics.arcade.overlap(this.jumpmanGroup, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
@@ -481,24 +493,30 @@ donkeyKong.level3 = {
         this.selectorPressed = true;
     },
     
-    SpawnBarrelRight: function(){
+    SpawnBarrel: function(distX, dir){
         this.randomNumber = Math.floor(Math.random() * 100);
         if(this.randomNumber < 40){
-            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'barrel');
+            this.barrel = new donkeyKong.barrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, false, this, 'barrel');
             this.barrels.add(this.barrel);
         }
         else if (this.randomNumber <  60){
-            this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, this, 'spiky_barrel');
+            this.spiky_barrel = new donkeyKong.spiky_barrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, this, 'spiky_barrel');
             this.barrels.add(this.spiky_barrel);
         }
         else if(this.randomNumber < 80){
-            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, 'nuclear_barrel');            
+            this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, false, this, 'nuclear_barrel');            
             this.barrels.add(this.nuclear_barrel);
         }
         else if(this.randomNumber < 100){    
-            var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+this.kong.width/2, this.kong.y + 10, 75, 1, false, this, "mineBarrel");
+            var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+distX, this.kong.y + 10, 75, dir, false, this, "mineBarrel");
             this.barrels.add(mine);
         }
+    },
+    SpawnBarrelRight: function(){
+        this.SpawnBarrel(this.kong.width/2, 1)
+    },
+    SpawnBarrelLeft: function(){
+        this.SpawnBarrel(this.kong.width/2, -1)
     },
     
     SpawnBarrelDown: function(){

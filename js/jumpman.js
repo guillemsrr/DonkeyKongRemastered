@@ -67,13 +67,18 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.starPowerUpActive = false;
     this.starPowerUpCounter = 0;
     this.starPowerUpTime = 5;
+    
+    //Bonus Text
+    this.bonusTime = 0;
+    this.bonusMaxTime = 1;
+    this.bonusActive = false;
+    this.bonusText;
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.jumpman.prototype.constructor = donkeyKong.jumpman;
 
 donkeyKong.jumpman.prototype.setInputs = function(rightPressed, leftPressed, upPressed, downPressed, overlapStairs, overlapFinalStair){
-    
     this.rightPressed = rightPressed;
     this.leftPressed = leftPressed;
     this.upPressed = upPressed;
@@ -296,6 +301,8 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
         if(this.starPowerUpActive){
             this.starPowerUp();
         }
+        
+        this.BonusCounter();
     }
     else{
         this.finalDeath();    
@@ -309,4 +316,18 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
 donkeyKong.jumpman.prototype.JumpOnBarrel = function(){
     this.scoreUpSound.play();
     this.points++;
+    this.bonusText = this.game.add.text(this.body.position.x, this.body.position.y - 10, "100", hudStyle);
+    this.bonusTime = 0;
+    this.bonusActive = true;
+}
+
+donkeyKong.jumpman.prototype.BonusCounter = function(){
+    if(this.bonusActive){
+        if(this.bonusTime > this.bonusMaxTime){
+            this.bonusActive = false;
+            this.bonusText.destroy();
+            console.log("destroy!");
+        }
+        this.bonusTime += this.game.time.physicsElapsed
+    }
 }

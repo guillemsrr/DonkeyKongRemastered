@@ -18,7 +18,7 @@ donkeyKong.menu = {
         // Settings
         this.menuVerticalAlignement = 191;
         this.selectorOffset = 25;
-        var style = { font: "20px title", fill: "#f9bc00", boundsAlignH: "top", boundsAlignV: "middle" };
+        //var style = { font: "20px title", fill: "#f9bc00", boundsAlignH: "top", boundsAlignV: "middle" };
         
         this.game.add.sprite(0, 0, 'menu_background');
         

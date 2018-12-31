@@ -8,6 +8,9 @@ var gameOptions={
     gravity:1000,
 };
 
+var style = { font: "20px title", fill: "#f9bc00", boundsAlignH: "top", boundsAlignV: "middle" };
+var hudStyle = { font: "10px title", fill: "#ffff", boundsAlignH: "top", boundsAlignV: "middle" };
+
 donkeyKong.game = new Phaser.Game(gameOptions.gameWidth,gameOptions.gameHeight,Phaser.AUTO,'gameFrame',this,false,false);
 
 donkeyKong.game.state.add('Menu', donkeyKong.menu);
