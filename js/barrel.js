@@ -19,6 +19,8 @@ donkeyKong.barrel = function(_game, _x, _y, _speed, _direction, _fallingDown, _l
     this.fallingCounter = 0;
     this.time = 0;
     
+    this.limitDown = gameOptions.gameHeight - 8*12;
+    
     //this.body.setCircle(5);
 };
 
@@ -79,7 +81,7 @@ donkeyKong.barrel.prototype.update = function(){
             this.hitJumpman(this, this.level.jumpman2);
         }
         
-        if(this.y < gameOptions.gameHeight - 8*12){
+        if(this.y < this.limitDown){
             this.animations.play('front');
             this.body.velocity.x = 0;
             this.body.allowGravity = false;
