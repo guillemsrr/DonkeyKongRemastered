@@ -74,22 +74,6 @@ donkeyKong.level4 = {
         
         // ------------------ GAMEPLAY -------------------
         
-        // Hammer 1
-        this.hammerPowerUpGroup = this.game.add.group();            
-        this.hammerPowerUp = this.game.add.sprite(350, 150, 'hammer');
-        this.hammerPowerUpGroup.add(this.hammerPowerUp);
-        this.game.physics.enable(this.hammerPowerUp);
-        this.hammerPowerUp.body.immovable = true; 
-        this.hammerPowerUp.body.allowGravity = false;
-        this.hammerPowerUp.body.gravity = false;
-        
-        // Hammer 2   
-        this.hammerPowerUp2 = this.game.add.sprite(120, 350, 'hammer');
-        this.hammerPowerUpGroup.add(this.hammerPowerUp2);
-        this.game.physics.enable(this.hammerPowerUp2);
-        this.hammerPowerUp2.body.immovable = true; 
-        this.hammerPowerUp2.body.allowGravity = false;
-        this.hammerPowerUp2.body.gravity = false;
         
         
         
@@ -178,6 +162,8 @@ donkeyKong.level4 = {
         
         beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*48);
         
+        beamRow.createStraightRow(2, gameOptions.gameWidth/2 - 16*6, gameOptions.gameHeight - 8*51);
+        
         //var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
         
         this.directionSetter = new donkeyKong.directionSetter(this.game, 16*8, gameOptions.gameHeight - 8*20, -1, this, 'direction_collider');
@@ -206,7 +192,7 @@ donkeyKong.level4 = {
         this.jumpmanGroup.add(this.jumpman2);
         
         //PAULINE
-        this.pauline = new donkeyKong.pauline(this.game, 123, 29, 'pauline');
+        this.pauline = new donkeyKong.pauline(this.game, gameOptions.gameWidth/2 - 16*5, 31, 'pauline');
         this.game.add.existing(this.pauline);
         
         //DONKEY KONG
@@ -479,8 +465,6 @@ donkeyKong.level4 = {
                     }
                 }                
                 
-                // Hammer power ups collisions
-                this.game.physics.arcade.overlap(this.jumpmanGroup, this.hammerPowerUpGroup, this.HammerPowerUp, null, this);
                 
                 // Time stop power up logic
                 this.TimeStopped();
@@ -531,10 +515,6 @@ donkeyKong.level4 = {
         }
     },
     
-    HammerPowerUp: function (_jumpman, _hammer){
-            _jumpman.grabHammer();
-            _hammer.destroy();        
-    },
     
     PausePressed: function (){       
         
