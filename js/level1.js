@@ -130,7 +130,8 @@ donkeyKong.level1= {
         this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
-        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, 100, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2);
+        
+        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
         
@@ -256,11 +257,20 @@ donkeyKong.level1= {
         this.barrels = this.game.add.group();
     },
     
-    hitJumpman:function(_jumpman){        
-        _jumpman.body.position.x = 60;
-        _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
-        _jumpman.body.velocity.x = 0;
+    hitJumpman:function(_jumpman){      
+        if(_jumpman == this.jumpman){
+            _jumpman.body.position.x = 75;
+            _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+            _jumpman.body.velocity.x = 0;
+        }
+        else{
+            _jumpman.body.position.x = 85;
+            _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+            _jumpman.body.velocity.x = 0;
+        }
         this.hit.play();
+        if(_jumpman.health > 0) _jumpman.health -=1;
+        this.hud.setLife(_jumpman.num, _jumpman.health);
     },
     
     SpawnFireBall:function(){

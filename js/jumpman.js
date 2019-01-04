@@ -321,6 +321,7 @@ donkeyKong.jumpman.prototype.JumpOnBarrel = function(){
     this.bonusText = this.game.add.text(this.body.position.x, this.body.position.y - 10, "100", hudStyle);
     this.bonusTime = 0;
     this.bonusActive = true;
+    this.body.velocity.y = -this.jumpForce*0.75;
     
     //send it to the hud
     this.hud.setPoints(this.num, this.points);

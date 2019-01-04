@@ -62,9 +62,15 @@ donkeyKong.level4 = {
         this.load.audio('stageTheme', 'assets/audio/stageTheme.mp3');
         this.load.audio('hit', 'assets/audio/hit.mp3');
         
+        
+        this.hackText = this.game.add.text(0, 0, "HACK", hudStyle);
+        this.hackText.destroy();        
     },
     
     create: function () {
+        
+        //-----------------------HUD-----------------------
+        this.hud = new donkeyKong.hud(this.game, 70, 400, this);
         
         // ------------------ GAMEPLAY -------------------
         
@@ -190,11 +196,12 @@ donkeyKong.level4 = {
         
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
-        this.jumpman = new donkeyKong.jumpman(this.game, 48, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        
+        this.jumpman = new donkeyKong.jumpman(this.game, 16*4, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
         
-        this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 48, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer);
+        this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 16*4, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
         
@@ -207,10 +214,10 @@ donkeyKong.level4 = {
         this.game.add.existing(this.kong);
         
         //FIREBALL
-        this.fireBall = new donkeyKong.fireBall(this.game, 16*4, gameOptions.gameHeight - 8*43, 30, 1, this.jumpman2, this, 'fireBall');
+        this.fireBall = new donkeyKong.fireBall(this.game, 16*4, gameOptions.gameHeight - 8*35, 30, 1, this.jumpman2, this, 'fireBall');
         this.game.add.existing(this.fireBall);
 
-        this.fireBall = new donkeyKong.fireBall(this.game, gameOptions.gameWidth - 16*4, gameOptions.gameHeight - 8*43, 30, -1, this.jumpman, this, 'fireBall');
+        this.fireBall = new donkeyKong.fireBall(this.game, gameOptions.gameWidth - 16*4, gameOptions.gameHeight - 8*35, 30, -1, this.jumpman, this, 'fireBall');
         this.game.add.existing(this.fireBall);
         
         //static barrels
@@ -334,14 +341,15 @@ donkeyKong.level4 = {
             _jumpman.position.x = 56;
             _jumpman.position.y=gameOptions.gameHeight - 8*12;
             _jumpman.body.velocity.x = 0;
-            this.hit.play();
         }
         else if(_jumpman == this.jumpman2){
             _jumpman.position.x = gameOptions.gameWidth - 56;
             _jumpman.position.y=gameOptions.gameHeight - 8*12;
             _jumpman.body.velocity.x = 0;
-            this.hit.play();
         }
+        this.hit.play();
+        if(_jumpman.health > 0) _jumpman.health -=1;
+        this.hud.setLife(_jumpman.num, _jumpman.health);
     },
     
     SpawnFireBall:function(){
@@ -442,6 +450,8 @@ donkeyKong.level4 = {
                 this.pauline.customUpdate();
                 this.oil.customUpdate();
 
+                //HUD
+                this.hud.customUpdate();
 
                 //Barrels
                 if(this.barrelRightSpawned){
