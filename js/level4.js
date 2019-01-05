@@ -327,23 +327,23 @@ donkeyKong.level4 = {
         this.barrels = this.game.add.group();
     },
     
-    hitJumpman:function(_jumpman){    
-        if(_jumpman == this.jumpman){
-            _jumpman.position.x = 56;
-            _jumpman.position.y=gameOptions.gameHeight - 8*13;
-            _jumpman.body.velocity.x = 0;
-        }
-        else if(_jumpman == this.jumpman2){
-            _jumpman.position.x = gameOptions.gameWidth - 56;
-            _jumpman.position.y=gameOptions.gameHeight - 8*13;
-            _jumpman.body.velocity.x = 0;
-        }
-        this.hit.play();
-        if(_jumpman.health > 0){
+    hitJumpman:function(_jumpman){
+        if(_jumpman.health>0 && !_jumpman.temporallyInmune){
+            if(_jumpman == this.jumpman){
+                _jumpman.position.x = 56;
+                _jumpman.position.y=gameOptions.gameHeight - 8*13;
+                _jumpman.body.velocity.x = 0;
+            }
+            else{
+                _jumpman.position.x = gameOptions.gameWidth - 56;
+                _jumpman.position.y=gameOptions.gameHeight - 8*13;
+                _jumpman.body.velocity.x = 0;
+            }
+            this.hit.play();
             _jumpman.health -=1;
             _jumpman.temporallyInmune = true;
-        } 
-        this.hud.setLife(_jumpman.num, _jumpman.health);
+            this.hud.setLife(_jumpman.num, _jumpman.health);
+        }
     },
     
     SpawnFireBall:function(_oil){

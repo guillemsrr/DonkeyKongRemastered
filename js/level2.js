@@ -163,10 +163,23 @@ donkeyKong.level2= {
         
     },
     
-    hitJumpman:function(_jumpman){        
-        _jumpman.body.position.x = 60;
-        _jumpman.body.position.y=gameOptions.gameHeight - 8*12;
-        _jumpman.body.velocity.x = 0;
+    hitJumpman:function(_jumpman){
+        if(_jumpman.health>0 && !_jumpman.temporallyInmune){
+            if(_jumpman == this.jumpman){
+                _jumpman.body.position.x = 75;
+                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                _jumpman.body.velocity.x = 0;
+            }
+            else{
+                _jumpman.body.position.x = 85;
+                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                _jumpman.body.velocity.x = 0;
+            }
+            this.hit.play();
+            _jumpman.health -=1;
+            _jumpman.temporallyInmune = true;
+            this.hud.setLife(_jumpman.num, _jumpman.health);
+        }
     },
     
     SpawnFireBall:function(){
@@ -263,6 +276,9 @@ donkeyKong.level2= {
                 this.barrelDownSpawned = false;
                 this.barrelTimer = 0;
             }
+        }
+        else if(this.jumpman.health==0 && this.jumpman2.health==0){
+            this.LoadNextLevel("level2");
         }
     },
     
