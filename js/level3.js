@@ -435,7 +435,7 @@ donkeyKong.level3 = {
                 this.oil.customUpdate();
                 
                 //HUD
-                this.hud.customUpdate();
+                this.hud.customUpdate(this.jumpman, this.jumpman2);
 
 
                 //Barrels
