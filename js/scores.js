@@ -11,20 +11,7 @@ donkeyKong.scores = {
     
     create: function () {
         
-        // Settings
-        this.scoreVerticalAlignement = 30; 
-        this.scoreHorizontalStart = 80;
-        
-        this.playerName = "Pepito";
-        this.playerScore = 1000;
-        
-        var style = { font: "bold 25px Arial", fill: "#fff", boundsAlignH: "top", boundsAlignV: "middle" };
-        this.scoreTitle = this.game.add.text(gameOptions.gameWidth / 2 - 60, 20, "SCORES", style);
-        
-        this.scoresList = Array(10);
-        for(var i = 0; i < this.scoresList.length; i++){
-            this.scoresList[i] = this.game.add.text(this.scoreVerticalAlignement, this.scoreHorizontalStart + 32 * i, (i + 1).toString() + ". " + this.playerName + " - " + this.playerScore, style);
-        }
+        this.FillScores();
         
     },
     
@@ -37,4 +24,27 @@ donkeyKong.scores = {
     
     // -------------- FUNCTIONS --------------
     
+    FillScores: function (){
+        
+        // Settings
+        this.scoreVerticalAlignement = 30; 
+        this.scoreHorizontalStart = 80;
+        
+        var style = { font: "bold 25px Arial", fill: "#fff", boundsAlignH: "top", boundsAlignV: "middle" };
+        this.scoreTitle = this.game.add.text(gameOptions.gameWidth / 2 - 60, 20, "SCORES", style);
+        
+        this.saveFile = localStorage.getItem("ScoreFile");
+        this.saveFile = JSON.parse(this.saveFile);
+        
+        //console.log(this.saveFile.scoresList[0].name);
+        
+        this.textList = Array(10);
+        for(var i = 0; i < this.textList.length; i++){
+                    
+            this.textList[i] = this.game.add.text(this.scoreVerticalAlignement, this.scoreHorizontalStart + 32 * i, (i + 1).toString() + ". " + this.saveFile.scoresList[0].name + " - " + this.saveFile.scoresList[i].highScore, style);
+        }
+        
+    }
+    
 };
+

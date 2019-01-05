@@ -1,3 +1,14 @@
+
+var saveFile = {    
+    scoresList: Array(10)
+};
+
+var savedScore ={
+    name: "AAA",
+    highScore: 0
+    
+};
+
 var donkeyKong = donkeyKong || {};
 
 
@@ -17,6 +28,7 @@ donkeyKong.menu = {
     },
     
     create: function () {
+        
         
         // Settings
         this.menuVerticalAlignement = 191;
@@ -58,6 +70,10 @@ donkeyKong.menu = {
         this.startAudio = this.game.add.audio('start');
         this.started = false;
         
+        
+        // SAVE SCORE
+        this.CheckSavedScores();
+        
     },
     
     update: function () {
@@ -79,6 +95,20 @@ donkeyKong.menu = {
                 this.game.destroy();
             }
         }  
+        
+        
+        // SAVE DEBUG
+        
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.Y)){
+            console.log(localStorage.getItem("ScoreFile"));
+            //console.log(localStorage.getItem("1").highScore);
+        }
+        
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.U)){
+            localStorage.clear();
+        }
+        
+        
     },
     
     // -------------- FUNCTIONS --------------
@@ -120,6 +150,54 @@ donkeyKong.menu = {
         this.selector.y = this.buttonList[this.buttonIterator].y;
         
         this.selectorPressed = true;
-    },    
+    },
+    
+     
+    
+    CheckSavedScores: function(){
+        // Save game
+        
+        if(localStorage.getItem("ScoreFile") == null){
+            
+            for(var i = 0; i < 10; i++){ 
+                savedScore.name = "AAA";
+                savedScore.highScore = 0;
+                
+                saveFile.scoresList[i] = savedScore;
+            }
+            
+            
+            localStorage.setItem("ScoreFile", JSON.stringify(saveFile));
+            
+            
+            console.log("Object saved!");
+        }
+        
+        //var player = prompt("Please enter your name", "name");
+            
+        //console.log(player);
+        localStorage.setItem("Player1Score", 0);
+        localStorage.setItem("Player2Score", 0);
+        
+        console.log(localStorage.getItem("Player1Score"));
+        console.log(localStorage.getItem("Player2Score"));
+        /*
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.T)){
+            localStorage.setItem("1", "1000");
+        }
+        
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.Y)){
+            console.log(localStorage.getItem("1"));
+        }
+        
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.U)){
+            localStorage.clear();
+        }
+        */
+    }
     
 };
+
+
+    
+ 
