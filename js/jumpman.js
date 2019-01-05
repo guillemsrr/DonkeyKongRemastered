@@ -16,9 +16,16 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.stairSpeed = 70;
     this.health = 3;
     this.points = 0;
+    
+    //hammer
     this.hasHammer = false;
     this.hammerTime = 10;
     this.hammerCounter = 0;
+    
+    //lifes
+    this.temporallyInmune = false;
+    this.inmuneTimer = 0;
+    this.maxInmuneTime = 2;
     
     this.isInStair = false;
     
@@ -39,6 +46,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.animations.add('hammerWalk',[12, 13, 14, 15], 7, true);
     this.animations.add('deathRoll',[16, 17, 18, 19], 10, true);
     this.animations.add('finalDeath',[10], 1, true);
+    this.animations.add('jump',[11], 1, true);
     this.isMoving = false;
     
     //Collisioner:
@@ -75,6 +83,8 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.bonusMaxTime = 1;
     this.bonusActive = false;
     this.bonusText;
+    
+    
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
@@ -91,40 +101,42 @@ donkeyKong.jumpman.prototype.setInputs = function(rightPressed, leftPressed, upP
 }
 
 donkeyKong.jumpman.prototype.move = function(){    
+    if(this.body != null){//bug fixing
+        if(this.rightPressed){
+            if(!this.speedPowerUpActive){
+                this.scale.x=1;            
+                this.scale.y=1;            
+            }
+            else{
+                this.scale.x = 1.3;
+                this.scale.y = 1.3;
+            }
+            this.body.velocity.x = this.speed;
+            this.isMoving = true;
+            if(!this.runSound.isPlaying && this.body.touching.down)
+                    this.runSound.play();
+        }
+        else if(this.leftPressed){
+            if(!this.speedPowerUpActive){
+                this.scale.x=-1;            
+                this.scale.y=1;            
+            }
+            else{
+                this.scale.x = -1.3;
+                this.scale.y = 1.3;
+            }
+
+            this.body.velocity.x = -this.speed;
+            this.isMoving = true;
+            if(!this.runSound.isPlaying && this.body.touching.down)
+                    this.runSound.play();
+        }
+        else{
+            this.body.velocity.x = 0;
+            this.isMoving = false;
+        }
+    }
     
-    if(this.rightPressed){
-        if(!this.speedPowerUpActive){
-            this.scale.x=1;            
-            this.scale.y=1;            
-        }
-        else{
-            this.scale.x = 1.3;
-            this.scale.y = 1.3;
-        }
-        this.body.velocity.x = this.speed;
-        this.isMoving = true;
-        if(!this.runSound.isPlaying && this.body.touching.down)
-                this.runSound.play();
-    }
-    else if(this.leftPressed){
-        if(!this.speedPowerUpActive){
-            this.scale.x=-1;            
-            this.scale.y=1;            
-        }
-        else{
-            this.scale.x = -1.3;
-            this.scale.y = 1.3;
-        }
-        
-        this.body.velocity.x = -this.speed;
-        this.isMoving = true;
-        if(!this.runSound.isPlaying && this.body.touching.down)
-                this.runSound.play();
-    }
-    else{
-        this.body.velocity.x = 0;
-        this.isMoving = false;
-    }
 }
 
 donkeyKong.jumpman.prototype.jump = function(){
@@ -132,7 +144,8 @@ donkeyKong.jumpman.prototype.jump = function(){
         this.body.velocity.y = -this.jumpForce;
         if(this.runSound.isPlaying)
             this.runSound.stop();
-        this.jumpSound.play()
+        this.jumpSound.play();
+        this.animations.play('jump');
     }
 }
 
@@ -271,9 +284,14 @@ donkeyKong.jumpman.prototype.marioAnimations = function(){
     else{
         if(!this.isInStair){
             if(this.isMoving){
-                this.animations.play('run');            
+                if(this.body.touching.down)
+                    this.animations.play('run');
+                else
+                    this.animations.play('jump');
             }
             else{
+                if(this.body.touching.down)
+                    this.animations.play('run');
                 this.animations.stop();
             }            
         }
@@ -313,6 +331,10 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
     if(this.hasHammer){
         this.hammerLogic();
     }
+    
+    if(this.temporallyInmune && this.game!=null){
+        this.Inmunity();
+    }
 }
 
 donkeyKong.jumpman.prototype.JumpOnBarrel = function(){
@@ -335,4 +357,12 @@ donkeyKong.jumpman.prototype.BonusCounter = function(){
         }
         this.bonusTime += this.game.time.physicsElapsed
     }
+}
+
+donkeyKong.jumpman.prototype.Inmunity = function(){
+    if(this.inmuneTimer > this.maxInmuneTime){
+            this.temporallyInmune = false;
+            this.inmuneTimer = 0;
+    }
+    this.inmuneTimer += this.game.time.physicsElapsed;
 }

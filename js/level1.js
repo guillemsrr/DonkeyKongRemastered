@@ -269,8 +269,12 @@ donkeyKong.level1= {
             _jumpman.body.velocity.x = 0;
         }
         this.hit.play();
-        if(_jumpman.health > 0) _jumpman.health -=1;
+        if(_jumpman.health > 0){
+            _jumpman.health -=1;
+            _jumpman.temporallyInmune = true;
+        } 
         this.hud.setLife(_jumpman.num, _jumpman.health);
+        
     },
     
     SpawnFireBall:function(){
@@ -338,10 +342,23 @@ donkeyKong.level1= {
             if(this.start){//the game starts when the sound is finished
                 if(!this.stageTheme.isPlaying)
                     this.stageTheme.play();
-                //JUMPMAN 1        
+                //JUMPMAN 1
+                //jump specific:
+                this.upBool;
+                if(!this.game.physics.arcade.overlap(this.jumpman,this.stairs) && !this.game.physics.arcade.overlap(this.jumpman,this.finalStair)){
+                         if(this.player1Input.up.isDown && this.player1Input.up.downDuration(250)){
+                            this.upBool = true;
+                        }
+                        else
+                            this.upBool = false;                            
+                }
+                else{
+                    this.upBool = this.player1Input.up.isDown;
+                }
+                
                 this.jumpman.setInputs(this.player1Input.right.isDown,
                                        this.player1Input.left.isDown,
-                                       this.player1Input.up.isDown,
+                                       this.upBool,
                                        this.player1Input.down.isDown, 
                                        this.game.physics.arcade.overlap(this.jumpman,this.stairs), 
                                        this.game.physics.arcade.overlap(this.jumpman,this.finalStair));
@@ -349,10 +366,23 @@ donkeyKong.level1= {
                 this.jumpman.customUpdate();
 
 
-                //JUMPMAN 2 
+                //JUMPMAN 2
+                //jump specific:
+                this.upBool2;
+                if(!this.game.physics.arcade.overlap(this.jumpman2,this.stairs) && !this.game.physics.arcade.overlap(this.jumpman2,this.finalStair)){
+                         if(this.player2Input.up.isDown && this.player2Input.up.downDuration(250)){
+                            this.upBool2 = true;
+                        }
+                        else
+                            this.upBool2 = false;                            
+                }
+                else{
+                    this.upBool2 = this.player2Input.up.isDown;
+                }
+        
                 this.jumpman2.setInputs(this.player2Input.right.isDown,
                                         this.player2Input.left.isDown,
-                                        this.player2Input.up.isDown,
+                                        this.upBool2,
                                         this.player2Input.down.isDown, 
                                         this.game.physics.arcade.overlap(this.jumpman2,this.stairs), 
                                         this.game.physics.arcade.overlap(this.jumpman2,this.finalStair));
@@ -411,13 +441,15 @@ donkeyKong.level1= {
             this.start = true;
         }
         //levelCompletion
-        if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
-            this.levelCompleted = true;
-            this.roundClear.play();
-        }
-        else if(this.levelCompleted && !this.roundClear.isPlaying){
-            //load next level
-            this.LoadNextLevel(this.game.state.getCurrentState().key);
+        if(this.jumpman!=null && this.jumpman2!=null){
+                if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
+                this.levelCompleted = true;
+                this.roundClear.play();
+            }
+            else if(this.levelCompleted && !this.roundClear.isPlaying){
+                //load next level
+                this.LoadNextLevel(this.game.state.getCurrentState().key);
+            }
         }
         
     },

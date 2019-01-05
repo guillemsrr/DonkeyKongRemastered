@@ -134,8 +134,8 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
             _jumpman.JumpOnBarrel();
         }
         else{
-            this.level.hitJumpman(_jumpman);
-            
+            if(!_jumpman.temporallyInmune)
+                this.level.hitJumpman(_jumpman);
         }
     }
 };
