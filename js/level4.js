@@ -481,7 +481,7 @@ donkeyKong.level4 = {
             this.start = true;
         }
         //levelCompletion
-        if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
+        if(!this.levelCompleted && ((this.jumpman.body.position.y <= 20 && this.jumpman.body.position.x >= gameOptions.gameWidth/2) || (this.jumpman2.body.position.y <= 20 && this.jumpman2.body.position.x <= gameOptions.gameWidth/2))){
             this.levelCompleted = true;
             this.roundClear.play();
         }
