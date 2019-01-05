@@ -99,7 +99,7 @@ donkeyKong.nuclear_barrel.prototype.fallingStairLogic = function(){
 };
 
 donkeyKong.nuclear_barrel.prototype.spawnFireball = function(_barrel, _oil){
-    this.level.SpawnFireBall();
+    this.level.SpawnFireBall(_oil);
     this.kill();
 };
 
@@ -109,12 +109,14 @@ donkeyKong.nuclear_barrel.prototype.hitJumpman = function(_barrel, _jumpman){
         this.level.NuclearBarrel();
         this.level.DestroyBarrel(this.x, this.y);
         this.kill();
+        _jumpman.JumpOnBarrel();
     }
     else{
         if(_jumpman.hasHammer || _jumpman.starPowerUpActive){
             this.level.NuclearBarrel();
             this.level.DestroyBarrel(this.x, this.y);
             this.kill();
+            _jumpman.JumpOnBarrel();
         }
         else{
             this.level.hitJumpman(_jumpman);

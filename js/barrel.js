@@ -170,7 +170,7 @@ donkeyKong.barrel.prototype.destroyBarrel = function(_jumpman){
 }
 
 donkeyKong.barrel.prototype.spawnFireball = function(_barrel, _oil){
-    this.level.SpawnFireBall();
+    this.level.SpawnFireBall(_oil);
     this.kill();
 };
 

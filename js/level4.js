@@ -242,19 +242,24 @@ donkeyKong.level4 = {
 
         
         //Oil Barrel
-        this.oil = new donkeyKong.oil(this.game, 32, gameOptions.gameHeight - 92, 'oil');
-        this.game.add.existing(this.oil);
-        this.game.physics.arcade.enable(this.oil);
-        this.oil.body.immovable = true;
-        this.oil.body.moves = false;
+        this.oil = this.game.add.group();
         
-        this.oil = new donkeyKong.oil(this.game, gameOptions.gameWidth - 32, gameOptions.gameHeight - 92, 'oil');
-        this.game.add.existing(this.oil);
-        this.game.physics.arcade.enable(this.oil);
-        this.oil.body.immovable = true;
-        this.oil.body.moves = false;
+        this.oil1 = new donkeyKong.oil(this.game, 32, gameOptions.gameHeight - 92, 'oil');
+        this.game.add.existing(this.oil1);
+        this.game.physics.arcade.enable(this.oil1);
+        this.oil1.body.immovable = true;
+        this.oil1.body.moves = false;
+        this.oil.add(this.oil1);
         
-        this.fireballCounter=0;
+        this.oil2 = new donkeyKong.oil(this.game, gameOptions.gameWidth - 32, gameOptions.gameHeight - 92, 'oil');
+        this.game.add.existing(this.oil2);
+        this.game.physics.arcade.enable(this.oil2);
+        this.oil2.body.immovable = true;
+        this.oil2.body.moves = false;
+        this.oil.add(this.oil2);
+        
+        this.fireballCounter1=0;
+        this.fireballCounter2=0;
         
         //Barrel
         this.barrelTimer = 0;
@@ -325,12 +330,12 @@ donkeyKong.level4 = {
     hitJumpman:function(_jumpman){    
         if(_jumpman == this.jumpman){
             _jumpman.position.x = 56;
-            _jumpman.position.y=gameOptions.gameHeight - 8*12;
+            _jumpman.position.y=gameOptions.gameHeight - 8*13;
             _jumpman.body.velocity.x = 0;
         }
         else if(_jumpman == this.jumpman2){
             _jumpman.position.x = gameOptions.gameWidth - 56;
-            _jumpman.position.y=gameOptions.gameHeight - 8*12;
+            _jumpman.position.y=gameOptions.gameHeight - 8*13;
             _jumpman.body.velocity.x = 0;
         }
         this.hit.play();
@@ -338,20 +343,23 @@ donkeyKong.level4 = {
         this.hud.setLife(_jumpman.num, _jumpman.health);
     },
     
-    SpawnFireBall:function(){
-        this.fireballCounter++;
-        if(this.fireballCounter<3){
-            if(this.fireballCounter%2 == 0){
-                this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this.jumpman, this, 'fireBall');
+    SpawnFireBall:function(_oil){
+        if(_oil == this.oil1){
+            this.fireballCounter1++;
+            if(this.fireballCounter1<2){
+                this.fireBall = new donkeyKong.fireBall(this.game, this.oil1.x + 15, this.oil1.y, 30, 1, this.jumpman, this, 'fireBall');
                 this.game.add.existing(this.fireBall);
-            }
-            else{
-                this.fireBall = new donkeyKong.fireBall(this.game, this.oil.x + 15, this.oil.y, 30, 1, this.jumpman2, this, 'fireBall');
-                this.game.add.existing(this.fireBall);
+                if(!this.oil1.fired) this.oil1.fired = true;
             }
         }
-        if(!this.oil.fired)
-            this.oil.fired = true;
+        else if(_oil == this.oil2){
+            this.fireballCounter2++;
+            if(this.fireballCounter2<2){
+                this.fireBall = new donkeyKong.fireBall(this.game, this.oil2.x - 15, this.oil2.y, 30, -1, this.jumpman2, this, 'fireBall');
+                this.game.add.existing(this.fireBall);
+                if(!this.oil2.fired) this.oil2.fired = true;
+            }
+        }
     },
     
     NuclearBarrel:function(_game){
@@ -434,7 +442,8 @@ donkeyKong.level4 = {
                 //NPCs
                 this.kong.customUpdate();
                 this.pauline.customUpdate();
-                this.oil.customUpdate();
+                this.oil1.customUpdate();
+                this.oil2.customUpdate();
 
                 //HUD
                 this.hud.customUpdate();
@@ -488,6 +497,9 @@ donkeyKong.level4 = {
         else if(this.levelCompleted && !this.roundClear.isPlaying){
             //load next level
             this.LoadNextLevel(this.game.state.getCurrentState().key);
+        }
+        else if(this.jumpman.health==0 && this.jumpman2.health==0){
+            this.LoadNextLevel("level4");
         }
         
     },

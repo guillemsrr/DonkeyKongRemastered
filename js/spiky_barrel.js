@@ -96,7 +96,7 @@ donkeyKong.spiky_barrel.prototype.fallingStairLogic = function(){
 };
 
 donkeyKong.spiky_barrel.prototype.spawnFireball = function(_barrel, _oil){
-    this.level.SpawnFireBall();
+    this.level.SpawnFireBall(_oil);
     this.kill();
 };
 
