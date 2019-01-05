@@ -172,7 +172,7 @@ donkeyKong.fireBall.prototype.Pursue = function(_jumpman){
 
 //------------------FUNCIÓN PARA MATAR AL PLAYER-----------------------
 donkeyKong.fireBall.prototype.hitJumpman = function(_fireball, _jumpman){
-    if(!_jumpman.starPowerUpActive){
+    if(!_jumpman.starPowerUpActive && !_jumpman.temporallyInmune){
         this.level.hitJumpman(_jumpman);        
     }
 };

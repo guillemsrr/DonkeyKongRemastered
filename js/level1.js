@@ -257,24 +257,23 @@ donkeyKong.level1= {
         this.barrels = this.game.add.group();
     },
     
-    hitJumpman:function(_jumpman){      
-        if(_jumpman == this.jumpman){
-            _jumpman.body.position.x = 75;
-            _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
-            _jumpman.body.velocity.x = 0;
-        }
-        else{
-            _jumpman.body.position.x = 85;
-            _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
-            _jumpman.body.velocity.x = 0;
-        }
-        this.hit.play();
-        if(_jumpman.health > 0){
+    hitJumpman:function(_jumpman){
+        if(_jumpman.health>0 && !_jumpman.temporallyInmune){
+            if(_jumpman == this.jumpman){
+                _jumpman.body.position.x = 75;
+                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                _jumpman.body.velocity.x = 0;
+            }
+            else{
+                _jumpman.body.position.x = 85;
+                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                _jumpman.body.velocity.x = 0;
+            }
+            this.hit.play();
             _jumpman.health -=1;
             _jumpman.temporallyInmune = true;
-        } 
-        this.hud.setLife(_jumpman.num, _jumpman.health);
-        
+            this.hud.setLife(_jumpman.num, _jumpman.health);
+        }
     },
     
     SpawnFireBall:function(){
@@ -450,6 +449,9 @@ donkeyKong.level1= {
                 //load next level
                 this.LoadNextLevel(this.game.state.getCurrentState().key);
             }
+        }
+        else if(this.jumpman.health==0 && this.jumpman2.health==0){
+            this.LoadNextLevel("level1");
         }
         
     },
