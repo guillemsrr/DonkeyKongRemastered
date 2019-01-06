@@ -145,7 +145,7 @@ donkeyKong.hud.prototype.gameOverFunction = function(){
     if(this.gameOver){
         this.gameOverTimer+= this.game.time.physicsElapsed;
         if(this.gameOverTimer > this.maxGameOverTimer){
-            console.log("change level");
+            this.game.sound.stopAll();
             donkeyKong.game.state.start('HighScore');
         }
     }

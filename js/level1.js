@@ -584,7 +584,6 @@ donkeyKong.level1= {
         
         this.UpdatePersistentScore();
         
-        
         this.game.sound.stopAll();
         if(_key=="level1"){
             this.game.state.start('level2');
