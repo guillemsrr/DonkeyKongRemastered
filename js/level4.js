@@ -485,7 +485,7 @@ donkeyKong.level4 = {
                 this.oil2.customUpdate();
 
                 //HUD
-                this.hud.customUpdate();
+                this.hud.customUpdate(this.jumpman, this.jumpman2);
 
                 //Barrels
                 if(this.barrelRightSpawned){

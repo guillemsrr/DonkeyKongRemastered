@@ -358,9 +358,6 @@ donkeyKong.jumpman.prototype.JumpOnBarrel = function(){
     
     //send it to the hud
     this.hud.setPoints(this.num, this.points);
-    this.hud.bonusTimer = 0;
-    this.hud.bonusNum+=100;
-    this.hud.bonus.text = this.hud.bonusNum.toString();
 }
 
 donkeyKong.jumpman.prototype.BonusCounter = function(){
