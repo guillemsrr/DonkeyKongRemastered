@@ -646,7 +646,7 @@ donkeyKong.level3 = {
         else if(_key=="level4")
             this.game.state.start('level5');
         else if(_key=="level5")
-            this.game.state.start('level1');
+            this.game.state.start('HighScore');
     },
     
     UpdatePersistentScore: function(){
