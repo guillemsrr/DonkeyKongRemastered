@@ -259,12 +259,12 @@ donkeyKong.level1= {
     
     hitJumpman:function(_jumpman){
         if(_jumpman.health>0 && !_jumpman.temporallyInmune){
-            if(_jumpman == this.jumpman){
+            if(_jumpman == this.jumpman && this.jumpman.body!= null){
                 _jumpman.body.position.x = 75;
                 _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
                 _jumpman.body.velocity.x = 0;
             }
-            else{
+            else if(_jumpman == this.jumpman2 && this.jumpman2.body!= null){
                 _jumpman.body.position.x = 85;
                 _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
                 _jumpman.body.velocity.x = 0;

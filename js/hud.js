@@ -28,6 +28,11 @@ donkeyKong.hud = function(_game, _x, _y, _level){
     this.bonusNum = 5000;
     this.bonusTimer = 0;
     this.bonusMaxTime = 2;
+    
+    //final death
+    this.gameOverTimer = 0;
+    this.maxGameOverTimer = 3;
+    this.gameOver = false;
 };
 
 donkeyKong.hud.prototype.constructor = donkeyKong.hud;
@@ -40,6 +45,8 @@ donkeyKong.hud.prototype.customUpdate = function(){
         this.bonusNum -= 100;
         this.bonus.text = this.bonusNum.toString();
     }
+    
+    this.gameOverFunction();
 }
 
 donkeyKong.hud.prototype.setLife = function(_playerNum, life){
@@ -52,11 +59,25 @@ donkeyKong.hud.prototype.setLife = function(_playerNum, life){
 }
 
 donkeyKong.hud.prototype.setPoints = function(_playerNum, points){
-    console.log(_playerNum);
     if(_playerNum == 1){
          this.points1.text = points.toString();
     }
     else if(_playerNum == 2){
         this.points2.text =  points.toString();
      }
+}
+
+donkeyKong.hud.prototype.gameOverFunction = function(){
+    if(this.lifes1.text.toString() == "0" && this.lifes2.text.toString() == "0" && !this.gameOver){
+        console.log("both dead");
+        this.gameOver = true;
+        this.gameOverText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/2, "GAME OVER", style);
+    }
+    if(this.gameOver){
+        this.gameOverTimer+= this.game.time.physicsElapsed;
+        if(this.gameOverTimer > this.maxGameOverTimer){
+            console.log("change level");
+            donkeyKong.game.state.start('Scores');
+        }
+    }
 }

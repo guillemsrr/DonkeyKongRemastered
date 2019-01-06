@@ -293,20 +293,23 @@ donkeyKong.level3 = {
         
     hitJumpman:function(_jumpman){
         if(_jumpman.health>0 && !_jumpman.temporallyInmune){
-            if(_jumpman == this.jumpman){
-                _jumpman.body.position.x = 75;
-                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
-                _jumpman.body.velocity.x = 0;
-            }
-            else{
-                _jumpman.body.position.x = 450;
-                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
-                _jumpman.body.velocity.x = 0;
-            }
-            this.hit.play();
             _jumpman.health -=1;
-            _jumpman.temporallyInmune = true;
+            this.hit.play();
             this.hud.setLife(_jumpman.num, _jumpman.health);
+
+            if(_jumpman.health>0){//only change position with the other lifes
+                if(_jumpman == this.jumpman && this.jumpman.body!= null){
+                    _jumpman.body.position.x = 75;
+                    _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                    _jumpman.body.velocity.x = 0;
+                }
+                else if(_jumpman == this.jumpman2 && this.jumpman2.body!= null){
+                    _jumpman.body.position.x = 85;
+                    _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                    _jumpman.body.velocity.x = 0;
+                }
+            }
+            _jumpman.temporallyInmune = true;
         }
     },
     
@@ -394,7 +397,7 @@ donkeyKong.level3 = {
                                        this.player1Input.down.isDown, 
                                        this.game.physics.arcade.overlap(this.jumpman,this.stairs), 
                                        this.game.physics.arcade.overlap(this.jumpman,this.finalStair));
-
+                
                 this.jumpman.customUpdate();
 
 

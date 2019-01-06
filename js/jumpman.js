@@ -14,7 +14,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.powerUpSpeed = 180;
     this.jumpForce = 250;
     this.stairSpeed = 70;
-    this.health = 3;
+    this.health = 1;
     this.points = 0;
     
     //hammer
@@ -57,6 +57,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.time = 0;
     this.deathRollTime = 2;
     this.deathRolling = false;
+    this.dead = false;
     
     //Audios:
     this.runSound = _run;
@@ -196,12 +197,13 @@ donkeyKong.jumpman.prototype.stairs = function(){
 }
 
 donkeyKong.jumpman.prototype.die = function(){
-    this.animations.play('deathRoll');
-    this.health = 0;
-    this.time = 0;
-    this.deathRolling = true;
-    if(!this.deathSound.isPlaying)
-        this.deathSound.play();
+    if(!this.deathRolling){
+        this.animations.play('deathRoll');
+        this.time = 0;
+        this.deathRolling = true;
+        if(!this.deathSound.isPlaying)
+            this.deathSound.play();
+    }
 }
 
 donkeyKong.jumpman.prototype.finalDeath = function(){
@@ -210,6 +212,7 @@ donkeyKong.jumpman.prototype.finalDeath = function(){
         if(this.time > this.deathRollTime){
             this.animations.play('finalDeath');
             this.deathRolling = false;
+            this.dead = true;
         }
     }
 }
@@ -306,34 +309,38 @@ donkeyKong.jumpman.prototype.marioAnimations = function(){
     }
 }
 
-
 donkeyKong.jumpman.prototype.customUpdate = function(){
-    //provisional
-    if(this.health > 0){
-        this.move();
-        this.jump();
-        this.stairs();
-        this.marioAnimations();
-        
-        if(this.speedPowerUpActive){
-            this.speedPowerUp();
+    if(this!=null && this.body != null && !this.dead){
+        //provisional
+        if(this.health > 0){
+            this.move();
+            this.jump();
+            this.stairs();
+            this.marioAnimations();
+
+            if(this.speedPowerUpActive){
+                this.speedPowerUp();
+            }
+            if(this.starPowerUpActive){
+                this.starPowerUp();
+            }
+
+            this.BonusCounter();
         }
-        if(this.starPowerUpActive){
-            this.starPowerUp();
+        else{
+            if(!this.dead){
+               this.die();
+            this.finalDeath(); 
+            }
         }
-        
-        this.BonusCounter();
-    }
-    else{
-        this.finalDeath();    
-    }
-    
-    if(this.hasHammer){
-        this.hammerLogic();
-    }
-    
-    if(this.temporallyInmune && this.game!=null){
-        this.Inmunity();
+
+        if(this.hasHammer){
+            this.hammerLogic();
+        }
+
+        if(this.temporallyInmune && this.game!=null){
+            this.Inmunity();
+        }
     }
 }
 
