@@ -20,8 +20,13 @@ donkeyKong.hud = function(_game, _x, _y, _level){
     //Variables
     this.lifes1 = this.game.add.text(_x + 3, _y +12, "3", player1Style);
     this.lifes2 = this.game.add.text(_x + 3, _y +24, "3", player2Style);
-    this.points1 = this.game.add.text(_x + 22, _y +12, "000", player1Style);
-    this.points2 = this.game.add.text(_x + 22, _y +24, "000", player2Style);
+    
+    this.currentScore1 = localStorage.getItem("Player1Score");
+    this.points1 = this.game.add.text(_x + 22, _y +12, this.currentScore1, player1Style);
+    
+    this.currentScore2 = localStorage.getItem("Player2Score");
+    this.points2 = this.game.add.text(_x + 22, _y +24, this.currentScore2, player2Style);
+    
     this.bonus = this.game.add.text(_x + 80, _y +17, "5000", hudStyle);
     this.level = this.game.add.text(_x + 125, _y +17, "1", hudStyle);
     

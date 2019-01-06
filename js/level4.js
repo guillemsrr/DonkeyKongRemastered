@@ -662,6 +662,9 @@ donkeyKong.level4 = {
     },
     
     LoadNextLevel: function (_key){
+        
+        this.UpdatePersistentScore();
+        
         this.game.sound.stopAll();
         if(_key=="level1")
             this.game.state.start('level3');
@@ -673,5 +676,19 @@ donkeyKong.level4 = {
             this.game.state.start('level5');
         else if(_key=="level5")
             this.game.state.start('level1');
+    },
+    
+    UpdatePersistentScore: function(){
+        
+        this.currentScore1 = parseInt(localStorage.getItem("Player1Score"));        
+        this.currentScore1 = parseInt(this.hud.points1.text);
+        this.currentScore1 += this.hud.bonusNum;
+        localStorage.setItem("Player1Score", this.currentScore1);
+        
+        this.currentScore2 = parseInt(localStorage.getItem("Player2Score"));        
+        this.currentScore2 = parseInt(this.hud.points2.text);
+        this.currentScore2 += this.hud.bonusNum;
+        localStorage.setItem("Player2Score", this.currentScore2);
+        //console.log(localStorage.getItem("Player1Score"));
     }
 };
