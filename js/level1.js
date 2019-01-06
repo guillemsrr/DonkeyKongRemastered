@@ -127,8 +127,8 @@ donkeyKong.level1= {
         
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
-        //this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
-        this.jumpman = new donkeyKong.jumpman(this.game, 200, gameOptions.gameHeight - 8*46, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
+        this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
+        //this.jumpman = new donkeyKong.jumpman(this.game, 200, gameOptions.gameHeight - 8*46, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
         
@@ -325,6 +325,15 @@ donkeyKong.level1= {
         
         
         // ---------------- GAMEPLAY -----------------
+        
+        if(this.jumpman.health <= 0 && this.jumpman2.health <= 0){
+            
+            console.log("Game finished!");
+            
+            this.game.state.start('HighScore');
+            
+        }
+        
         //JumpmanCollisions
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){
             this.game.physics.arcade.collide(this.jumpman,this.beams);

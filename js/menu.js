@@ -1,8 +1,3 @@
-
-var saveFile = {    
-    scoresList: Array(10)
-};
-
 var savedScore ={
     name: "AAA",
     highScore: 0
@@ -156,18 +151,19 @@ donkeyKong.menu = {
     
     CheckSavedScores: function(){
         // Save game
-        
         if(localStorage.getItem("ScoreFile") == null){
+            
+            this.scoresList = Array(10);        
             
             for(var i = 0; i < 10; i++){ 
                 savedScore.name = "AAA";
                 savedScore.highScore = 0;
                 
-                saveFile.scoresList[i] = savedScore;
+                this.scoresList[i] = savedScore;
             }
             
             
-            localStorage.setItem("ScoreFile", JSON.stringify(saveFile));
+            localStorage.setItem("ScoreFile", JSON.stringify(this.scoresList));
             
             
             console.log("Object saved!");
@@ -176,8 +172,8 @@ donkeyKong.menu = {
         //var player = prompt("Please enter your name", "name");
             
         //console.log(player);
-        localStorage.setItem("Player1Score", 0);
-        localStorage.setItem("Player2Score", 0);
+        localStorage.setItem("Player1Score", 2000);
+        localStorage.setItem("Player2Score", 1000);
         
         console.log(localStorage.getItem("Player1Score"));
         console.log(localStorage.getItem("Player2Score"));
@@ -189,11 +185,11 @@ donkeyKong.menu = {
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.Y)){
             console.log(localStorage.getItem("1"));
         }
+        */
         
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.U)){
             localStorage.clear();
         }
-        */
     }
     
 };
