@@ -14,7 +14,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.powerUpSpeed = 180;
     this.jumpForce = 250;
     this.stairSpeed = 70;
-    this.health = 1;
+    this.health = 3;
     this.points = 0;
     /*
     if(this.num == 1){
