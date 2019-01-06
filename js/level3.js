@@ -363,6 +363,15 @@ donkeyKong.level3 = {
         
         
         // ---------------- GAMEPLAY -----------------
+        
+        if(this.jumpman.health <= 0 && this.jumpman2.health <= 0){
+            
+            console.log("Game finished!");
+            
+            this.game.state.start('HighScore');
+            
+        }
+        
         //JumpmanCollisions
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){
             this.game.physics.arcade.collide(this.jumpman,this.beams);

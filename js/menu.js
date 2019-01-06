@@ -172,8 +172,8 @@ donkeyKong.menu = {
         //var player = prompt("Please enter your name", "name");
             
         //console.log(player);
-        localStorage.setItem("Player1Score", 2000);
-        localStorage.setItem("Player2Score", 1000);
+        localStorage.setItem("Player1Score", 0);
+        localStorage.setItem("Player2Score", 0);
         
         console.log(localStorage.getItem("Player1Score"));
         console.log(localStorage.getItem("Player2Score"));
