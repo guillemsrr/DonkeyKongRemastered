@@ -71,7 +71,7 @@ donkeyKong.hud.prototype.gameOverFunction = function(){
     if(this.lifes1.text.toString() == "0" && this.lifes2.text.toString() == "0" && !this.gameOver){
         console.log("both dead");
         this.gameOver = true;
-        this.gameOverText = this.game.add.text(gameOptions.gameWidth/2, gameOptions.gameHeight/2, "GAME OVER", style);
+        this.gameOverText = this.game.add.text(gameOptions.gameWidth/2 - 80, gameOptions.gameHeight/2, "GAME OVER", style);
     }
     if(this.gameOver){
         this.gameOverTimer+= this.game.time.physicsElapsed;
