@@ -25,10 +25,10 @@ donkeyKong.hud = function(_game, _x, _y, _level){
     this.lifes1 = this.game.add.text(_x + 3, _y +12, "3", player1Style);
     this.lifes2 = this.game.add.text(_x + 3, _y +24, "3", player2Style);
     
-    this.currentScore1 = localStorage.getItem("Player1Score");
+    this.currentScore1 = "0";
     this.points1 = this.game.add.text(_x + 22, _y +12, this.currentScore1, player1Style);
     
-    this.currentScore2 = localStorage.getItem("Player2Score");
+    this.currentScore2 = "0";
     this.points2 = this.game.add.text(_x + 22, _y +24, this.currentScore2, player2Style);
     
     this.bonus = this.game.add.text(_x + 80, _y +17, "5000", hudStyle);
@@ -47,8 +47,14 @@ donkeyKong.hud = function(_game, _x, _y, _level){
     this.maxGameOverTimer = 3;
     this.gameOver = false;
     
-    this.curSc = 0;
-    this.topSc = 0;
+    this.curSc = localStorage.getItem("TotalScore");
+    
+    this.scoresList = localStorage.getItem("ScoreFile");
+    this.scoresList = JSON.parse(this.scoresList);
+    
+    this.topSc = this.scoresList[0].highScore;
+    
+    this.updateTotalScore();
 };
 
 donkeyKong.hud.prototype.constructor = donkeyKong.hud;
@@ -64,8 +70,12 @@ donkeyKong.hud.prototype.customUpdate = function(_jumpman1, _jumpman2){
     
     this.gameOverFunction();
     
+    this.updateTotalScore();
+}
+
+donkeyKong.hud.prototype.updateTotalScore = function(){
     //CURRENT SCORE
-    this.curSc = _jumpman1.points + _jumpman2.points;
+    //this.curSc = _jumpman1.points + _jumpman2.points;
     if(this.curSc<100){
         this.currentScore.text = "000000";
     }
@@ -88,10 +98,25 @@ donkeyKong.hud.prototype.customUpdate = function(_jumpman1, _jumpman2){
         this.topScore.text = this.currentScore.text;
     }
     else{
-        //cuando tenga la highscore del js de score lo actualziaré
+        this.topScore.text = this.topSc;
+        
+        if(this.topSc<100){
+            this.topScore.text = "000000";
+        }
+        else if(this.topSc<1000){
+            this.topScore.text = "000" + this.topSc;
+        }
+        else if(this.topSc<10000){
+            this.topScore.text = "00" + this.topSc;
+        }
+        else if(this.topSc<100000){
+            this.topScore.text = "0" + this.topSc;
+        }
+        else if(this.topSc<1000000){
+            this.topScore.text = this.topSc;
+        }
     }
 }
-
 
 donkeyKong.hud.prototype.setLife = function(_playerNum, life){
     if(_playerNum == 1){
@@ -121,7 +146,7 @@ donkeyKong.hud.prototype.gameOverFunction = function(){
         this.gameOverTimer+= this.game.time.physicsElapsed;
         if(this.gameOverTimer > this.maxGameOverTimer){
             console.log("change level");
-            donkeyKong.game.state.start('Scores');
+            donkeyKong.game.state.start('HighScore');
         }
     }
 }

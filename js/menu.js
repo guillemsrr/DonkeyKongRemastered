@@ -172,11 +172,13 @@ donkeyKong.menu = {
         //var player = prompt("Please enter your name", "name");
             
         //console.log(player);
-        localStorage.setItem("Player1Score", 0);
-        localStorage.setItem("Player2Score", 0);
+        //localStorage.setItem("Player1Score", 0);
+        //localStorage.setItem("Player2Score", 0);
+        localStorage.setItem("TotalScore", 0);
         
-        console.log(localStorage.getItem("Player1Score"));
-        console.log(localStorage.getItem("Player2Score"));
+        //console.log(localStorage.getItem("Player1Score"));
+        //console.log(localStorage.getItem("Player2Score"));
+        console.log(localStorage.getItem("TotalScore"));
         /*
         if(this.game.input.keyboard.isDown(Phaser.Keyboard.T)){
             localStorage.setItem("1", "1000");

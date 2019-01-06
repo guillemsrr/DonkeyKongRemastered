@@ -16,62 +16,39 @@ donkeyKong.highScore = {
         
         this.letterCounter = 0;
         this.newNameInput = '';
-        this.letterPressed = false;
-        this.qPressed = false;
-        this.wPressed = false;
-        this.ePressed = false;
-        this.rPressed = false;
-        this.tPressed = false;
-        this.yPressed = false;
-        this.uPressed = false;
-        this.iPressed = false;
-        this.oPressed = false;
-        this.pPressed = false;
-        this.aPressed = false;
-        this.sPressed = false;
-        this.dPressed = false;
-        this.fPressed = false;
-        this.gPressed = false;
-        this.hPressed = false;
-        this.jPressed = false;
-        this.kPressed = false;
-        this.lPressed = false;
-        this.zPressed = false;
-        this.xPressed = false;
-        this.cPressed = false;
-        this.vPressed = false;
-        this.bPressed = false;
-        this.nPressed = false;
-        this.mPressed = false;
+        this.qPressed = true;
+        this.wPressed = true;
+        this.ePressed = true;
+        this.rPressed = true;
+        this.tPressed = true;
+        this.yPressed = true;
+        this.uPressed = true;
+        this.iPressed = true;
+        this.oPressed = true;
+        this.pPressed = true;
+        this.aPressed = true;
+        this.sPressed = true;
+        this.dPressed = true;
+        this.fPressed = true;
+        this.gPressed = true;
+        this.hPressed = true;
+        this.jPressed = true;
+        this.kPressed = true;
+        this.lPressed = true;
+        this.zPressed = true;
+        this.xPressed = true;
+        this.cPressed = true;
+        this.vPressed = true;
+        this.bPressed = true;
+        this.nPressed = true;
+        this.mPressed = true;
         
         this.title = this.game.add.text(this.scoreVerticalAlignement, 50, "Out of lives!", style);
         
-        this.player1Score = parseInt(localStorage.getItem("Player1Score"));
-        this.player2Score = parseInt(localStorage.getItem("Player2Score"));
+        this.totalScore = parseInt(localStorage.getItem("TotalScore"));
         
-        this.bestScore = 0;
+        this.scoreText = this.game.add.text(this.scoreVerticalAlignement, 100, "Final Score:" + this.totalScore, style);
         
-        if(this.player1Score > this.player2Score){         
-            this.bestScore = this.player1Score;
-            
-            this.title = this.game.add.text(this.scoreVerticalAlignement, 100, "Player 1 won!", style);
-            
-            this.scoreText = this.game.add.text(this.scoreVerticalAlignement, 150, "Score:" + localStorage.getItem("Player1Score"), style);            
-        }
-        else if(this.player1Score < this.player2Score){       
-            this.bestScore = this.player2Score;
-            
-            this.title = this.game.add.text(this.scoreVerticalAlignement, 100, "Player 2 won!", style);
-            
-            this.scoreText = this.game.add.text(this.scoreVerticalAlignement, 150, "Score:" + localStorage.getItem("Player2Score"), style);
-        }
-        else{    
-            this.bestScore = this.player1Score;
-            
-            this.title = this.game.add.text(this.scoreVerticalAlignement, 100, "Score tie!", style);
-            
-            this.scoreText = this.game.add.text(200, 150, "Score:" + localStorage.getItem("Player1Score"), style);               
-        }
         
         this.newHighscoreIterator = 0;
         this.newHighscore = false;
@@ -84,7 +61,7 @@ donkeyKong.highScore = {
         //this.textList = Array(10);
         for(var i = 0; i < this.scoresList.length; i++){
                     
-            if(this.bestScore > this.scoresList[i].highScore){
+            if(this.totalScore > this.scoresList[i].highScore){
                 this.newHighscore = true;
                 this.newHighscoreIterator = i;
                 break;
@@ -135,7 +112,7 @@ donkeyKong.highScore = {
                 if(!this.scoreInserted){
                     if(i == this.newHighscoreIterator){
                         savedScore.name = newName;
-                        savedScore.highScore = this.bestScore;
+                        savedScore.highScore = this.totalScore;
                         
                         this.newScoresList[i] = savedScore;
                         

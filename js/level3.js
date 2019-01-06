@@ -364,14 +364,6 @@ donkeyKong.level3 = {
         
         // ---------------- GAMEPLAY -----------------
         
-        if(this.jumpman.health <= 0 && this.jumpman2.health <= 0){
-            
-            console.log("Game finished!");
-            
-            this.game.state.start('HighScore');
-            
-        }
-        
         //JumpmanCollisions
         if(!this.jumpman.overlapFinalStair || !this.jumpman.isInStair){
             this.game.physics.arcade.collide(this.jumpman,this.beams);
@@ -659,15 +651,11 @@ donkeyKong.level3 = {
     
     UpdatePersistentScore: function(){
         
-        this.currentScore1 = parseInt(localStorage.getItem("Player1Score"));        
-        this.currentScore1 = parseInt(this.hud.points1.text);
-        this.currentScore1 += this.hud.bonusNum;
-        localStorage.setItem("Player1Score", this.currentScore1);
-        
-        this.currentScore2 = parseInt(localStorage.getItem("Player2Score"));        
-        this.currentScore2 = parseInt(this.hud.points2.text);
-        this.currentScore2 += this.hud.bonusNum;
-        localStorage.setItem("Player2Score", this.currentScore2);
-        //console.log(localStorage.getItem("Player1Score"));
+        this.totalScore = parseInt(localStorage.getItem("TotalScore"));
+        this.totalScore += parseInt(this.hud.points1.text);
+        this.totalScore += parseInt(this.hud.points2.text);
+        this.totalScore += this.hud.bonusNum;
+        console.log(this.totalScore);
+        localStorage.setItem("TotalScore", this.totalScore);
     }
 };

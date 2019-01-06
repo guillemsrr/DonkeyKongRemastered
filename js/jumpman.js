@@ -16,12 +16,14 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.stairSpeed = 70;
     this.health = 1;
     this.points = 0;
+    /*
     if(this.num == 1){
         this.points = parseInt(localStorage.getItem("Player1Score"));
     }
     else{
         this.points = parseInt(localStorage.getItem("Player2Score"));
     }
+    */
     this.hasHammer = false;
     this.hammerTime = 10;
     this.hammerCounter = 0;
