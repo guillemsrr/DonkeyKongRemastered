@@ -183,11 +183,11 @@ donkeyKong.level4 = {
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
         
-        this.jumpman = new donkeyKong.jumpman(this.game, 16*4, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
+        this.jumpman = new donkeyKong.jumpman(this.game, 16*4, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1, this);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
         
-        this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 16*4, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2);
+        this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 16*4, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2, this);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
         
@@ -268,6 +268,7 @@ donkeyKong.level4 = {
         
         this.mines = this.game.add.group();
         
+        this.levelWinHeight = 10;
         this.levelCompleted = false;
         
         // ------------------ PAUSE MENU -----------------
@@ -522,7 +523,7 @@ donkeyKong.level4 = {
         }
         //levelCompletion
         if(this.jumpman!=null && this.jumpman2!=null){
-                if(!this.levelCompleted && ((this.jumpman.body.position.y <= 20 && this.jumpman.body.position.x >= gameOptions.gameWidth/2) || (this.jumpman2.body.position.y <= 20 && this.jumpman2.body.position.x <= gameOptions.gameWidth/2))){
+                if(!this.levelCompleted && ((this.jumpman.body.position.y <= this.levelWinHeight && this.jumpman.body.position.x >= gameOptions.gameWidth/2) || (this.jumpman2.body.position.y <= this.levelWinHeight && this.jumpman2.body.position.x <= gameOptions.gameWidth/2))){
                 this.levelCompleted = true;
                 this.roundClear.play();
             }

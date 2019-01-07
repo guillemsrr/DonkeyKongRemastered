@@ -1,12 +1,13 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death, _itemGet, _hammer, _hud, jumpManNum){
+donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death, _itemGet, _hammer, _hud, jumpManNum, _level){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.game = _game;
     _game.physics.arcade.enable(this);
     this.num = jumpManNum;
     this.hud = _hud;
+    this.level = _level;
 
     //Variables
     this.speed = 90;
@@ -91,7 +92,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
     this.bonusActive = false;
     this.bonusText;
     
-    
+    this.MaxYDeath = 500;
 }
 
 donkeyKong.jumpman.prototype = Object.create(Phaser.Sprite.prototype);
@@ -332,11 +333,14 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
             }
 
             this.BonusCounter();
+            
+            if(this.body.position.y > this.MaxYDeath)
+                this.level.hitJumpman(this);
         }
         else{
             if(!this.dead){
-               this.die();
-            this.finalDeath(); 
+                this.die();
+                this.finalDeath(); 
             }
         }
 

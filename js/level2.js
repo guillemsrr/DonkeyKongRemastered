@@ -199,6 +199,7 @@ donkeyKong.level2= {
         
         var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
         
+        this.levelWinHeight = 10;
         this.levelCompleted = false;
                 
         // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite        
@@ -446,7 +447,7 @@ donkeyKong.level2= {
         }
         //levelCompletion
         if(this.jumpman!=null && this.jumpman2!=null){
-                if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
+                if(!this.levelCompleted && (this.jumpman.body.position.y <= this.levelWinHeight || this.jumpman2.body.position.y <= this.levelWinHeight)){
                 this.levelCompleted = true;
                 this.roundClear.play();
             }

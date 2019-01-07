@@ -127,12 +127,12 @@ donkeyKong.level1= {
         
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
-        this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
+        this.jumpman = new donkeyKong.jumpman(this.game, 85, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1, this);
         //this.jumpman = new donkeyKong.jumpman(this.game, 200, gameOptions.gameHeight - 8*46, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
         
-        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2);
+        this.jumpman2 = new donkeyKong.jumpman(this.game, 75, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2, this);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
         
@@ -196,6 +196,7 @@ donkeyKong.level1= {
         
         var movingRow = new donkeyKong.beamRow(this.game,'beam', this.beams);
         
+        this.levelWinHeight = 10;
         this.levelCompleted = false;
                 
         // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite        
@@ -443,7 +444,7 @@ donkeyKong.level1= {
         }
         //levelCompletion
         if(this.jumpman!=null && this.jumpman2!=null){
-                if(!this.levelCompleted && (this.jumpman.body.position.y <= 20 || this.jumpman2.body.position.y <= 20)){
+                if(!this.levelCompleted && (this.jumpman.body.position.y <= this.levelWinHeight || this.jumpman2.body.position.y <= this.levelWinHeight)){
                 this.levelCompleted = true;
                 this.roundClear.play();
             }
