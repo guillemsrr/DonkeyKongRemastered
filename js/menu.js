@@ -24,7 +24,7 @@ donkeyKong.menu = {
     
     create: function () {
         
-        
+        this.game.sound.stopAll();
         // Settings
         this.menuVerticalAlignement = 191;
         this.selectorOffset = 25;
@@ -108,7 +108,7 @@ donkeyKong.menu = {
     
     // -------------- FUNCTIONS --------------
     
-    SelectorLogic: function () {        
+    SelectorLogic: function () { 
         
         if(this.cursors.down.isDown){
             this.UpdateSelector(1);

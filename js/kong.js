@@ -56,7 +56,7 @@ donkeyKong.kong.prototype.SetNextMaxTime = function(){
 
 donkeyKong.kong.prototype.NextAnimation = function(){
      if(this.animations.name == "monkey"){
-         if(this.game.state.getCurrentState().key == 1 ){
+         if(this.game.state.getCurrentState().key == "level1" ){
              if(this.game.rnd.integerInRange(0, 100)<80) //40% per fer throw right
              this.ThrowRight();
          else 
