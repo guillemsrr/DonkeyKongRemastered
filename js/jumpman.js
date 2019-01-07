@@ -65,7 +65,7 @@ donkeyKong.jumpman = function(_game, _x, _y, _tag, _run, _jump, _scoreUp, _death
         this.animations.add('hammerIdle',[0,1], 7, true);
         this.animations.add('hammerWalk',[0,1], 7, true);
         this.animations.add('deathRoll',[0,1], 10, true);
-        this.animations.add('finalDeath',[0,1], 1, true);
+        this.animations.add('finalDeath',[0], 1, true);
         this.animations.add('jump',[0,1], 1, true);
         this.body.setCircle(8, 0, 5);
     }

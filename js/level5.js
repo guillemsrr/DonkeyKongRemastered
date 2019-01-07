@@ -236,7 +236,6 @@ donkeyKong.level5 = {
         this.game.add.existing(this.directionSetter);
         
         
-        
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
         
@@ -324,7 +323,7 @@ donkeyKong.level5 = {
         this.barrelDownSpawned = false;
         
         this.mines = this.game.add.group();
-        this.levelWinHeight = 10;
+        this.levelWinHeight = 20;
         this.levelCompleted = false;
         
         // ------------------ PAUSE MENU -----------------
@@ -341,7 +340,7 @@ donkeyKong.level5 = {
         this.pauseBackground = this.game.add.sprite(0, 0, 'pause_background');
         var style = { font: "bold 25px Arial", fill: "#fff", boundsAlignH: "top", boundsAlignV: "middle" };
         this.resume_button = this.game.add.text(this.menuVerticalAlignement, 200, "Resume", style);
-        this.backToMenu_button = this.game.add.text(this.menuVerticalAlignement, 250, "Back to Menu", style);  
+        this.backToMenu_button = this.game.add.text(this.menuVerticalAlignement, 250, "Back to Menu", style);
 
         // Buttons list
         this.buttonIterator = 0;        
@@ -431,7 +430,6 @@ donkeyKong.level5 = {
         this.barrels = this.game.add.group();
     },
     
-    
     DestroyBarrel:function(_x, _y){
         this.destroy_barrel = new donkeyKong.destroy_barrel(this.game, _x, _y, 'destroy_barrel');
         this.game.add.existing(this.destroy_barrel);
@@ -464,7 +462,7 @@ donkeyKong.level5 = {
         }
         
         //JUMPMAN 2 
-        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){            
+        if(!this.jumpman2.overlapFinalStair || !this.jumpman2.isInStair){      
             this.game.physics.arcade.collide(this.jumpman2,this.beams);
         }
         //All customUpdates inside
@@ -568,7 +566,7 @@ donkeyKong.level5 = {
 
                 //mineExplosions:
                 for(var i = 0; i< this.mines.length; i++){
-                    this.mines.children[i].checkExplosion();
+                    this.mines.children[i].checkExplosion(); 
                 }
                 /*this.game.mines.forEach(function(mine)){
                     mine.checkExplosion();   
@@ -579,7 +577,7 @@ donkeyKong.level5 = {
         }
         //levelCompletion
         if(this.jumpman!=null && this.jumpman2!=null){
-                if(!this.levelCompleted && ((this.jumpman.body.position.y <= this.levelWinHeight && this.jumpman.body.position.x >= gameOptions.gameWidth/2) || (this.jumpman2.body.position.y <= this.levelWinHeight && this.jumpman2.body.position.x <= gameOptions.gameWidth/2))){
+                if(!this.levelCompleted && (this.jumpman.body.position.y <= this.levelWinHeight || (this.jumpman2.body.position.y <= this.levelWinHeight ))){
                 this.levelCompleted = true;
                 this.roundClear.play();
             }
@@ -618,7 +616,6 @@ donkeyKong.level5 = {
         }
     },
     
-    
     PausePressed: function (){       
         
         
@@ -636,7 +633,7 @@ donkeyKong.level5 = {
         this.pause.play();
     },
     
-    SelectorLogic: function () {        
+    SelectorLogic: function () {
         
         if(this.cursors.down.isDown){
             this.UpdateSelector(1);
@@ -702,7 +699,6 @@ donkeyKong.level5 = {
     SpawnBarrelLeft: function(){
         this.SpawnBarrel(this.kong.width/2, -1)
     },
-    
     SpawnBarrelDown: function(){
         this.barrel = new donkeyKong.barrel(this.game, this.kong.x, this.kong.y, 75, 1, true, this, 'barrel');
         this.barrel.limitDown = gameOptions.gameHeight - 8*20;

@@ -310,7 +310,7 @@ donkeyKong.level3 = {
                 _jumpman.body.velocity.x = 0;
             }
             else if(_jumpman == this.jumpman2 && this.jumpman2.body!= null){
-                _jumpman.body.position.x = 85;
+                _jumpman.body.position.x = 450;
                 _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
                 _jumpman.body.velocity.x = 0;
             }
