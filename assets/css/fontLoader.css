@@ -1,0 +1,8 @@
+@font-face {
+	font-family: "title";
+	font-style: normal;
+	font-weight: 200;
+	/*src: url("../fonts/game_over.ttf") format('truetype');*/
+	/*src: url("../fonts/Gamer.ttf") format('truetype');*/
+	src: url("../fonts/PressStart2P-Regular.ttf") format('truetype');
+}
