@@ -109,10 +109,19 @@ donkeyKong.level5 = {
         this.finalStair = this.game.add.group();
         var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
         
-        /*
-        stair.createStair(14, 8*12, gameOptions.gameHeight - 4*21);      
-        stair.createStair(14, gameOptions.gameWidth-8*13,  gameOptions.gameHeight - 4*21);      
+         
+        stair.createStair(10, 8*8, gameOptions.gameHeight - 4*59);      
+        stair.createStair(10, 8*58, gameOptions.gameHeight - 4*59);
         
+        //stair.createStair(3, 8*8, gameOptions.gameHeight - 4*85);      
+        //stair.createStair(3, 8*58, gameOptions.gameHeight - 4*85);
+        
+        stair.createStair(10, 8*33, gameOptions.gameHeight - 4*42);
+        stair.createStair(10, 8*33, gameOptions.gameHeight - 4*78);
+        
+        stair.createStair(14, 8*20, gameOptions.gameHeight - 4*88);
+        //stair.createStair(14, gameOptions.gameWidth-8*13,  gameOptions.gameHeight - 4*21);      
+        /*
         stair.createStair(14, 8*5, gameOptions.gameHeight - 4*37);  
         stair.createStair(14, gameOptions.gameWidth/2-4, gameOptions.gameHeight - 4*37);  
         stair.createStair(14, gameOptions.gameWidth-8*6, gameOptions.gameHeight - 4*37);  
@@ -139,13 +148,51 @@ donkeyKong.level5 = {
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
         
         beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*10, true, true);
-        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*30, true, true);
-        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*40, true, true);
+        beamRow.createStraightRow(25, 65, gameOptions.gameHeight - 8*26, true, true);
+        beamRow.createStraightRow(17, 125, gameOptions.gameHeight - 8*44, true, true);
         //beamRow.createStraightRow(8, gameOptions.gameWidth-16*9, gameOptions.gameHeight - 8*10, true, true);
         
-        beamRow.createStraightRow(2, 100, 350, true, true);
-        beamRow.createStraightRow(2, 60, 325, true, true);
-        beamRow.createStraightRow(2, 140, 325, true, true);
+        beamRow.createStraightRow(2, 100, 340, true, true);
+        beamRow.createStraightRow(2, 50, 315, true, true);
+        beamRow.createStraightRow(2, 150, 315, true, true);
+        beamRow.createStraightRow(2, 100, 290, true, true);
+        
+        beamRow.createStraightRow(2, 200, 340, true, true);
+        beamRow.createStraightRow(2, 150, 315, true, true);
+        beamRow.createStraightRow(2, 250, 315, true, true);
+        beamRow.createStraightRow(2, 200, 290, true, true);
+        
+        beamRow.createStraightRow(2, 300, 340, true, true);
+        beamRow.createStraightRow(2, 250, 315, true, true);
+        beamRow.createStraightRow(2, 350, 315, true, true);
+        beamRow.createStraightRow(2, 300, 290, true, true);
+        
+        beamRow.createStraightRow(2, 400, 340, true, true);
+        beamRow.createStraightRow(2, 350, 315, true, true);
+        beamRow.createStraightRow(2, 450, 315, true, true);
+        beamRow.createStraightRow(2, 400, 290, true, true);
+        
+        //
+        
+        beamRow.createStraightRow(2, 100, 200, true, true);
+        beamRow.createStraightRow(2, 50, 175, true, true);
+        beamRow.createStraightRow(2, 150, 175, true, true);
+        beamRow.createStraightRow(2, 100, 150, true, true);
+        
+        beamRow.createStraightRow(2, 200, 200, true, true);
+        beamRow.createStraightRow(2, 150, 175, true, true);
+        beamRow.createStraightRow(2, 250, 175, true, true);
+        beamRow.createStraightRow(2, 200, 140, true, true);
+        
+        beamRow.createStraightRow(2, 300, 200, true, true);
+        beamRow.createStraightRow(2, 250, 175, true, true);
+        beamRow.createStraightRow(2, 350, 175, true, true);
+        beamRow.createStraightRow(2, 300, 150, true, true);
+        
+        beamRow.createStraightRow(2, 400, 200, true, true);
+        beamRow.createStraightRow(2, 350, 175, true, true);
+        beamRow.createStraightRow(2, 450, 175, true, true);
+        beamRow.createStraightRow(2, 400, 150, true, true);
         
         /*
         beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*18, true, true);
@@ -642,7 +689,7 @@ donkeyKong.level5 = {
             this.nuclear_barrel = new donkeyKong.nuclear_barrel(this.game, this.kong.x+distX, this.kong.y + 10, 65, dir, false, this, 'nuclear_barrel');            
             this.barrels.add(this.nuclear_barrel);
         }
-        else if(this.randomNumber < 100){    
+        else if(this.randomNumber < 100){
             var mine = new donkeyKong.mineBarrel(this.game, this.kong.x+distX, this.kong.y + 10, 65, dir, false, this, "mineBarrel");
             this.barrels.add(mine);
         }
