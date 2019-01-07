@@ -109,6 +109,7 @@ donkeyKong.level5 = {
         this.finalStair = this.game.add.group();
         var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
         
+        /*
         stair.createStair(14, 8*12, gameOptions.gameHeight - 4*21);      
         stair.createStair(14, gameOptions.gameWidth-8*13,  gameOptions.gameHeight - 4*21);      
         
@@ -131,15 +132,22 @@ donkeyKong.level5 = {
         
         var stair = new donkeyKong.stair(this.game, 'red_stair', this.stairs, true, 'finalStair', this.finalStair);
         stair.createStair(30, gameOptions.gameWidth-8*4, gameOptions.gameHeight - 4*85);  
-        
+        */
         //Beams
         this.beams = this.game.add.group();
         this.beamCollider = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
         
-        beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*10, true, true);
-        beamRow.createStraightRow(8, gameOptions.gameWidth-16*9, gameOptions.gameHeight - 8*10, true, true);
+        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*10, true, true);
+        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*30, true, true);
+        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*40, true, true);
+        //beamRow.createStraightRow(8, gameOptions.gameWidth-16*9, gameOptions.gameHeight - 8*10, true, true);
         
+        beamRow.createStraightRow(2, 100, 350, true, true);
+        beamRow.createStraightRow(2, 60, 325, true, true);
+        beamRow.createStraightRow(2, 140, 325, true, true);
+        
+        /*
         beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*18, true, true);
         beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*18, true, true);
         beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*18, true, true);
@@ -159,6 +167,7 @@ donkeyKong.level5 = {
         beamRow.createStraightRow(8, 16, gameOptions.gameHeight - 8*42, true, true);
         beamRow.createStraightRow(8, gameOptions.gameWidth - 16*9, gameOptions.gameHeight - 8*42, true, true);
         beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*42, true, true);
+        */
         
         beamRow.createStraightRow(8, gameOptions.gameWidth/2 - 16*4, gameOptions.gameHeight - 8*48);
         
