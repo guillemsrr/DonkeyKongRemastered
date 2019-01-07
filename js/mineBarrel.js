@@ -22,7 +22,7 @@ donkeyKong.mineBarrel.prototype.hitJumpman = function(_barrel, _jumpman){
         this.mineActivation();
     }
     else{
-        if(_jumpman.hasHammer){
+        if(_jumpman.hasHammer || _jumpman.starPowerUpActive){
             this.kill();
         }
         else{

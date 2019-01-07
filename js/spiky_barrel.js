@@ -43,8 +43,14 @@ donkeyKong.spiky_barrel.prototype.update = function(){
         this.body.allowGravity = true;        
     }
     
-    if(this.game.physics.arcade.overlap(this,this.level.jumpman)) this.level.hitJumpman(this.level.jumpman);
-    if(this.game.physics.arcade.overlap(this,this.level.jumpman2)) this.level.hitJumpman(this.level.jumpman2);
+    if(this.game.physics.arcade.overlap(this,this.level.jumpman)) {
+        if(!this.level.jumpman.starPowerUpActive)
+            this.level.hitJumpman(this.level.jumpman);        
+    }
+    if(this.game.physics.arcade.overlap(this,this.level.jumpman2)){
+        if(!this.level.jumpman2.starPowerUpActive)
+            this.level.hitJumpman(this.level.jumpman2);
+    } 
     
     //Con esto nos aseguramos de que calcule el random 1 vez cada vez que está en una escalera y no 1 vez por frame
     if(!this.IsGoingDown){

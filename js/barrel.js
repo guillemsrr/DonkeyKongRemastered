@@ -149,6 +149,7 @@ donkeyKong.barrel.prototype.destroyBarrel = function(_jumpman){
     //_jumpman.speedPowerUpActive = true;
     //this.level.timeStopped = true;
     //_jumpman.starPowerUpActive = true;
+    //_jumpman.starPowerUpCounter = 0;
     //this.level.SpawnStarSprite(_jumpman);
     
     this.randomNum = Math.floor(Math.random() * 10);
@@ -163,6 +164,8 @@ donkeyKong.barrel.prototype.destroyBarrel = function(_jumpman){
         }
         else if(this.randomNum < 10){            
             _jumpman.starPowerUpActive = true;
+            _jumpman.starPowerUpCounter = 0;
+
             this.level.SpawnStarSprite(_jumpman);
         }
     }

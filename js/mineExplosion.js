@@ -21,8 +21,14 @@ donkeyKong.mineExplosion.prototype.update = function(){
     }
     else{
         if(Phaser.Math.distance(this.position.x, this.position.y, this.level.jumpman.position.x, this.level.jumpman.position.y) < this.explodingRad){
-            this.level.hitJumpman(this.level.jumpman);
+            if(!this.level.jumpman.starPowerUpActive)
+                this.level.hitJumpman(this.level.jumpman);
         }
+        if(Phaser.Math.distance(this.position.x, this.position.y, this.level.jumpman2.position.x, this.level.jumpman2.position.y) < this.explodingRad){
+            if(!this.level.jumpman2.starPowerUpActive)
+                this.level.hitJumpman(this.level.jumpman2);
+        }
+        
     }
         
 }
