@@ -209,7 +209,7 @@ donkeyKong.level1= {
         this.selectorOffset = 25;
         
         //this.isPaused = false; TODO:: no hauria de ser false?¿ sinó fa la musiqueta al principi
-        this.isPaused = true;
+        this.isPaused = false;
         this.pauseButtonPressed = false;
         
         // Pause graphics
@@ -252,7 +252,12 @@ donkeyKong.level1= {
         
         
         // This is called once so all Pause grafics and logic are hidden.
-        this.PausePressed();
+        //this.PausePressed();
+        this.pauseBackground.visible = false;
+        this.selector.visible = false;
+        for(var i = 0; i < this.buttonList.length; i++){
+            this.buttonList[i].visible = false;
+        }
         
         
         //----- BARRELS GROUP -----
@@ -320,6 +325,7 @@ donkeyKong.level1= {
             this.pauseButtonPressed = false;
             //console.log("2");
         }
+        
 
         // Selector Input
         if(this.isPaused){
@@ -489,10 +495,10 @@ donkeyKong.level1= {
     
     PausePressed: function (){       
         
-        
         if(this.pauseButtonPressed) return;
         
         this.isPaused = !this.isPaused;
+        //this.game.paused = this.isPaused;
         
         this.pauseBackground.visible = this.isPaused;
         this.selector.visible = this.isPaused;

@@ -278,7 +278,7 @@ donkeyKong.level4 = {
         this.selectorOffset = 25;
         
         //this.isPaused = false; TODO:: no hauria de ser false?¿ sinó fa la musiqueta al principi
-        this.isPaused = true;
+        this.isPaused = false;
         this.pauseButtonPressed = false;
         
         // Pause graphics
@@ -321,7 +321,12 @@ donkeyKong.level4 = {
         
         
         // This is called once so all Pause grafics and logic are hidden.
-        this.PausePressed();
+        //this.PausePressed();
+        this.pauseBackground.visible = false;
+        this.selector.visible = false;
+        for(var i = 0; i < this.buttonList.length; i++){
+            this.buttonList[i].visible = false;
+        }
         
         
         //----- BARRELS GROUP -----
