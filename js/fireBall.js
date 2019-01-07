@@ -48,12 +48,13 @@ donkeyKong.fireBall.prototype.update = function(){
     this.game.physics.arcade.overlap(this,this.level.jumpman,this.hitJumpman,null,this);
     this.game.physics.arcade.overlap(this,this.level.jumpman2,this.hitJumpman,null,this);
            
-    if(this.level.timeStopped){
+    if(this.level.timeStopped || this.level.isPaused){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         
         this.body.allowGravity = false;
         this.animations.stop();
+        return;
     }
     else{
         this.animations.play();

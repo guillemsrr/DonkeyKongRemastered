@@ -28,15 +28,17 @@ donkeyKong.barrel.prototype = Object.create(Phaser.Sprite.prototype);
 donkeyKong.barrel.prototype.constructor = donkeyKong.barrel;
 
 donkeyKong.barrel.prototype.update = function(){
-        
+
     this.game.physics.arcade.collide(this,this.level.oil,this.spawnFireball,null,this);
        
-    if(this.level.timeStopped){
+    if(this.level.timeStopped || this.level.isPaused){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         
         this.body.allowGravity = false;
         this.animations.stop();
+        
+        return;
     }
     else{
         this.animations.play();
