@@ -17,7 +17,8 @@ donkeyKong.level5 = {
         this.load.spritesheet('jumpman', 'assets/sprites/Mario.png', 38, 34);
         this.load.spritesheet('jumpman2', 'assets/sprites/Mario_2.png', 38, 34);
         //NPCs
-        this.load.spritesheet('pauline', 'assets/sprites/pauline.png', 15, 22);
+        this.load.spritesheet('pauline', 'assets/sprites/Pauline_red.png', 15, 22);
+        this.load.spritesheet('pauline2', 'assets/sprites/Pauline_green.png', 15, 22);
         //Enemies
         this.load.spritesheet('kong', 'assets/sprites/Donkey_Kong.png', 46, 32);
         this.load.spritesheet('fireBall', 'assets/sprites/Fire_Ball.png', 16, 16);
@@ -239,16 +240,16 @@ donkeyKong.level5 = {
         //Jumpman
         this.jumpmanGroup = this.game.add.group();
         
-        this.jumpman = new donkeyKong.jumpman(this.game, 16*4, gameOptions.gameHeight - 8*12, 'jumpman', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1, this);
+        this.jumpman = new donkeyKong.jumpman(this.game, 16*4, gameOptions.gameHeight - 8*12, 'pauline', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 1, this, true);
         this.game.add.existing(this.jumpman);
         this.jumpmanGroup.add(this.jumpman);
         
-        this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 16*4, gameOptions.gameHeight - 8*12, 'jumpman2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2, this);
+        this.jumpman2 = new donkeyKong.jumpman(this.game, gameOptions.gameWidth - 16*4, gameOptions.gameHeight - 8*12, 'pauline2', this.run, this.jump, this.scoreUp, this.death, this.itemGet, this.hammer, this.hud, 2, this, true);
         this.game.add.existing(this.jumpman2);
         this.jumpmanGroup.add(this.jumpman2);
         
         //PAULINE
-        this.pauline = new donkeyKong.pauline(this.game, gameOptions.gameWidth/2 - 16*5, 31, 'pauline');
+        this.pauline = new donkeyKong.pauline(this.game, gameOptions.gameWidth/2 - 16*5, 26, 'jumpman');
         this.game.add.existing(this.pauline);
         
         //DONKEY KONG
@@ -599,6 +600,7 @@ donkeyKong.level5 = {
         //this.game.debug.inputInfo(32, 32);
         //this.game.debug.pointer(this.game.input.activePointer );
         //this.game.debug.body(this.jumpman);
+        //this.game.debug.body(this.jumpman2);
     },
     
     
