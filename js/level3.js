@@ -67,7 +67,7 @@ donkeyKong.level3 = {
     create: function () {
         
         //-----------------------HUD-----------------------
-        this.hud = new donkeyKong.hud(this.game, 70, 350, this);
+        this.hud = new donkeyKong.hud(this.game, 30, 405, this);
         
         //----------------------AUDIO----------------------
         //level
@@ -115,8 +115,8 @@ donkeyKong.level3 = {
         this.stairs = this.game.add.group();
         this.finalStair = this.game.add.group();
         var stair = new donkeyKong.stair(this.game, 'stair', this.stairs, true, 'finalStair', this.finalStair);
-        stair.createStair(28, 16*13.5, gameOptions.gameHeight - 8*5.5);
-        stair.createStair(28, 16*19, gameOptions.gameHeight - 8*5.5);
+        stair.createStair(24, 16*13.5, gameOptions.gameHeight - 8*7.5);
+        stair.createStair(24, 16*19, gameOptions.gameHeight - 8*7.5);
         stair.createStair(40, gameOptions.gameWidth/2 , gameOptions.gameHeight - 8*26);
         stair.createStair(20, 370, 8*15.5);
         
@@ -140,7 +140,7 @@ donkeyKong.level3 = {
         
         
         //Oil Barrel
-        this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 52, 'oil');
+        this.oil = new donkeyKong.oil(this.game, 40, gameOptions.gameHeight - 69, 'oil');
         this.game.add.existing(this.oil);
         this.game.physics.arcade.enable(this.oil);
         this.oil.body.immovable = true;
@@ -162,7 +162,7 @@ donkeyKong.level3 = {
         this.beamCollider = this.game.add.group();
         var beamRow = new donkeyKong.beamRow(this.game,'beam', this.beams, 'finalStair', this.beamCollider);
         //base
-        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*5);
+        beamRow.createStraightRow(30, 16, gameOptions.gameHeight - 8*7);
         
         //right down
         beamRow.createDiagRow(4, 16*19, gameOptions.gameHeight - 8*20, false, true);
@@ -233,6 +233,16 @@ donkeyKong.level3 = {
         
         this.levelWinHeight = 15;
         this.levelCompleted = false;
+        
+        // Hammer 1
+        this.hammerPowerUpGroup = this.game.add.group();            
+        this.hammerPowerUp = this.game.add.sprite(gameOptions.gameWidth/2 + 5, 350, 'hammer');
+        this.hammerPowerUpGroup.add(this.hammerPowerUp);
+        this.game.physics.enable(this.hammerPowerUp);
+        this.hammerPowerUp.body.immovable = true; 
+        this.hammerPowerUp.body.allowGravity = false;
+        this.hammerPowerUp.body.gravity = false;
+        
                 
         // Stairs initialized before Jumpman so jumpman sprite is on top of stairs sprite                
         // ------------------ PAUSE MENU -----------------
@@ -294,23 +304,20 @@ donkeyKong.level3 = {
         
     hitJumpman:function(_jumpman){
         if(_jumpman.health>0 && !_jumpman.temporallyInmune){
-            _jumpman.health -=1;
-            this.hit.play();
-            this.hud.setLife(_jumpman.num, _jumpman.health);
-
-            if(_jumpman.health>0){//only change position with the other lifes
-                if(_jumpman == this.jumpman && this.jumpman.body!= null){
-                    _jumpman.body.position.x = 75;
-                    _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
-                    _jumpman.body.velocity.x = 0;
-                }
-                else if(_jumpman == this.jumpman2 && this.jumpman2.body!= null){
-                    _jumpman.body.position.x = 85;
-                    _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
-                    _jumpman.body.velocity.x = 0;
-                }
+            if(_jumpman == this.jumpman && this.jumpman.body!= null){
+                _jumpman.body.position.x = 75;
+                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                _jumpman.body.velocity.x = 0;
             }
+            else if(_jumpman == this.jumpman2 && this.jumpman2.body!= null){
+                _jumpman.body.position.x = 85;
+                _jumpman.body.position.y = gameOptions.gameHeight - 8*12;
+                _jumpman.body.velocity.x = 0;
+            }
+            this.hit.play();
+            _jumpman.health -=1;
             _jumpman.temporallyInmune = true;
+            this.hud.setLife(_jumpman.num, _jumpman.health);
         }
     },
     
@@ -622,7 +629,7 @@ donkeyKong.level3 = {
         this.barrels.add(this.barrel);
     },
     
-    SpawnClockSprite: function(_jumpman){        
+    SpawnClockSprite: function(_jumpman){
         this.newClock = new donkeyKong.clockTimeStop(this.game, 'clockTime', _jumpman);
         this.game.add.existing(this.newClock);
     },

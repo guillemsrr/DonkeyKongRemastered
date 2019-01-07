@@ -8,7 +8,7 @@ donkeyKong.mineExplosion = function(_game, _x, _y, _tag, _level){
     this.animations.add('explosion', null,10,false);
     this.animations.play('explosion');
     this.time = 0;
-    this.explodingRad = 20;
+    this.explodingRad = 30;
 }
 
 donkeyKong.mineExplosion.prototype = Object.create(Phaser.Sprite.prototype);

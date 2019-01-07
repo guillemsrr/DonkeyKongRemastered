@@ -22,4 +22,4 @@ donkeyKong.game.state.add('level2', donkeyKong.level2);
 donkeyKong.game.state.add('level3', donkeyKong.level3);
 donkeyKong.game.state.add('level4', donkeyKong.level4);
 donkeyKong.game.state.add('level5', donkeyKong.level5);
-donkeyKong.game.state.start('level1');
+donkeyKong.game.state.start('level4');
