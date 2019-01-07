@@ -354,10 +354,10 @@ donkeyKong.jumpman.prototype.customUpdate = function(){
     }
 }
 
-donkeyKong.jumpman.prototype.JumpOnBarrel = function(){
+donkeyKong.jumpman.prototype.JumpOnBarrel = function(score){
     this.scoreUpSound.play();
-    this.points+=100;
-    this.bonusText = this.game.add.text(this.body.position.x, this.body.position.y - 10, "100", hudStyle);
+    this.points+=score;
+    this.bonusText = this.game.add.text(this.body.position.x, this.body.position.y - 10, score.toString(), hudStyle);
     this.bonusTime = 0;
     this.bonusActive = true;
     this.body.velocity.y = -this.jumpForce*0.75;

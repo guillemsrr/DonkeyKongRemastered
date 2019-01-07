@@ -124,14 +124,14 @@ donkeyKong.barrel.prototype.hitJumpman = function(_barrel, _jumpman){
         this.level.DestroyBarrel(this.x, this.y);
         this.destroyBarrel(_jumpman);
         this.kill();
-        _jumpman.JumpOnBarrel();
+        _jumpman.JumpOnBarrel(500);
     }
     else{
         if(_jumpman.hasHammer || _jumpman.starPowerUpActive){
             this.level.DestroyBarrel(this.x, this.y);
             this.destroyBarrel(_jumpman);
             this.kill();
-            _jumpman.JumpOnBarrel();
+            _jumpman.JumpOnBarrel(500);
         }
         else{
             if(!_jumpman.temporallyInmune)

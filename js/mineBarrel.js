@@ -17,7 +17,7 @@ donkeyKong.mineBarrel.prototype.hitJumpman = function(_barrel, _jumpman){
     if(_barrel.body.touching.up && _jumpman.body.touching.down){
         
         if(!this.mineActivated)
-            _jumpman.JumpOnBarrel();
+            _jumpman.JumpOnBarrel(1000);
         
         this.mineActivation();
     }
