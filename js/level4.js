@@ -337,12 +337,12 @@ donkeyKong.level4 = {
         if(_jumpman.health>0 && !_jumpman.temporallyInmune){
             if(_jumpman == this.jumpman){
                 _jumpman.position.x = 56;
-                _jumpman.position.y=gameOptions.gameHeight - 8*13;
+                _jumpman.position.y=gameOptions.gameHeight - 8*15;
                 _jumpman.body.velocity.x = 0;
             }
             else{
                 _jumpman.position.x = gameOptions.gameWidth - 56;
-                _jumpman.position.y=gameOptions.gameHeight - 8*13;
+                _jumpman.position.y=gameOptions.gameHeight - 8*15;
                 _jumpman.body.velocity.x = 0;
             }
             this.hit.play();
