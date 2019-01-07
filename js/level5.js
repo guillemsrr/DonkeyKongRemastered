@@ -248,7 +248,7 @@ donkeyKong.level5 = {
         this.jumpmanGroup.add(this.jumpman2);
         
         //PAULINE
-        this.pauline = new donkeyKong.pauline(this.game, gameOptions.gameWidth/2 - 16*5, 26, 'jumpman');
+        this.pauline = new donkeyKong.pauline(this.game, gameOptions.gameWidth/2 - 16*5, 26, 'jumpman', true);
         this.game.add.existing(this.pauline);
         
         //DONKEY KONG

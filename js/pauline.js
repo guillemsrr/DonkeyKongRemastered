@@ -1,6 +1,6 @@
 var donkeyKong = donkeyKong || {};
 
-donkeyKong.pauline = function(_game, _x, _y, _tag){
+donkeyKong.pauline = function(_game, _x, _y, _tag, isJumpman = false){
     Phaser.Sprite.call(this,_game, _x, _y, _tag);
     this.anchor.setTo(.5);
     this.game = _game;
@@ -10,7 +10,13 @@ donkeyKong.pauline = function(_game, _x, _y, _tag){
     this.MIN_TIME = 1;
     this.MAX_TIME = 3;
     this.flipped = false;
-    this.animations.add('idle',null,8,true);
+    
+    if(!isJumpman){
+        this.animations.add('idle',null,8,true);
+    }
+    else{
+        this.animations.add('idle',[0,1,2],8,true);
+    }
 }
 
 donkeyKong.pauline.prototype = Object.create(Phaser.Sprite.prototype);
